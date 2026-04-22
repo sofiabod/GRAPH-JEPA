@@ -1,0 +1,46 @@
+encoder:
+  in_dim: 384
+  hidden_dim: 256
+  n_layers: 3
+  n_heads: 4
+  dropout: 0.1
+  temporal_stride: 1
+
+predictor:
+  embed_dim: 256
+  n_heads: 4
+  n_layers: 2
+  mlp_ratio: 2
+  dropout: 0.1
+  n_nodes: 50
+  max_time_steps: 200
+  temporal_stride: 1
+
+training:
+  optimizer: adamw
+  lr: 3.0e-4
+  weight_decay: 0.01
+  lr_min: 1.0e-5
+  batch_size: 16
+  max_epochs: 200
+  early_stopping_patience: 30
+  mask_ratio: 0.20
+  context_k: 4
+  ema_momentum_start: 0.996
+  ema_momentum_end: 1.0
+  grad_clip_max_norm: 1.0
+  total_steps: 40000
+
+loss:
+  lambda_reg: 0.01
+  bcs_num_slices: 1024
+  bcs_lmbd: 0.1
+
+data:
+  enron_data_path: data/enron_graphs.pt
+  enron_meta_path: data/enron_meta.json
+  train_weeks: [0, 119]
+  val_weeks: [120, 139]
+  test_weeks: [140, 179]
+
+seeds: [0, 1, 2, 3, 4]

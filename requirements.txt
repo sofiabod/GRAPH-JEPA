@@ -1,0 +1,15 @@
+torch>=2.0
+torch-geometric>=2.4
+torch-scatter
+torch-sparse
+sentence-transformers>=2.2
+py-tgb
+numpy
+scikit-learn
+scipy
+matplotlib
+umap-learn
+pytest
+modal
+omegaconf
+einops
