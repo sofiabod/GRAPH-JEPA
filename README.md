@@ -1,4 +1,4 @@
-# Graph-JEPA
+<h1 align="center">Graph-JEPA</h1>
 
 PyTorch codebase for **Graph-JEPA** (Temporal Graph Joint-Embedding Predictive Architecture), a method for self-supervised learning of node-level representations from temporal graphs.
 
