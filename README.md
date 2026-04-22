@@ -103,46 +103,6 @@ Downstream probe tasks: (1) communication volume next week (regression), (2) pri
 
 The MLP encoder in the sequential ablation is matched in parameter count to GATv2. This controls for model capacity and isolates relational context as the independent variable.
 
-## Code Structure
-
-```
-.
-├── configs/                            # experiment config files (.yaml)
-├── src/
-│   ├── data/
-│   │   ├── enron_loader.py             #   download, parse, deduplicate Enron emails
-│   │   ├── graph_builder.py            #   emails to weekly PyG snapshots
-│   │   └── dataset.py                  #   temporal window sampling, masking, batching
-│   ├── model/
-│   │   ├── graph_encoder.py            #   GATv2 online encoder
-│   │   ├── target_encoder.py           #   EMA copy + stop-gradient
-│   │   ├── predictor.py                #   spatiotemporal transformer predictor
-│   │   └── ema.py                      #   EMA update logic
-│   ├── loss/
-│   │   ├── prediction.py               #   SmoothL1
-│   │   ├── sigreg.py                   #   SigReg / BCS (from eb_jepa/losses.py)
-│   │   └── total.py                    #   combined loss
-│   ├── train.py
-│   ├── eval.py
-│   └── utils/
-├── experiments/
-│   ├── train_tgjepa.py                 #   Modal entrypoint for training
-│   ├── train_sequential_ablation.py    #   ablation training
-│   ├── eval_all.py                     #   run all 6 evals
-│   └── download_enron.py               #   download and preprocess Enron data
-├── tests/
-├── docs/
-│   └── frozen-config-tgjepa.md        #   frozen hyperparameters (do not edit after eval)
-├── results/
-├── data/                               #   gitignored, populated by download script
-├── ijepa/                              #   reference: facebookresearch/ijepa
-├── jepa/                               #   reference: facebookresearch/jepa (V-JEPA)
-├── graph-jepa/                         #   reference: geriskenderi/graph-jepa
-├── jodie/                              #   reference: srijankr/jodie
-├── TGB/                                #   reference: shenyangHuang/TGB
-└── DyGLib/                             #   reference: yule-BUAA/DyGLib
-```
-
 ## Getting Started
 
 ```bash
