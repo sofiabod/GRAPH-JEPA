@@ -1,19 +1,17 @@
-import os
 import tarfile
 import urllib.request
 from pathlib import Path
 from email import message_from_string
-from datetime import datetime
 
 
-ENRON_URL = "https://www.cs.cmu.edu/~enron/enron_mail_20150507.tgz"
+ENRON_URL = "https://www.cs.cmu.edu/~enron/enron_mail_20150507.tar.gz"
 
 
 def download_enron(data_dir):
     # downloads enron corpus to data_dir/raw/
     raw_dir = Path(data_dir) / "raw"
     raw_dir.mkdir(parents=True, exist_ok=True)
-    dest = raw_dir / "enron_mail_20150507.tgz"
+    dest = raw_dir / "enron_mail_20150507.tar.gz"
     if dest.exists():
         return
     urllib.request.urlretrieve(ENRON_URL, dest)

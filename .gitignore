@@ -7,7 +7,7 @@ ijepa/
 jepa/
 graph-jepa/
 jodie/
-data/
+/data/
 __pycache__/
 *.pyc
 .pytest_cache/
