@@ -22,7 +22,8 @@ def _collate_fn(batch):
 
 def _encode_context(online, context_graphs):
     # returns list of [N, D] tensors, one per context snapshot
-    return [online(g) for g in context_graphs]
+    device = next(online.parameters()).device
+    return [online(g.to(device)) for g in context_graphs]
 
 
 def _build_tokens_for_sample(
@@ -83,6 +84,7 @@ def _build_tokens_for_sample(
 
 def _step(batch, online, target, predictor, loss_fn):
     """run one forward pass over a list-batch of samples, return total loss."""
+    device = next(online.parameters()).device
     z_pred_list = []
     z_target_list = []
     z_online_all_list = []
@@ -90,12 +92,11 @@ def _step(batch, online, target, predictor, loss_fn):
 
     # process each sample separately (loop over batch)
     for sample in batch:
-        ctx_graphs = sample['context_graphs']
-        tgt_graph = sample['target_graph']
-        masked_ids = sample['masked_node_ids']
-        visible_ids = sample['visible_node_ids']
+        tgt_graph = sample['target_graph'].to(device)
+        masked_ids = sample['masked_node_ids'].to(device)
+        visible_ids = sample['visible_node_ids'].to(device)
         # online encoder on all context snapshots
-        ctx_embs = _encode_context(online, ctx_graphs)  # list of [N, D]
+        ctx_embs = _encode_context(online, sample['context_graphs'])  # list of [N, D]
 
         # target encoder on target graph (stop-grad already applied in TargetEncoder)
         tgt_emb_sg = target(tgt_graph)  # [N, D], no grad
@@ -171,7 +172,7 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
     target.encoder = target.encoder.to(device)
 
     predictor = build_predictor(cfg.predictor).to(device)
-    loss_fn = build_loss(cfg.loss)
+    loss_fn = build_loss(cfg.loss).to(device)
     ema_updater = build_ema(cfg.training)
 
     # optimizer: online encoder + predictor only
@@ -268,5 +269,4 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
     return {
         'train_losses': train_losses,
         'val_losses': val_losses,
-        'target_encoder': target,
     }

@@ -54,13 +54,12 @@ class EvalRunner:
 
         with torch.no_grad():
             for sample in dataset:
-                ctx_graphs = sample['context_graphs']
-                tgt_graph = sample['target_graph']
-                masked_ids = sample['masked_node_ids']
+                tgt_graph = sample['target_graph'].to(self.device)
+                masked_ids = sample['masked_node_ids'].to(self.device)
+                visible_ids = sample['visible_node_ids'].to(self.device)
 
-                ctx_embs = _encode_context(self.online, ctx_graphs)
+                ctx_embs = _encode_context(self.online, sample['context_graphs'])
                 tgt_emb = self.target(tgt_graph)
-                visible_ids = sample['visible_node_ids']
 
                 tokens, time_indices, node_ids_seq, mask_positions = _build_tokens_for_sample(
                     ctx_embs, tgt_emb, masked_ids, visible_ids, self.predictor
@@ -108,7 +107,7 @@ class EvalRunner:
         self.online.eval()
         with torch.no_grad():
             for sample in dataset:
-                g = sample['target_graph']
+                g = sample['target_graph'].to(self.device)
                 z = self.online(g)
                 all_embs.append(z)
 

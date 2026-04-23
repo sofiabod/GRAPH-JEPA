@@ -39,8 +39,8 @@ loss:
 data:
   enron_data_path: data/enron_graphs.pt
   enron_meta_path: data/enron_meta.json
-  train_weeks: [0, 119]
-  val_weeks: [120, 139]
-  test_weeks: [140, 179]
+  train_weeks: [0, 99]
+  val_weeks: [100, 114]
+  test_weeks: [115, 132]
 
 seeds: [0, 1, 2, 3, 4]

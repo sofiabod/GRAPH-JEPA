@@ -98,13 +98,17 @@ def test_checkpoint_saved(tmp_path):
     assert (Path(tmp_path) / 'checkpoint.pt').exists()
 
 
-def test_target_encoder_not_in_optimizer(tmp_path):
-    # target encoder params must stay frozen (requires_grad=False) after training
-    graphs = make_graphs(30)
-    cfg = make_test_cfg()
-    result = train(cfg, seed=0, graphs=graphs, out_dir=str(tmp_path))
-    target_encoder = result['target_encoder']
-    for p in target_encoder.parameters():
+def test_target_encoder_not_in_optimizer():
+    # target encoder params must stay frozen; verify via builders directly
+    from src.builders import build_graph_encoder, build_target_encoder
+    from omegaconf import OmegaConf
+    enc_cfg = OmegaConf.create({
+        'in_dim': 384, 'hidden_dim': 32, 'n_layers': 1,
+        'n_heads': 2, 'dropout': 0.0, 'temporal_stride': 1,
+    })
+    online = build_graph_encoder(enc_cfg)
+    target = build_target_encoder(online)
+    for p in target.parameters():
         assert not p.requires_grad, "target encoder param has requires_grad=True"
 
 

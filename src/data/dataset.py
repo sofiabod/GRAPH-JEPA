@@ -1,11 +1,11 @@
 import torch
 from torch.utils.data import Dataset
 
-TRAIN_END = 119
-VAL_START = 120
-VAL_END = 139
-TEST_START = 140
-TEST_END = 179
+TRAIN_END = 99
+VAL_START = 100
+VAL_END = 114
+TEST_START = 115
+TEST_END = 132
 
 
 class TemporalGraphDataset(Dataset):
