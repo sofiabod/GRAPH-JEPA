@@ -19,7 +19,7 @@ def main():
     emails = load_emails(DATA_DIR)
     print(f"loaded {len(emails)} emails")
     print("building weekly graphs...")
-    graphs, meta = build_weekly_graphs(emails, top_n=50, min_active=10)
+    graphs, meta = build_weekly_graphs(emails, top_n=50, min_active=10, cache_path=f"{DATA_DIR}/bge_cache.pkl")
     print(f"built {len(graphs)} weekly snapshots")
     Path(DATA_DIR).mkdir(exist_ok=True)
     torch.save(graphs, f"{DATA_DIR}/enron_graphs.pt")
