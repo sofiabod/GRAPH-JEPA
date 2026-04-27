@@ -1,4 +1,3 @@
-import copy
 from src.models.graph_encoder import GraphEncoder
 from src.models.target_encoder import TargetEncoder
 from src.models.predictor import TemporalGraphPredictor
@@ -13,7 +12,6 @@ def build_graph_encoder(cfg):
         n_layers=cfg.n_layers,
         n_heads=cfg.n_heads,
         dropout=cfg.dropout,
-        temporal_stride=cfg.temporal_stride,
     )
 
 
@@ -30,7 +28,6 @@ def build_predictor(cfg):
         dropout=cfg.dropout,
         n_nodes=cfg.n_nodes,
         max_time_steps=cfg.max_time_steps,
-        temporal_stride=cfg.temporal_stride,
     )
 
 

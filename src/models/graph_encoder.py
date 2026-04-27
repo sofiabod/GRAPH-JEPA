@@ -1,9 +1,10 @@
 from torch_geometric.nn import GATv2Conv
 import torch.nn as nn
+import torch.nn.functional as F
 
 
 class GraphEncoder(nn.Module):
-    def __init__(self, in_dim=384, hidden_dim=256, n_layers=3, n_heads=4, dropout=0.1, temporal_stride=1):
+    def __init__(self, in_dim=384, hidden_dim=256, n_layers=3, n_heads=4, dropout=0.1):
         super().__init__()
         self.input_proj = nn.Linear(in_dim, hidden_dim)
         self.layers = nn.ModuleList([
@@ -15,7 +16,6 @@ class GraphEncoder(nn.Module):
             for _ in range(n_layers)
         ])
         self.dropout = nn.Dropout(dropout)
-        self.temporal_stride = temporal_stride
 
     def forward(self, data):
         # project input features then apply gat layers with residual connections
@@ -26,4 +26,4 @@ class GraphEncoder(nn.Module):
                 h = h + self.dropout(h_new)
             else:
                 h = h_new
-        return h
+        return F.normalize(h, dim=-1)

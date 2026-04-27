@@ -142,7 +142,7 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
     args:
         cfg: omegaconf config
         seed: random seed
-        graphs: optional list of pyg Data objects (if None, loads from cfg.data.enron_data_path)
+        graphs: optional list of pyg Data objects (if None, loads from cfg.data.graphs_path)
         out_dir: optional path string for checkpoint (if None, skips saving)
         ablation: if True, use SequentialMLP instead of GraphEncoder
     returns:
@@ -153,7 +153,21 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
 
     # load graphs if not provided
     if graphs is None:
-        graphs = torch.load(cfg.data.enron_data_path)
+        import json
+        graphs = torch.load(cfg.data.graphs_path)
+
+    # resolve split ranges from config or meta.json
+    if hasattr(cfg.data, 'train_weeks') and cfg.data.train_weeks is not None:
+        train_range = tuple(cfg.data.train_weeks)
+        val_range = tuple(cfg.data.val_weeks)
+        test_range = tuple(cfg.data.test_weeks)
+    else:
+        import json
+        with open(cfg.data.meta_path) as f:
+            meta = json.load(f)
+        train_range = tuple(meta['train_range'])
+        val_range = tuple(meta['val_range'])
+        test_range = tuple(meta['test_range'])
 
     # build models
     if ablation:
@@ -197,15 +211,20 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
     batch_size = cfg.training.batch_size
 
     train_dataset = TemporalGraphDataset(
-        graphs, context_k=context_k, mask_ratio=mask_ratio, split='train'
+        graphs, context_k=context_k, mask_ratio=mask_ratio, split='train',
+        train_range=train_range, val_range=val_range, test_range=test_range,
     )
     val_dataset = TemporalGraphDataset(
-        graphs, context_k=context_k, mask_ratio=mask_ratio, split='val'
+        graphs, context_k=context_k, mask_ratio=mask_ratio, split='val',
+        train_range=train_range, val_range=val_range, test_range=test_range,
     )
 
     train_losses = []
     val_losses = []
     global_step = 0
+    best_val_loss = float('inf')
+    patience_counter = 0
+    patience = cfg.training.early_stopping_patience
 
     for _ in range(max_epochs):
         online.train()
@@ -251,7 +270,16 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
                 for batch in val_loader:
                     vloss = _step(batch, online, target, predictor, loss_fn)
                     vlosses.append(vloss.item())
-            val_losses.append(sum(vlosses) / len(vlosses))
+            epoch_val_loss = sum(vlosses) / len(vlosses)
+            val_losses.append(epoch_val_loss)
+
+            if epoch_val_loss < best_val_loss:
+                best_val_loss = epoch_val_loss
+                patience_counter = 0
+            else:
+                patience_counter += 1
+                if patience_counter >= patience:
+                    break
 
     # save checkpoint
     if out_dir is not None:
@@ -261,6 +289,7 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
             {
                 'online': online.state_dict(),
                 'predictor': predictor.state_dict(),
+                'target_encoder': target.encoder.state_dict(),
                 'step': global_step,
             },
             out_path / 'checkpoint.pt',

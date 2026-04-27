@@ -9,9 +9,8 @@ class SequentialMLP(nn.Module):
     approximate parameter count of GraphEncoder with the same hidden_dim.
     """
 
-    def __init__(self, in_dim=384, hidden_dim=256, n_layers=3, dropout=0.1, temporal_stride=1):
+    def __init__(self, in_dim=384, hidden_dim=256, n_layers=3, dropout=0.1):
         super().__init__()
-        self.temporal_stride = temporal_stride
         self.input_proj = nn.Linear(in_dim, hidden_dim)
         layers = []
         for _ in range(n_layers):

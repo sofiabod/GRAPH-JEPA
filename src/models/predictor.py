@@ -4,11 +4,10 @@ import torch.nn as nn
 
 class TemporalGraphPredictor(nn.Module):
     def __init__(self, embed_dim=256, n_heads=4, n_layers=2, mlp_ratio=2, dropout=0.1,
-                 n_nodes=50, max_time_steps=200, temporal_stride=1):
+                 n_nodes=50, max_time_steps=200):
         super().__init__()
         self.node_id_emb = nn.Embedding(n_nodes, embed_dim)
         self.temporal_pos_emb = nn.Embedding(max_time_steps, embed_dim)
-        self.temporal_stride = temporal_stride
         self.layers = nn.ModuleList([
             nn.TransformerEncoderLayer(
                 d_model=embed_dim,
