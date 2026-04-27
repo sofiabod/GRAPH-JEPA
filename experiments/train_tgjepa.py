@@ -15,12 +15,15 @@ image = (
         "torch-geometric",
         find_links=f"https://data.pyg.org/whl/torch-{TORCH_VERSION}+{CUDA}.html",
     )
-    .pip_install("sentence-transformers", "omegaconf", "einops")
+    .pip_install("sentence-transformers", "omegaconf", "einops", "pytest")
     .add_local_dir("src", remote_path="/app/src")
     .add_local_dir("configs", remote_path="/app/configs")
-    .add_local_dir("data", remote_path="/app/data")
     .add_local_dir("tests", remote_path="/app/tests")
-    .pip_install("pytest")
+)
+
+# training image also mounts the preprocessed graph files
+train_image = image.add_local_file(
+    "data/enron_graphs.pt", remote_path="/app/data/enron_graphs.pt"
 )
 
 vol = modal.Volume.from_name("tgjepa-results", create_if_missing=True)
@@ -29,7 +32,7 @@ vol = modal.Volume.from_name("tgjepa-results", create_if_missing=True)
 @app.function(
     gpu="A10G",
     timeout=3600 * 8,
-    image=image,
+    image=train_image,
     volumes={"/results": vol},
 )
 def train_seed(seed: int, config_path: str = "configs/enron.yaml"):
