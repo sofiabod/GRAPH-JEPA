@@ -16,34 +16,7 @@ Graph-JEPA extends the joint-embedding predictive architecture to temporal graph
 
 **Lineage:** I-JEPA (images) -> V-JEPA (video) -> Graph-JEPA static (Skenderi, 2025) -> **Temporal Graph-JEPA (this work)**
 
-```
-weekly graph snapshots [t-k, ..., t, t+1]
-         |
-         v
-  online encoder (trained)             target encoder (EMA, stop-grad)
-  GATv2, 3 layers, 256d                slow-moving copy of online encoder
-  runs on full graph at t-k to t       runs on full graph at t+1
-         |                                      |
-         v                                      v
-  node embeddings                      node embeddings at t+1
-  (all nodes, all history steps)       (all nodes, stop-grad)
-         |                                      |
-         +------------------+------------------->
-                            |
-                            v
-                   temporal predictor
-                   bidirectional transformer, 2 layers
-                   input tokens: [node_v history t-k:t]
-                               + [all nodes u history t-k:t]
-                               + [all nodes u at t+1 via EMA]
-                               + [mask token at (v, t+1)]
-                   output: predicted embedding at mask position
-                            |
-                            v
-                   SigReg (LeJEPA / BCS loss)
-                   isotropic Gaussian regularization
-                   prevents representation collapse
-```
+k context snapshots are encoded by the online GATv2 encoder into per-node embeddings. The target graph at t+1 is encoded by the EMA target encoder (stop-grad). The predictor receives: all node embeddings across all k history steps, all non-masked nodes at t+1 via the target encoder, and a learnable mask token at position (v, t+1) carrying temporal and node-identity embeddings. It outputs a predicted embedding at the mask position, which is regressed against the target encoder's output via MSE on the unit sphere. BCS regularization enforces isotropy and prevents collapse.
 
 ## Approach
 
