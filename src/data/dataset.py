@@ -1,25 +1,27 @@
 import torch
 from torch.utils.data import Dataset
 
-TRAIN_END = 99
-VAL_START = 100
-VAL_END = 114
-TEST_START = 115
-TEST_END = 132
+# spec defaults: train weeks 0-119, val 120-139, test 140-179
+_DEFAULT_TRAIN = (0, 119)
+_DEFAULT_VAL = (120, 139)
+_DEFAULT_TEST = (140, 179)
 
 
 class TemporalGraphDataset(Dataset):
-    def __init__(self, graphs, context_k=4, mask_ratio=0.20, split='train'):
+    def __init__(self, graphs, context_k=4, mask_ratio=0.20, split='train',
+                 train_range=_DEFAULT_TRAIN, val_range=_DEFAULT_VAL, test_range=_DEFAULT_TEST):
         self.context_k = context_k
         self.mask_ratio = mask_ratio
-        # filter graph indices by split
         all_indices = list(range(len(graphs)))
         if split == 'train':
-            self.valid_target_indices = [i for i in all_indices if context_k <= i <= TRAIN_END]
+            lo, hi = train_range
+            self.valid_target_indices = [i for i in all_indices if context_k <= i <= hi and i >= lo]
         elif split == 'val':
-            self.valid_target_indices = [i for i in all_indices if VAL_START <= i <= VAL_END]
+            lo, hi = val_range
+            self.valid_target_indices = [i for i in all_indices if lo <= i <= hi]
         elif split == 'test':
-            self.valid_target_indices = [i for i in all_indices if TEST_START <= i <= TEST_END]
+            lo, hi = test_range
+            self.valid_target_indices = [i for i in all_indices if lo <= i <= hi]
         self.graphs = graphs
 
     def __len__(self):

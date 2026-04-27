@@ -21,27 +21,26 @@ FAKE_GRAPHS = make_fake_graphs(200)
 
 def test_train_split_range():
     ds = TemporalGraphDataset(FAKE_GRAPHS, split='train')
-    # sample enough items to be confident
     for i in range(len(ds)):
         sample = ds[i]
-        assert 0 <= sample['week_idx'] <= 99, \
-            f"train split week_idx {sample['week_idx']} outside [0, 99]"
+        assert 0 <= sample['week_idx'] <= 119, \
+            f"train split week_idx {sample['week_idx']} outside [0, 119]"
 
 
 def test_val_split_range():
     ds = TemporalGraphDataset(FAKE_GRAPHS, split='val')
     for i in range(len(ds)):
         sample = ds[i]
-        assert 100 <= sample['week_idx'] <= 114, \
-            f"val split week_idx {sample['week_idx']} outside [100, 114]"
+        assert 120 <= sample['week_idx'] <= 139, \
+            f"val split week_idx {sample['week_idx']} outside [120, 139]"
 
 
 def test_test_split_range():
     ds = TemporalGraphDataset(FAKE_GRAPHS, split='test')
     for i in range(len(ds)):
         sample = ds[i]
-        assert 115 <= sample['week_idx'] <= 132, \
-            f"test split week_idx {sample['week_idx']} outside [115, 132]"
+        assert 140 <= sample['week_idx'] <= 179, \
+            f"test split week_idx {sample['week_idx']} outside [140, 179]"
 
 
 def test_no_future_in_context():

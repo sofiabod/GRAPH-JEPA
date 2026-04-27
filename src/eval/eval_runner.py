@@ -9,13 +9,17 @@ from src.eval.wilcoxon import paired_wilcoxon
 
 
 class EvalRunner:
-    def __init__(self, online, target, predictor, graphs, cfg):
+    def __init__(self, online, target, predictor, graphs, cfg,
+                 train_range=(0, 119), val_range=(120, 139), test_range=(140, 179)):
         self.online = online
         self.target = target
         self.predictor = predictor
         self.graphs = graphs
         self.cfg = cfg
         self.device = next(online.parameters()).device
+        self.train_range = train_range
+        self.val_range = val_range
+        self.test_range = test_range
 
     def run_all(self, out_dir: str) -> dict:
         # runs all 6 evals, saves eval_summary.json to out_dir
@@ -42,6 +46,9 @@ class EvalRunner:
             context_k=self.cfg.training.context_k,
             mask_ratio=self.cfg.training.mask_ratio,
             split='test',
+            train_range=self.train_range,
+            val_range=self.val_range,
+            test_range=self.test_range,
         )
         if len(dataset) == 0:
             return {'error': 'no test data'}
@@ -98,7 +105,10 @@ class EvalRunner:
         # effective rank and mean pairwise cosine on test set embeddings
         from src.data.dataset import TemporalGraphDataset
         dataset = TemporalGraphDataset(
-            self.graphs, context_k=4, mask_ratio=0.0, split='test'
+            self.graphs, context_k=4, mask_ratio=0.0, split='test',
+            train_range=self.train_range,
+            val_range=self.val_range,
+            test_range=self.test_range,
         )
         if len(dataset) == 0:
             return {'error': 'no test data'}

@@ -18,7 +18,7 @@ image = (
     .pip_install("sentence-transformers", "omegaconf", "einops")
     .add_local_dir("src", remote_path="/app/src")
     .add_local_dir("configs", remote_path="/app/configs")
-    .add_local_file("data/enron_graphs.pt", remote_path="/app/data/enron_graphs.pt")
+    .add_local_dir("data", remote_path="/app/data")
 )
 
 vol = modal.Volume.from_name("tgjepa-results", create_if_missing=False)
@@ -30,21 +30,37 @@ vol = modal.Volume.from_name("tgjepa-results", create_if_missing=False)
     image=image,
     volumes={"/results": vol},
 )
-def eval_seed(seed: int, condition: str):
+def eval_seed(seed: int, condition: str, config_path: str = "configs/enron.yaml"):
     import sys
     sys.path.insert(0, "/app")
+    import json
     import torch
     from omegaconf import OmegaConf
     from src.builders import build_graph_encoder, build_target_encoder, build_predictor
     from src.models.sequential_encoder import SequentialMLP
     from src.eval.eval_runner import EvalRunner
 
-    cfg = OmegaConf.load("/app/configs/tgjepa_base.yaml")
+    cfg = OmegaConf.load(f"/app/{config_path}")
     device = torch.device("cuda")
 
-    graphs = torch.load("/app/data/enron_graphs.pt", map_location="cpu")
-
+    graphs = torch.load(f"/app/{cfg.data.graphs_path}", map_location="cpu")
+    condition = cfg.get("dataset", condition)
     ckpt_path = f"/results/{condition}/seed{seed}/checkpoint.pt"
+
+    if hasattr(cfg.data, 'train_weeks') and cfg.data.train_weeks is not None:
+        split_kwargs = dict(
+            train_range=tuple(cfg.data.train_weeks),
+            val_range=tuple(cfg.data.val_weeks),
+            test_range=tuple(cfg.data.test_weeks),
+        )
+    else:
+        with open(f"/app/{cfg.data.meta_path}") as f:
+            meta = json.load(f)
+        split_kwargs = dict(
+            train_range=tuple(meta['train_range']),
+            val_range=tuple(meta['val_range']),
+            test_range=tuple(meta['test_range']),
+        )
     ckpt = torch.load(ckpt_path, map_location=device)
 
     if condition == "sequential-ablation":
@@ -63,8 +79,10 @@ def eval_seed(seed: int, condition: str):
 
     target = build_target_encoder(online)
     target.encoder = target.encoder.to(device)
+    if "target_encoder" in ckpt:
+        target.encoder.load_state_dict(ckpt["target_encoder"])
 
-    runner = EvalRunner(online, target, predictor, graphs, cfg)
+    runner = EvalRunner(online, target, predictor, graphs, cfg, **split_kwargs)
     results = runner.run_all(f"/results/eval/{condition}/seed{seed}")
     vol.commit()
     return {"seed": seed, "condition": condition, **results}
