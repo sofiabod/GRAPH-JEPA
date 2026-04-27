@@ -31,7 +31,7 @@ def build_components():
     target = TargetEncoder(online)
     predictor = TemporalGraphPredictor(
         embed_dim=HIDDEN_DIM, n_heads=2, n_layers=1, mlp_ratio=2,
-        dropout=0.0, n_nodes=N_NODES, max_time_steps=20, temporal_stride=1
+        dropout=0.0, n_nodes=N_NODES, max_time_steps=20
     )
     loss_fn = TGJEPALoss(lambda_reg=0.01)
     ema = EMAUpdater(momentum_start=0.996, momentum_end=1.0, total_steps=100)

@@ -18,7 +18,7 @@ image = (
     .pip_install("sentence-transformers", "omegaconf", "einops")
     .add_local_dir("src", remote_path="/app/src")
     .add_local_dir("configs", remote_path="/app/configs")
-    .add_local_file("data/enron_graphs.pt", remote_path="/app/data/enron_graphs.pt")
+    .add_local_dir("data", remote_path="/app/data")
 )
 
 vol = modal.Volume.from_name("tgjepa-results", create_if_missing=True)
@@ -30,7 +30,7 @@ vol = modal.Volume.from_name("tgjepa-results", create_if_missing=True)
     image=image,
     volumes={"/results": vol},
 )
-def train_seed_ablation(seed: int, config_path: str = "configs/tgjepa_base.yaml"):
+def train_seed_ablation(seed: int, config_path: str = "configs/enron.yaml"):
     import sys
     sys.path.insert(0, "/app")
     from omegaconf import OmegaConf
@@ -38,7 +38,6 @@ def train_seed_ablation(seed: int, config_path: str = "configs/tgjepa_base.yaml"
     from src.utils.seed import set_seed
 
     cfg = OmegaConf.load(f"/app/{config_path}")
-    cfg.data.enron_data_path = "/app/data/enron_graphs.pt"
     set_seed(seed)
     # ablation=True swaps GraphEncoder for param-matched SequentialMLP (no message passing)
     log = train(

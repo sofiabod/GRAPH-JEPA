@@ -1,10 +1,11 @@
+dataset: enron
+
 encoder:
   in_dim: 389
   hidden_dim: 256
   n_layers: 3
   n_heads: 4
   dropout: 0.1
-  temporal_stride: 1
 
 predictor:
   embed_dim: 256
@@ -14,7 +15,6 @@ predictor:
   dropout: 0.1
   n_nodes: 50
   max_time_steps: 200
-  temporal_stride: 1
 
 training:
   optimizer: adamw
@@ -37,10 +37,10 @@ loss:
   bcs_lmbd: 0.1
 
 data:
-  enron_data_path: data/enron_graphs.pt
-  enron_meta_path: data/enron_meta.json
-  train_weeks: [0, 99]
-  val_weeks: [100, 114]
-  test_weeks: [115, 132]
+  graphs_path: data/enron_graphs.pt
+  meta_path: data/enron_meta.json
+  train_weeks: [0, 119]
+  val_weeks: [120, 139]
+  test_weeks: [140, 179]
 
 seeds: [0, 1, 2, 3, 4]

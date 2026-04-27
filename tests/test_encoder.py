@@ -47,15 +47,7 @@ def test_different_inputs_different_outputs(tiny_graph):
     assert not torch.allclose(out1, out2), "different inputs should yield different embeddings"
 
 
-def test_temporal_stride_stored():
-    encoder = GraphEncoder(temporal_stride=1)
-    assert encoder.temporal_stride == 1
-
-
-def test_temporal_stride_from_builder():
-    cfg = SimpleNamespace(
-        in_dim=384, hidden_dim=256, n_layers=3, n_heads=4, dropout=0.1, temporal_stride=1
-    )
+def test_builder_returns_graph_encoder():
+    cfg = SimpleNamespace(in_dim=384, hidden_dim=256, n_layers=3, n_heads=4, dropout=0.1)
     encoder = build_graph_encoder(cfg)
     assert isinstance(encoder, GraphEncoder)
-    assert encoder.temporal_stride == cfg.temporal_stride

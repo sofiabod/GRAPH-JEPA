@@ -1,5 +1,4 @@
 import torch
-import torch.nn as nn
 
 from src.models.predictor import TemporalGraphPredictor
 
@@ -96,10 +95,6 @@ def test_temporal_pos_embedding_matters():
     assert not torch.allclose(out1[0, -1], out2[0, -1], atol=1e-4), \
         "different time indices at mask position should produce different outputs"
 
-
-def test_temporal_stride_stored():
-    predictor = TemporalGraphPredictor(temporal_stride=1)
-    assert predictor.temporal_stride == 1
 
 
 def test_param_count():

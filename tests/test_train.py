@@ -27,7 +27,6 @@ def make_test_cfg(n_nodes=10):
             'n_layers': 1,
             'n_heads': 2,
             'dropout': 0.0,
-            'temporal_stride': 1,
         },
         'predictor': {
             'embed_dim': 32,
@@ -37,7 +36,6 @@ def make_test_cfg(n_nodes=10):
             'dropout': 0.0,
             'n_nodes': n_nodes,
             'max_time_steps': 50,
-            'temporal_stride': 1,
         },
         'training': {
             'lr': 1e-3,
@@ -59,8 +57,11 @@ def make_test_cfg(n_nodes=10):
             'bcs_lmbd': 0.1,
         },
         'data': {
-            'enron_data_path': 'data/enron_graphs.pt',
-            'enron_meta_path': 'data/enron_meta.json',
+            'graphs_path': 'data/enron_graphs.pt',
+            'meta_path': 'data/enron_meta.json',
+            'train_weeks': [0, 119],
+            'val_weeks': [120, 139],
+            'test_weeks': [140, 179],
         },
     })
 
@@ -104,7 +105,7 @@ def test_target_encoder_not_in_optimizer():
     from omegaconf import OmegaConf
     enc_cfg = OmegaConf.create({
         'in_dim': 384, 'hidden_dim': 32, 'n_layers': 1,
-        'n_heads': 2, 'dropout': 0.0, 'temporal_stride': 1,
+        'n_heads': 2, 'dropout': 0.0,
     })
     online = build_graph_encoder(enc_cfg)
     target = build_target_encoder(online)

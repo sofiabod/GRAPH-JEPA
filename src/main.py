@@ -5,7 +5,7 @@ from src.train import train
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, default="configs/tgjepa_base.yaml")
+    parser.add_argument("--config", type=str, default="configs/enron.yaml")
     parser.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()
 

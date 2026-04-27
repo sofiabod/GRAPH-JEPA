@@ -18,7 +18,9 @@ image = (
     .pip_install("sentence-transformers", "omegaconf", "einops")
     .add_local_dir("src", remote_path="/app/src")
     .add_local_dir("configs", remote_path="/app/configs")
-    .add_local_file("data/enron_graphs.pt", remote_path="/app/data/enron_graphs.pt")
+    .add_local_dir("data", remote_path="/app/data")
+    .add_local_dir("tests", remote_path="/app/tests")
+    .pip_install("pytest")
 )
 
 vol = modal.Volume.from_name("tgjepa-results", create_if_missing=True)
@@ -30,7 +32,7 @@ vol = modal.Volume.from_name("tgjepa-results", create_if_missing=True)
     image=image,
     volumes={"/results": vol},
 )
-def train_seed(seed: int, config_path: str = "configs/tgjepa_base.yaml"):
+def train_seed(seed: int, config_path: str = "configs/enron.yaml"):
     import sys
     sys.path.insert(0, "/app")
     from omegaconf import OmegaConf
@@ -38,15 +40,38 @@ def train_seed(seed: int, config_path: str = "configs/tgjepa_base.yaml"):
     from src.utils.seed import set_seed
 
     cfg = OmegaConf.load(f"/app/{config_path}")
-    cfg.data.enron_data_path = "/app/data/enron_graphs.pt"
     set_seed(seed)
-    log = train(cfg, seed=seed, out_dir=f"/results/tgjepa/seed{seed}")
+    condition = cfg.get("dataset", "tgjepa")
+    log = train(cfg, seed=seed, out_dir=f"/results/{condition}/seed{seed}")
     vol.commit()
     return log
 
 
+@app.function(image=image, timeout=600)
+def run_tests():
+    import sys
+    import subprocess
+    sys.path.insert(0, "/app")
+    result = subprocess.run(
+        ["python", "-m", "pytest", "tests/", "-v", "--tb=short", "--noconftest"],
+        cwd="/app",
+        capture_output=True,
+        text=True,
+    )
+    print(result.stdout)
+    if result.stderr:
+        print(result.stderr)
+    return result.returncode
+
+
 @app.local_entrypoint()
-def main(seeds: str = "0,1,2,3,4"):
+def main(config: str = "configs/enron.yaml", seeds: str = "0,1,2,3,4"):
     seed_list = [int(s) for s in seeds.split(",")]
-    for future in train_seed.map(seed_list):
+    for future in train_seed.map(seed_list, kwargs=[{"config_path": config}] * len(seed_list)):
         print(future)
+
+
+@app.local_entrypoint()
+def test():
+    rc = run_tests.remote()
+    print(f"\nexit code: {rc}")
