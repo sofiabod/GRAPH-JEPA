@@ -56,7 +56,7 @@ def run_tests():
     import subprocess
     sys.path.insert(0, "/app")
     result = subprocess.run(
-        ["python", "-m", "pytest", "tests/", "-v", "--tb=short", "--noconftest"],
+        ["python", "-m", "pytest", "tests/", "-v", "--tb=short"],
         cwd="/app",
         capture_output=True,
         text=True,

@@ -1,11 +1,10 @@
 import pytest
 import torch
-from torch_geometric.data import Data
 
 
 @pytest.fixture
 def tiny_graph():
-    # 10 nodes, 15 edges, node features shape [10, 384]
+    from torch_geometric.data import Data
     n = 10
     x = torch.randn(n, 384)
     edge_index = torch.randint(0, n, (2, 15))
@@ -15,7 +14,7 @@ def tiny_graph():
 
 @pytest.fixture
 def temporal_sequence(tiny_graph):
-    # 8 snapshots with slight perturbation
+    from torch_geometric.data import Data
     graphs = []
     for _ in range(8):
         g = Data(
