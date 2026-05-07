@@ -1,0 +1,24 @@
+{
+  "seed": 3,
+  "condition": "sequential-ablation",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.7528622315210455,
+    "mean_copy_cos": 0.5896081637495252,
+    "mean_graph_avg_cos": 0.33140410963245026,
+    "wilcoxon_p_vs_copy": 1.4855526088729838e-06,
+    "wilcoxon_stat_vs_copy": 21829.0,
+    "wilcoxon_p_vs_graph_avg": 3.2323256178079406e-29,
+    "wilcoxon_stat_vs_graph_avg": 29476.0,
+    "n_pairs": 255,
+    "wilcoxon_p_vs_copy_bonferroni": 2.9711052177459675e-06,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 6.464651235615881e-29
+  },
+  "eval3_multistep_rollout": {
+    "status": "not_implemented"
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 19.384822845458984,
+    "mean_pairwise_cosine": 0.30233442783355713
+  },
+  "family_size": 2
+}

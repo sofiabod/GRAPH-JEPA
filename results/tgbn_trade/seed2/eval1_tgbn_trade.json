@@ -1,0 +1,24 @@
+{
+  "seed": 2,
+  "condition": "tgbn_trade",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.827181766817675,
+    "mean_copy_cos": 0.46918805884379966,
+    "mean_graph_avg_cos": 0.16649892094965074,
+    "wilcoxon_p_vs_copy": 1.8350613463123882e-10,
+    "wilcoxon_stat_vs_copy": 23709.0,
+    "wilcoxon_p_vs_graph_avg": 7.026945239659058e-44,
+    "wilcoxon_stat_vs_graph_avg": 32640.0,
+    "n_pairs": 255,
+    "wilcoxon_p_vs_copy_bonferroni": 3.6701226926247764e-10,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 1.4053890479318117e-43
+  },
+  "eval3_multistep_rollout": {
+    "status": "not_implemented"
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 7.99895715713501,
+    "mean_pairwise_cosine": 0.3330901265144348
+  },
+  "family_size": 2
+}

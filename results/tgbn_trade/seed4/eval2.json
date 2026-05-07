@@ -1,0 +1,9 @@
+{
+  "seed": 4,
+  "mean_graph_cos": 0.8236587435299275,
+  "mean_sequential_cos": 0.7195419092388714,
+  "wilcoxon_p": 1.2331934686987262e-17,
+  "wilcoxon_stat": 26305.0,
+  "n_pairs": 255,
+  "win_rate": 0.8784313725490196
+}
