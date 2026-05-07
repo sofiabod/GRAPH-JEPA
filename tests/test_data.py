@@ -62,3 +62,10 @@ def test_no_future_in_context():
 def test_dataset_len_nonzero():
     ds = TemporalGraphDataset(FAKE_GRAPHS, split='train')
     assert len(ds) > 0, "train dataset should have nonzero length"
+
+
+def test_dataset_accepts_seed_param():
+    # the seed param plumbs through; absence/explicit value both ok
+    ds_default = TemporalGraphDataset(FAKE_GRAPHS, split='train')
+    ds_seeded = TemporalGraphDataset(FAKE_GRAPHS, split='train', seed=7)
+    assert len(ds_default) == len(ds_seeded)

@@ -2,7 +2,9 @@ from pathlib import Path
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from torch.utils.data import DataLoader
+from torch_geometric.data import Batch
 
 from src.builders import (
     build_graph_encoder,
@@ -82,57 +84,78 @@ def _build_tokens_for_sample(
     return tokens, time_indices, node_ids_seq, mask_positions
 
 
+def _encode_batched(encoder, graphs, n_nodes, device):
+    # batch a list of pyg data objects, run encoder once, split back to [B, N, D]
+    batched = Batch.from_data_list([g.to(device) for g in graphs])
+    out = encoder(batched)  # [B*N, D]
+    return out.view(len(graphs), n_nodes, -1)
+
+
 def _step(batch, online, target, predictor, loss_fn):
     """run one forward pass over a list-batch of samples, return total loss."""
     device = next(online.parameters()).device
-    z_pred_list = []
-    z_target_list = []
-    z_online_all_list = []
-    z_target_all_list = []
+    B = len(batch)
+    k = len(batch[0]['context_graphs'])
+    n_nodes = batch[0]['target_graph'].x.shape[0]
 
-    # process each sample separately (loop over batch)
-    for sample in batch:
-        tgt_graph = sample['target_graph'].to(device)
+    # vectorize encoder calls across the batch
+    # for each timestep t, encode the t-th context graph for all samples in one call
+    ctx_embs_per_sample = [[None] * k for _ in range(B)]  # ctx_embs_per_sample[b][t] = [N, D]
+    for t in range(k):
+        graphs_t = [batch[b]['context_graphs'][t] for b in range(B)]
+        out_t = _encode_batched(online, graphs_t, n_nodes, device)  # [B, N, D]
+        for b in range(B):
+            ctx_embs_per_sample[b][t] = out_t[b]
+
+    # batched encoders on target graphs
+    tgt_graphs = [batch[b]['target_graph'] for b in range(B)]
+    tgt_emb_online_batched = _encode_batched(online, tgt_graphs, n_nodes, device)  # [B, N, D]
+    # target encoder applies stop-grad inside; pass batched data directly
+    batched_tgt = Batch.from_data_list([g.to(device) for g in tgt_graphs])
+    tgt_emb_sg_flat = target(batched_tgt)  # [B*N, D], no grad
+    tgt_emb_sg_batched = tgt_emb_sg_flat.view(B, n_nodes, -1)  # [B, N, D]
+
+    # build per-sample token sequences then stack for one predictor forward
+    tokens_list = []
+    time_list = []
+    node_list = []
+    z_tgt_list = []
+    mask_positions_list = []
+    for b in range(B):
+        sample = batch[b]
         masked_ids = sample['masked_node_ids'].to(device)
         visible_ids = sample['visible_node_ids'].to(device)
-        # online encoder on all context snapshots
-        ctx_embs = _encode_context(online, sample['context_graphs'])  # list of [N, D]
+        ctx_embs = ctx_embs_per_sample[b]
+        tgt_emb_sg = tgt_emb_sg_batched[b]
 
-        # target encoder on target graph (stop-grad already applied in TargetEncoder)
-        tgt_emb_sg = target(tgt_graph)  # [N, D], no grad
-
-        # online encoder on target graph (for BCS anti-collapse)
-        tgt_emb_online = online(tgt_graph)  # [N, D]
-
-        # build token sequence for this sample
         tokens, time_indices, node_ids_seq, mask_positions = _build_tokens_for_sample(
             ctx_embs, tgt_emb_sg, masked_ids, visible_ids, predictor
         )
+        tokens_list.append(tokens)
+        time_list.append(time_indices)
+        node_list.append(node_ids_seq)
+        z_tgt_list.append(tgt_emb_sg[masked_ids])
+        mask_positions_list.append(mask_positions)
 
-        # predictor forward: [1, T, D]
-        out = predictor(
-            tokens.unsqueeze(0),
-            time_indices.unsqueeze(0),
-            node_ids_seq.unsqueeze(0),
-        )  # [1, T, D]
+    # stack into [B, T, D]; T is identical across samples since N and k are fixed
+    tokens_b = torch.stack(tokens_list, dim=0)
+    time_b = torch.stack(time_list, dim=0)
+    node_b = torch.stack(node_list, dim=0)
 
-        out = out.squeeze(0)  # [T, D]
+    out_b = predictor(tokens_b, time_b, node_b)  # [B, T, D]
 
-        # extract predictions at mask positions
-        z_pred = out[mask_positions]  # [M, D]
-        z_tgt = tgt_emb_sg[masked_ids]  # [M, D]
+    # extract predictions at per-sample mask positions and l2-normalize onto sphere
+    z_pred_list = []
+    for b in range(B):
+        z_pred_b = out_b[b][mask_positions_list[b]]
+        z_pred_b = F.normalize(z_pred_b, dim=-1)
+        z_pred_list.append(z_pred_b)
 
-        z_pred_list.append(z_pred)
-        z_target_list.append(z_tgt)
-        z_online_all_list.append(tgt_emb_online)   # [N, D]
-        z_target_all_list.append(tgt_emb_sg)        # [N, D]
+    z_pred_all = torch.cat(z_pred_list, dim=0)              # [sum(M), D]
+    z_tgt_all = torch.cat(z_tgt_list, dim=0)                # [sum(M), D]
+    z_online_all = tgt_emb_online_batched.reshape(B * n_nodes, -1)  # [B*N, D]
 
-    z_pred_all = torch.cat(z_pred_list, dim=0)      # [sum(M), D]
-    z_tgt_all = torch.cat(z_target_list, dim=0)     # [sum(M), D]
-    z_online_all = torch.cat(z_online_all_list, dim=0)   # [B*N, D]
-    z_target_all = torch.cat(z_target_all_list, dim=0)   # [B*N, D]
-
-    total, _, _ = loss_fn(z_pred_all, z_tgt_all, z_online_all, z_target_all)
+    total, _, _ = loss_fn(z_pred_all, z_tgt_all, z_online_all)
     return total
 
 
@@ -154,7 +177,23 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
     # load graphs if not provided
     if graphs is None:
         import json
-        graphs = torch.load(cfg.data.graphs_path)
+        # weights_only=False: pyg data objects rely on pickle
+        graphs = torch.load(cfg.data.graphs_path, weights_only=False)
+
+    # all snapshots must share the same node count and match cfg.predictor.n_nodes
+    # catches dataset/config drift (e.g. JODIE) before mid-training IndexErrors
+    if len(graphs) > 0:
+        n_nodes_set = {g.x.shape[0] for g in graphs}
+        if len(n_nodes_set) != 1:
+            raise ValueError(
+                f"all graphs must share n_nodes; found {sorted(n_nodes_set)}"
+            )
+        n_nodes_data = next(iter(n_nodes_set))
+        if n_nodes_data != cfg.predictor.n_nodes:
+            raise ValueError(
+                f"n_nodes mismatch: data has {n_nodes_data}, "
+                f"cfg.predictor.n_nodes is {cfg.predictor.n_nodes}"
+            )
 
     # resolve split ranges from config or meta.json
     if hasattr(cfg.data, 'train_weeks') and cfg.data.train_weeks is not None:
@@ -210,13 +249,18 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
     mask_ratio = cfg.training.mask_ratio
     batch_size = cfg.training.batch_size
 
+    # mask_seed is plumbed so paired evals share the same mask sets
+    mask_seed = cfg.training.get('mask_seed', seed)
+
     train_dataset = TemporalGraphDataset(
         graphs, context_k=context_k, mask_ratio=mask_ratio, split='train',
         train_range=train_range, val_range=val_range, test_range=test_range,
+        seed=mask_seed,
     )
     val_dataset = TemporalGraphDataset(
         graphs, context_k=context_k, mask_ratio=mask_ratio, split='val',
         train_range=train_range, val_range=val_range, test_range=test_range,
+        seed=mask_seed,
     )
 
     train_losses = []
@@ -276,12 +320,26 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
             if epoch_val_loss < best_val_loss:
                 best_val_loss = epoch_val_loss
                 patience_counter = 0
+                # save best checkpoint on every val improvement
+                if out_dir is not None:
+                    out_path = Path(out_dir)
+                    out_path.mkdir(parents=True, exist_ok=True)
+                    torch.save(
+                        {
+                            'online': online.state_dict(),
+                            'predictor': predictor.state_dict(),
+                            'target_encoder': target.encoder.state_dict(),
+                            'step': global_step,
+                            'val_loss': epoch_val_loss,
+                        },
+                        out_path / 'checkpoint_best.pt',
+                    )
             else:
                 patience_counter += 1
                 if patience_counter >= patience:
                     break
 
-    # save checkpoint
+    # save final checkpoint as well
     if out_dir is not None:
         out_path = Path(out_dir)
         out_path.mkdir(parents=True, exist_ok=True)
@@ -298,4 +356,5 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
     return {
         'train_losses': train_losses,
         'val_losses': val_losses,
+        'best_val_loss': best_val_loss if best_val_loss != float('inf') else None,
     }

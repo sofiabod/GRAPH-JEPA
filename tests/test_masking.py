@@ -66,3 +66,38 @@ def test_context_window_length(fake_dataset):
     sample = fake_dataset[0]
     assert len(sample['context_graphs']) == 4, \
         f"context_graphs should have 4 entries, got {len(sample['context_graphs'])}"
+
+
+def test_masking_deterministic_same_seed():
+    # same (seed, target_idx) must produce the same masked set across calls
+    graphs = make_fake_graphs(200)
+    ds_a = TemporalGraphDataset(graphs, context_k=4, mask_ratio=0.20, split='train', seed=0)
+    ds_b = TemporalGraphDataset(graphs, context_k=4, mask_ratio=0.20, split='train', seed=0)
+    for i in [0, 5, 17]:
+        a = ds_a[i]
+        b = ds_b[i]
+        assert torch.equal(a['masked_node_ids'], b['masked_node_ids']), \
+            f"determinism broken at idx {i}: {a['masked_node_ids']} vs {b['masked_node_ids']}"
+        assert torch.equal(a['visible_node_ids'], b['visible_node_ids'])
+
+
+def test_masking_deterministic_within_dataset_repeat_call():
+    # repeated __getitem__(idx) calls return identical mask sets
+    graphs = make_fake_graphs(200)
+    ds = TemporalGraphDataset(graphs, context_k=4, mask_ratio=0.20, split='train', seed=42)
+    a = ds[3]
+    b = ds[3]
+    assert torch.equal(a['masked_node_ids'], b['masked_node_ids'])
+
+
+def test_masking_changes_with_seed():
+    # different seeds should generally produce different mask sets
+    graphs = make_fake_graphs(200)
+    ds_a = TemporalGraphDataset(graphs, context_k=4, mask_ratio=0.20, split='train', seed=0)
+    ds_b = TemporalGraphDataset(graphs, context_k=4, mask_ratio=0.20, split='train', seed=1)
+    differs_anywhere = False
+    for i in range(min(10, len(ds_a))):
+        if not torch.equal(ds_a[i]['masked_node_ids'], ds_b[i]['masked_node_ids']):
+            differs_anywhere = True
+            break
+    assert differs_anywhere, "different seeds should produce different masks somewhere"

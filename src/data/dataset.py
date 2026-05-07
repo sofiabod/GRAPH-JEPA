@@ -9,9 +9,11 @@ _DEFAULT_TEST = (140, 179)
 
 class TemporalGraphDataset(Dataset):
     def __init__(self, graphs, context_k=4, mask_ratio=0.20, split='train',
-                 train_range=_DEFAULT_TRAIN, val_range=_DEFAULT_VAL, test_range=_DEFAULT_TEST):
+                 train_range=_DEFAULT_TRAIN, val_range=_DEFAULT_VAL, test_range=_DEFAULT_TEST,
+                 seed=0):
         self.context_k = context_k
         self.mask_ratio = mask_ratio
+        self.seed = seed
         all_indices = list(range(len(graphs)))
         if split == 'train':
             lo, hi = train_range
@@ -35,7 +37,11 @@ class TemporalGraphDataset(Dataset):
 
         n_nodes = target_graph.x.shape[0]
         n_mask = max(1, round(n_nodes * self.mask_ratio))
-        perm = torch.randperm(n_nodes)
+        # deterministic per-sample permutation: pairs runs across conditions
+        # for the same (seed, target_idx) this returns the identical mask set
+        gen = torch.Generator()
+        gen.manual_seed(self.seed * 100003 + target_idx)
+        perm = torch.randperm(n_nodes, generator=gen)
         masked_node_ids = perm[:n_mask]
         visible_node_ids = perm[n_mask:]
 
