@@ -14,7 +14,7 @@ from src.eval.eval_runner import EvalRunner
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--checkpoint', type=str, required=True)
-    parser.add_argument('--config', type=str, default='configs/enron.yaml')
+    parser.add_argument('--config', type=str, default='configs/tgbn_trade.yaml')
     parser.add_argument('--data', type=str, default=None,
                         help='path to graphs .pt file (defaults to cfg.data.graphs_path)')
     parser.add_argument('--out_dir', type=str, default='results/eval')
@@ -42,17 +42,19 @@ def main():
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     online = build_graph_encoder(cfg.encoder).to(device)
-    target = build_target_encoder(online)
-    target.encoder = target.encoder.to(device)
     predictor = build_predictor(cfg.predictor).to(device)
 
+    # load online weights BEFORE building target so target deepcopy gets trained weights
     ckpt = torch.load(args.checkpoint, map_location=device)
     online.load_state_dict(ckpt['online'])
     predictor.load_state_dict(ckpt['predictor'])
+
+    target = build_target_encoder(online)
+    target.encoder = target.encoder.to(device)
     if 'target_encoder' in ckpt:
         target.encoder.load_state_dict(ckpt['target_encoder'])
 
-    runner = EvalRunner(online, target, predictor, graphs, cfg, **split_kwargs)
+    runner = EvalRunner(online, target, predictor, graphs, cfg, mask_seed=0, **split_kwargs)
     results = runner.run_all(args.out_dir)
     print(results)
 
