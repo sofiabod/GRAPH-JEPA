@@ -2,15 +2,17 @@
 from pathlib import Path
 import json
 import torch
+import torch.nn.functional as F
 import numpy as np
 
 from src.eval.metrics import cosine_sim, effective_rank, mean_pairwise_cosine
-from src.eval.wilcoxon import paired_wilcoxon
+from src.eval.wilcoxon import paired_wilcoxon, bonferroni_correct
 
 
 class EvalRunner:
     def __init__(self, online, target, predictor, graphs, cfg,
-                 train_range=(0, 119), val_range=(120, 139), test_range=(140, 179)):
+                 train_range=(0, 119), val_range=(120, 139), test_range=(140, 179),
+                 mask_seed=0):
         self.online = online
         self.target = target
         self.predictor = predictor
@@ -20,9 +22,11 @@ class EvalRunner:
         self.train_range = train_range
         self.val_range = val_range
         self.test_range = test_range
+        self.mask_seed = mask_seed
 
     def run_all(self, out_dir: str) -> dict:
-        # runs all 6 evals, saves eval_summary.json to out_dir
+        # runs the eval family minus eval 2 (which needs a paired ablation ckpt)
+        # applies bonferroni across the family of paired tests for eval 1
         out_path = Path(out_dir)
         out_path.mkdir(parents=True, exist_ok=True)
 
@@ -31,13 +35,76 @@ class EvalRunner:
         results['eval3_multistep_rollout'] = self._eval3_multistep_rollout()
         results['eval6_representation_quality'] = self._eval6_representation_quality()
 
+        # bonferroni across eval 1 family (model vs copy-forward, model vs graph-average)
+        e1 = results['eval1_node_prediction']
+        if 'wilcoxon_p_vs_copy' in e1 and 'wilcoxon_p_vs_graph_avg' in e1:
+            corrected = bonferroni_correct(
+                [e1['wilcoxon_p_vs_copy'], e1['wilcoxon_p_vs_graph_avg']], n_tests=2
+            )
+            e1['wilcoxon_p_vs_copy_bonferroni'] = corrected[0]
+            e1['wilcoxon_p_vs_graph_avg_bonferroni'] = corrected[1]
+            results['family_size'] = 2
+
+        with open(out_path / 'eval_summary.json', 'w') as f:
+            json.dump(results, f, indent=2)
+        return results
+
+    def run_all_with_eval2(self, out_dir: str, sequential_ckpt_path=None) -> dict:
+        """eval family including eval 2 if a sequential-ablation checkpoint is given.
+
+        bonferroni correction is applied across the whole family of paired tests:
+        eval1 (model vs copy, model vs graph-avg) + eval2 (graph vs sequential).
+        """
+        from src.eval.eval2 import eval2_compare
+
+        out_path = Path(out_dir)
+        out_path.mkdir(parents=True, exist_ok=True)
+
+        results = {}
+        results['eval1_node_prediction'] = self._eval1_node_prediction()
+        results['eval3_multistep_rollout'] = self._eval3_multistep_rollout()
+        results['eval6_representation_quality'] = self._eval6_representation_quality()
+
+        e1 = results['eval1_node_prediction']
+        pvals = []
+        labels = []
+        if 'wilcoxon_p_vs_copy' in e1:
+            pvals.append(e1['wilcoxon_p_vs_copy'])
+            labels.append('eval1_vs_copy')
+        if 'wilcoxon_p_vs_graph_avg' in e1:
+            pvals.append(e1['wilcoxon_p_vs_graph_avg'])
+            labels.append('eval1_vs_graph_avg')
+
+        if sequential_ckpt_path is not None:
+            # graph_ckpt_path is implicit: the runner already holds the graph-jepa models
+            e2 = eval2_compare(
+                graph_models=(self.online, self.target, self.predictor),
+                sequential_ckpt_path=sequential_ckpt_path,
+                graphs=self.graphs,
+                cfg=self.cfg,
+                splits=(self.train_range, self.val_range, self.test_range),
+                mask_seed=self.mask_seed,
+                device=self.device,
+            )
+            results['eval2_graph_vs_sequential'] = e2
+            pvals.append(e2['wilcoxon_p'])
+            labels.append('eval2_graph_vs_sequential')
+
+        if len(pvals) > 0:
+            corrected = bonferroni_correct(pvals, n_tests=len(pvals))
+            results['bonferroni'] = {
+                label: {'raw': pvals[i], 'corrected': corrected[i]}
+                for i, label in enumerate(labels)
+            }
+            results['family_size'] = len(pvals)
+
         with open(out_path / 'eval_summary.json', 'w') as f:
             json.dump(results, f, indent=2)
         return results
 
     def _eval1_node_prediction(self) -> dict:
-        # cos(z_pred, z_target) vs copy-forward baseline
-        # uses test split (week indices 140-179)
+        # cos(z_pred, z_target) vs copy-forward and graph-average baselines
+        # uses test split (week indices 140-179 by default)
         from src.data.dataset import TemporalGraphDataset
         from src.train import _encode_context, _build_tokens_for_sample
 
@@ -49,12 +116,14 @@ class EvalRunner:
             train_range=self.train_range,
             val_range=self.val_range,
             test_range=self.test_range,
+            seed=self.mask_seed,
         )
         if len(dataset) == 0:
             return {'error': 'no test data'}
 
         pred_sims = []
         copy_sims = []
+        graph_avg_sims = []
 
         self.online.eval()
         self.predictor.eval()
@@ -77,22 +146,35 @@ class EvalRunner:
                     node_ids_seq.unsqueeze(0),
                 ).squeeze(0)
 
-                z_pred = out[mask_positions]
+                # normalize predictor output to match training-time sphere geometry
+                z_pred = F.normalize(out[mask_positions], dim=-1)
                 z_true = tgt_emb[masked_ids]
                 z_last = ctx_embs[-1][masked_ids]  # copy-forward baseline
 
+                # graph-average baseline: mean of neighbor embeddings at last context step
+                z_graph_avg = _graph_average_baseline(
+                    masked_ids, tgt_graph, ctx_embs[-1]
+                )
+
                 pred_sims.extend(cosine_sim(z_pred, z_true).cpu().numpy().tolist())
                 copy_sims.extend(cosine_sim(z_last, z_true).cpu().numpy().tolist())
+                graph_avg_sims.extend(cosine_sim(z_graph_avg, z_true).cpu().numpy().tolist())
 
         pred_arr = np.array(pred_sims)
         copy_arr = np.array(copy_sims)
-        p_val, stat = paired_wilcoxon(pred_arr, copy_arr)
+        graph_avg_arr = np.array(graph_avg_sims)
+
+        p_copy, stat_copy = paired_wilcoxon(pred_arr, copy_arr)
+        p_ga, stat_ga = paired_wilcoxon(pred_arr, graph_avg_arr)
 
         return {
             'mean_pred_cos': float(pred_arr.mean()),
             'mean_copy_cos': float(copy_arr.mean()),
-            'wilcoxon_p': p_val,
-            'wilcoxon_stat': stat,
+            'mean_graph_avg_cos': float(graph_avg_arr.mean()),
+            'wilcoxon_p_vs_copy': p_copy,
+            'wilcoxon_stat_vs_copy': stat_copy,
+            'wilcoxon_p_vs_graph_avg': p_ga,
+            'wilcoxon_stat_vs_graph_avg': stat_ga,
             'n_pairs': len(pred_arr),
         }
 
@@ -109,6 +191,7 @@ class EvalRunner:
             train_range=self.train_range,
             val_range=self.val_range,
             test_range=self.test_range,
+            seed=self.mask_seed,
         )
         if len(dataset) == 0:
             return {'error': 'no test data'}
@@ -126,3 +209,36 @@ class EvalRunner:
             'effective_rank': effective_rank(z_all),
             'mean_pairwise_cosine': mean_pairwise_cosine(z_all),
         }
+
+
+def _graph_average_baseline(masked_ids, tgt_graph, last_ctx_emb):
+    """mean neighbor embedding at the last context timestep, l2-normalized.
+
+    for each masked node v, find neighbors in the target graph snapshot
+    and average their last-context-step embeddings. isolated nodes fall
+    back to the global mean of last_ctx_emb.
+    """
+    device = last_ctx_emb.device
+    n_nodes = last_ctx_emb.shape[0]
+    edge_index = tgt_graph.edge_index
+    # treat edges as undirected for neighborhood: union of source and dest
+    src = edge_index[0]
+    dst = edge_index[1]
+
+    global_mean = last_ctx_emb.mean(dim=0, keepdim=True)
+    out = torch.zeros(masked_ids.shape[0], last_ctx_emb.shape[1], device=device)
+    for i, v in enumerate(masked_ids.tolist()):
+        # neighbors from both directions
+        mask_out = (src == v)
+        mask_in = (dst == v)
+        neighbors = torch.cat([dst[mask_out], src[mask_in]], dim=0)
+        if neighbors.numel() == 0:
+            out[i] = global_mean.squeeze(0)
+        else:
+            # restrict to valid node ids
+            neighbors = neighbors[(neighbors >= 0) & (neighbors < n_nodes)]
+            if neighbors.numel() == 0:
+                out[i] = global_mean.squeeze(0)
+            else:
+                out[i] = last_ctx_emb[neighbors].mean(dim=0)
+    return F.normalize(out, dim=-1)

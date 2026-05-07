@@ -66,9 +66,8 @@ def run_forward(online, target, predictor, loss_fn):
     # use last token output as prediction, first node of z_target as target
     z_pred = pred_out[0, -1:].expand(N_NODES, -1)  # [N, D]
     z_online_all = z_online  # [N, D]
-    z_target_all = z_target  # [N, D]
 
-    total, pred_loss, sigreg_dict = loss_fn(z_pred, z_target, z_online_all, z_target_all)
+    total, pred_loss, sigreg_dict = loss_fn(z_pred, z_target, z_online_all)
     return total, pred_loss, sigreg_dict
 
 

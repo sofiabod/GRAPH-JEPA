@@ -46,3 +46,32 @@ def test_mean_pairwise_cosine_range():
     z = torch.randn(50, 256)
     mpc = mean_pairwise_cosine(z)
     assert -1.0 <= mpc <= 1.0
+
+
+def test_effective_rank_all_zero_returns_one():
+    # degenerate input: all-zero matrix should return 1.0, not nan
+    z = torch.zeros(20, 64)
+    rank = effective_rank(z)
+    assert rank == 1.0
+
+
+def test_effective_rank_tiny_signal_returns_finite():
+    # numerically vanishing singular values should not propagate as nan
+    z = torch.full((10, 16), 1e-15)
+    rank = effective_rank(z)
+    assert torch.isfinite(torch.tensor(rank)).item()
+
+
+def test_mean_pairwise_cosine_subsamples_large_input():
+    # with N>5000 the function should subsample without erroring out
+    z = torch.randn(6000, 32)
+    mpc = mean_pairwise_cosine(z)
+    assert -1.0 <= mpc <= 1.0
+
+
+def test_mean_pairwise_cosine_subsample_deterministic():
+    # repeated calls on the same input should yield the same value
+    z = torch.randn(6000, 32)
+    a = mean_pairwise_cosine(z)
+    b = mean_pairwise_cosine(z)
+    assert abs(a - b) < 1e-6

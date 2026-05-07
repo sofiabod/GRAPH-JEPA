@@ -5,11 +5,11 @@ from src.losses.anticollapse import EppsPulley, BCS
 from src.losses.prediction import TGJEPALoss
 
 
-def test_smoothl1_zero_when_equal():
+def test_pred_loss_zero_when_equal():
     loss_fn = TGJEPALoss(lambda_reg=0.0)
     z = torch.randn(10, 256)
-    # dummy full-batch tensors for sigreg (same z used for both online and target all)
-    total, pred_loss, sigreg_dict = loss_fn(z, z, z, z)
+    # dummy full-batch tensor for sigreg (same z reused)
+    _, pred_loss, _ = loss_fn(z, z, z)
     assert pred_loss.item() < 1e-6, \
         f"prediction loss should be 0 when pred==target, got {pred_loss.item()}"
 
@@ -41,7 +41,7 @@ def test_total_loss_structure():
     z_target = torch.randn(10, 256)
     z_all = torch.randn(32, 256)
 
-    total, pred_loss, sigreg_dict = loss_fn(z_pred, z_target, z_all, z_all)
+    total, pred_loss, sigreg_dict = loss_fn(z_pred, z_target, z_all)
 
     expected_total = pred_loss + lmbd * sigreg_dict['loss']
     assert torch.allclose(total, expected_total, atol=1e-5), \
@@ -53,8 +53,8 @@ def test_lambda_reg_effect():
     z_target = torch.randn(10, 256)
     z_all = torch.randn(32, 256)
 
-    loss_low = TGJEPALoss(lambda_reg=0.001)(z_pred, z_target, z_all, z_all)[0]
-    loss_high = TGJEPALoss(lambda_reg=1.0)(z_pred, z_target, z_all, z_all)[0]
+    loss_low = TGJEPALoss(lambda_reg=0.001)(z_pred, z_target, z_all)[0]
+    loss_high = TGJEPALoss(lambda_reg=1.0)(z_pred, z_target, z_all)[0]
 
     assert loss_high > loss_low, \
         "higher lambda_reg should yield higher total loss when sigreg loss is nonzero"
