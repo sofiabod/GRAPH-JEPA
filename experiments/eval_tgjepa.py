@@ -177,11 +177,13 @@ def main(config: str = "configs/tgbn_trade.yaml", seeds: str = "0,1,2,3,4"):
 
     results_root = Path("results") / main_condition
 
-    all_results = []
-    for result in eval_seed.starmap(args):
+    # collect all futures into lists first so modal's iterator cleanup is fully done
+    # before we run local save logic (streaming iteration races with cleanup, drops side effects)
+    print(f"running eval 1 on {len(args)} (seed, condition) pairs")
+    all_results = list(eval_seed.starmap(args))
+    print("eval 1 complete; saving locally")
+    for result in all_results:
         print(json.dumps(result, indent=2))
-        all_results.append(result)
-        # persist locally per (condition, seed)
         cond = result.get("condition", "unknown")
         seed = result.get("seed", -1)
         out_dir = results_root / f"seed{seed}"
@@ -194,10 +196,11 @@ def main(config: str = "configs/tgbn_trade.yaml", seeds: str = "0,1,2,3,4"):
     # eval 2: paired comparison per seed
     print("\n--- eval 2 (paired graph vs sequential) ---")
     eval2_args = [(seed, config) for seed in seed_list]
-    eval2_results = []
-    for result in eval_paired_seed.starmap(eval2_args):
+    print(f"running eval 2 on {len(eval2_args)} seeds")
+    eval2_results = list(eval_paired_seed.starmap(eval2_args))
+    print("eval 2 complete; saving locally")
+    for result in eval2_results:
         print(json.dumps(result, indent=2))
-        eval2_results.append(result)
         seed = result.get("seed", -1)
         out_dir = results_root / f"seed{seed}"
         out_dir.mkdir(parents=True, exist_ok=True)

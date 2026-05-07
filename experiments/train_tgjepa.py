@@ -104,8 +104,12 @@ def main(config: str = "configs/tgbn_trade.yaml", seeds: str = "0,1,2,3,4"):
     from pathlib import Path
     seed_list = [int(s) for s in seeds.split(",")]
     dataset = _read_dataset_name_local(config)
-    # config_path is the same across all seeds; pass as a single shared kwargs dict
-    for seed, future in zip(seed_list, train_seed.map(seed_list, kwargs={"config_path": config})):
+    # collect all futures into a list first so modal's iterator cleanup is fully done
+    # before we run local save logic (streaming iteration races with cleanup, drops side effects)
+    print(f"running {len(seed_list)} seeds; saves will land after all complete")
+    logs = list(train_seed.map(seed_list, kwargs={"config_path": config}))
+    print("all seeds complete; saving locally")
+    for seed, future in zip(seed_list, logs):
         print(_format_log(future, seed))
         out_dir = Path("results") / dataset / f"seed{seed}"
         out_dir.mkdir(parents=True, exist_ok=True)
