@@ -29,7 +29,7 @@ vol = modal.Volume.from_name("tgjepa-results", create_if_missing=True)
 
 
 @app.function(
-    gpu="A10G",
+    gpu="H100",
     timeout=3600 * 8,
     image=train_image,
     volumes={"/results": vol},

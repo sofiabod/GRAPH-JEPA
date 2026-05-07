@@ -25,7 +25,7 @@ vol = modal.Volume.from_name("tgjepa-results", create_if_missing=False)
 
 
 @app.function(
-    gpu="A10G",
+    gpu="H100",
     timeout=3600,
     image=image,
     volumes={"/results": vol},
@@ -90,7 +90,7 @@ def eval_seed(seed: int, condition: str, config_path: str = "configs/tgbn_trade.
 
 
 @app.function(
-    gpu="A10G",
+    gpu="H100",
     timeout=3600,
     image=image,
     volumes={"/results": vol},
