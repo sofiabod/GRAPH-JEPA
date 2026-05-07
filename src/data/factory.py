@@ -13,12 +13,12 @@ def create_dataset(cfg):
     """
     dataset = cfg.dataset
 
-    if dataset in ("enron", "eu_email", "jodie_reddit", "jodie_wikipedia", "tgbn_trade"):
+    if dataset in ("enron", "eu_email", "jodie_reddit", "jodie_wikipedia", "tgbn_trade", "tgbn_genre"):
         return _load_prebuilt(cfg)
 
     raise ValueError(
         f"unknown dataset '{dataset}'. "
-        f"valid options: enron, eu_email, jodie_reddit, jodie_wikipedia, tgbn_trade"
+        f"valid options: enron, eu_email, jodie_reddit, jodie_wikipedia, tgbn_trade, tgbn_genre"
     )
 
 

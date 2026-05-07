@@ -6,6 +6,7 @@ usage:
     python experiments/download_benchmarks.py --dataset jodie_reddit
     python experiments/download_benchmarks.py --dataset jodie_wikipedia
     python experiments/download_benchmarks.py --dataset tgbn_trade
+    python experiments/download_benchmarks.py --dataset tgbn_genre
 """
 import argparse
 import sys
@@ -49,12 +50,25 @@ def build_tgbn_trade(data_dir="data"):
     print(f"saved {len(graphs)} snapshots. splits: train={meta['train_range']}, val={meta['val_range']}, test={meta['test_range']}")
 
 
+def build_tgbn_genre(data_dir="data"):
+    from src.data.tgb_builder import build_tgbn_genre_graphs
+    print("building TGBN-Genre weekly graphs...")
+    graphs, meta = build_tgbn_genre_graphs(data_dir)
+    torch.save(graphs, f"{data_dir}/tgbn_genre_graphs.pt")
+    save_meta(meta, f"{data_dir}/tgbn_genre_meta.json")
+    print(f"saved {len(graphs)} snapshots. splits: train={meta['train_range']}, val={meta['val_range']}, test={meta['test_range']}")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", default="all",
-                        choices=["all", "eu_email", "jodie_reddit", "jodie_wikipedia", "tgbn_trade"])
+                        choices=["all", "eu_email", "jodie_reddit", "jodie_wikipedia", "tgbn_trade", "tgbn_genre"])
     parser.add_argument("--data_dir", default="data")
+    # accept --data-dir alias to match prompt-style invocations
+    parser.add_argument("--data-dir", dest="data_dir_alias", default=None)
     args = parser.parse_args()
+    if args.data_dir_alias is not None:
+        args.data_dir = args.data_dir_alias
 
     Path(args.data_dir).mkdir(parents=True, exist_ok=True)
 
@@ -69,6 +83,9 @@ def main():
 
     if args.dataset in ("all", "tgbn_trade"):
         build_tgbn_trade(args.data_dir)
+
+    if args.dataset in ("all", "tgbn_genre"):
+        build_tgbn_genre(args.data_dir)
 
     print("done.")
 
