@@ -195,27 +195,25 @@ class BCS(nn.Module):
         self.num_slices = num_slices
         self.step = 0
         self.lmbd = lmbd
-        self._total_n = None
         self.epps = EppsPulley()
 
     def forward(self, z1, z2=None):
+        # compute total batch size fresh each call so smaller last batches scale correctly
         if z2 is not None:
-            if self._total_n is None:
-                self._total_n = _total_batch_size(z1.shape[0])
+            total_n = _total_batch_size(z1.shape[0])
             bcs1, _ = _sliced_epps_pulley(
-                z1, self.step, self.num_slices, self._total_n, self.epps
+                z1, self.step, self.num_slices, total_n, self.epps
             )
             bcs2, self.step = _sliced_epps_pulley(
-                z2, self.step, self.num_slices, self._total_n, self.epps
+                z2, self.step, self.num_slices, total_n, self.epps
             )
             bcs = (bcs1 + bcs2) / 2
             invariance_loss = F.mse_loss(z1, z2)
         else:
             pooled = z1.reshape(-1, z1.shape[-1])  # [V*B, D]
-            if self._total_n is None:
-                self._total_n = _total_batch_size(pooled.shape[0])
+            total_n = _total_batch_size(pooled.shape[0])
             bcs, self.step = _sliced_epps_pulley(
-                pooled, self.step, self.num_slices, self._total_n, self.epps
+                pooled, self.step, self.num_slices, total_n, self.epps
             )
             centroid = z1.mean(dim=0)  # [B, D]
             invariance_loss = (z1 - centroid).square().mean()

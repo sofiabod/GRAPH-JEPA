@@ -1,4 +1,5 @@
 import torch.nn as nn
+import torch.nn.functional as F
 
 
 class SequentialMLP(nn.Module):
@@ -7,6 +8,7 @@ class SequentialMLP(nn.Module):
     uses data.x only; ignores data.edge_index.
     architecture: input_proj + n_layers of linear+norm+relu, matching
     approximate parameter count of GraphEncoder with the same hidden_dim.
+    output is l2-normalized to match GraphEncoder's sphere geometry.
     """
 
     def __init__(self, in_dim=384, hidden_dim=256, n_layers=3, dropout=0.1):
@@ -26,4 +28,4 @@ class SequentialMLP(nn.Module):
         # ignores edge_index: no message passing
         h = self.input_proj(data.x)
         h = self.layers(h)
-        return h
+        return F.normalize(h, dim=-1)

@@ -32,7 +32,11 @@ def build_predictor(cfg):
 
 
 def build_loss(cfg):
-    return TGJEPALoss(lambda_reg=cfg.lambda_reg)
+    return TGJEPALoss(
+        lambda_reg=cfg.lambda_reg,
+        bcs_num_slices=cfg.get("bcs_num_slices", 1024),
+        bcs_lmbd=cfg.get("bcs_lmbd", 0.1),
+    )
 
 
 def build_ema(cfg):
