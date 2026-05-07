@@ -3,6 +3,11 @@ from torch_geometric.data import Data
 from src.data.tgb_builder import build_tgbn_trade_graphs_from_raw
 
 
+def test_tgb_pip_package_importable():
+    # smoke test: confirm py-tgb pip install resolves the expected import path
+    from tgb.nodeproppred.dataset import NodePropPredDataset  # noqa: F401
+
+
 def make_fake_trade_data(n_countries=10, n_years=15, edges_per_year=20):
     """generate fake trade data: list of (year, src, dst, volume) tuples."""
     import random

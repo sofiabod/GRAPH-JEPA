@@ -1,20 +1,16 @@
-import sys
 from collections import defaultdict
-from pathlib import Path
 
 import torch
 from torch_geometric.data import Data
+
+from tgb.nodeproppred.dataset import NodePropPredDataset
 
 from src.data.graph_utils import compute_structural_features
 from src.data.factory import compute_split_ranges
 
 
 def download_tgbn_trade(data_dir: str):
-    """download tgbn-trade using the TGB library (vendored at TGB/ in repo root)."""
-    tgb_root = Path(__file__).parent.parent.parent / "TGB"
-    if str(tgb_root) not in sys.path:
-        sys.path.insert(0, str(tgb_root))
-    from tgb.nodeproppred.dataset import NodePropPredDataset
+    """download tgbn-trade via the pip-installed py-tgb package."""
     dataset = NodePropPredDataset(name="tgbn-trade", root=data_dir)
     return dataset
 
@@ -78,11 +74,6 @@ def build_tgbn_trade_graphs_from_raw(records, country_ids):
 
 def build_tgbn_trade_graphs(data_dir: str):
     """full pipeline: download tgbn-trade via TGB, convert to annual snapshots."""
-    tgb_root = Path(__file__).parent.parent.parent / "TGB"
-    if str(tgb_root) not in sys.path:
-        sys.path.insert(0, str(tgb_root))
-    from tgb.nodeproppred.dataset import NodePropPredDataset
-
     dataset = NodePropPredDataset(name="tgbn-trade", root=data_dir)
     data = dataset.full_data
 
@@ -95,12 +86,12 @@ def build_tgbn_trade_graphs(data_dir: str):
     node2id = {n: i for i, n in enumerate(all_nodes)}
     n_nodes = len(node2id)
 
-    import datetime
+    # tgbn-trade timestamps are raw years stored as floats (e.g. 1986.0..2016.0),
+    # not unix seconds. cast directly to int.
     records = []
-    for s, d, ts in zip(sources, destinations, timestamps):
-        year = datetime.datetime.fromtimestamp(float(ts)).year
-        idx = len(records)
-        vol = float(edge_feats[idx, 0]) if edge_feats is not None else 1.0
+    for i, (s, d, ts) in enumerate(zip(sources, destinations, timestamps)):
+        year = int(float(ts))
+        vol = float(edge_feats[i, 0]) if edge_feats is not None else 1.0
         records.append((year, node2id[int(s)], node2id[int(d)], vol))
 
     return build_tgbn_trade_graphs_from_raw(records, list(range(n_nodes)))
