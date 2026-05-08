@@ -1,0 +1,102 @@
+{
+  "seed": 0,
+  "dataset": "baci_gravity",
+  "RG_1a_random_graph": {
+    "kind": "random_graph_encoder",
+    "effective_rank": 2.552298069000244,
+    "mean_pairwise_cosine": 0.9725767374038696,
+    "n_embeddings": 4767,
+    "embedding_dim": 256,
+    "snapshots_used": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24
+    ]
+  },
+  "RG_1b_random_sequential": {
+    "kind": "random_sequential_encoder",
+    "effective_rank": 3.519463062286377,
+    "mean_pairwise_cosine": 0.9460151791572571,
+    "n_embeddings": 4767,
+    "embedding_dim": 256,
+    "snapshots_used": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24
+    ]
+  },
+  "RG_10_random_projection": {
+    "kind": "random_projection_baseline",
+    "effective_rank": 2.539876937866211,
+    "mean_pairwise_cosine": 0.8970568776130676,
+    "n_embeddings": 4767,
+    "embedding_dim": 256
+  },
+  "RG_4_param_counts": {
+    "graph_encoder": 399616,
+    "sequential_encoder": 398080
+  },
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/baci_gravity_graphs.pt": "45bafb5fe65de3e725f9dafb64e8d21a97e272e149ee6dd6f363c79c5aa57b77",
+      "/app/data/baci_gravity_meta.json": "ee8ded31230d90a9d76ee25fbd66f46a396f0f5b1959a80c4c47c3cce083ab91"
+    },
+    "config_path": "/app/configs/baci_gravity.yaml",
+    "config_sha256": "a6f0f6234a90ba9e155f5164d45ca896b5ee3627a2f66e2a84fa4e59aff777a8",
+    "eval": "random_baseline + random_projection"
+  }
+}

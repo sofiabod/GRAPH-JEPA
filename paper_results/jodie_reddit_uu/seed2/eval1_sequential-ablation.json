@@ -1,0 +1,76 @@
+{
+  "seed": 2,
+  "condition": "sequential-ablation",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.5815255767740309,
+    "mean_copy_cos": 0.4702505528740585,
+    "mean_graph_avg_cos": 0.32561143503710627,
+    "wilcoxon_p_vs_copy": 7.743034022870611e-08,
+    "wilcoxon_stat_vs_copy": 79584.0,
+    "wilcoxon_p_vs_graph_avg": 2.5295928753801707e-20,
+    "wilcoxon_stat_vs_graph_avg": 92242.0,
+    "n_pairs": 500,
+    "wilcoxon_p_vs_copy_bonferroni": 1.5486068045741222e-07,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 5.0591857507603415e-20
+  },
+  "eval3_multistep_rollout": {
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.5815255535626784,
+      "mean_copy_cos": 0.4702505346499383,
+      "wilcoxon_p_vs_copy": 7.743034022870611e-08,
+      "wilcoxon_stat_vs_copy": 79584.0,
+      "n_pairs": 500
+    },
+    "h2": {
+      "mean_pred_cos": 0.570814180597663,
+      "mean_copy_cos": 0.4214858270529658,
+      "wilcoxon_p_vs_copy": 1.1521029102548483e-09,
+      "wilcoxon_stat_vs_copy": 53924.0,
+      "n_pairs": 400
+    },
+    "h4": {
+      "mean_pred_cos": 0.604389518322423,
+      "mean_copy_cos": 0.4347563445288688,
+      "wilcoxon_p_vs_copy": 2.8917630339448276e-06,
+      "wilcoxon_stat_vs_copy": 13766.0,
+      "n_pairs": 200
+    }
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 5.3304266929626465,
+    "mean_pairwise_cosine": 0.002640104154124856
+  },
+  "family_size": 2,
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/jodie_reddit_uu_graphs.pt": "5b00e823d28aaf916fa6bc44e7c84886a451b424fcb0addc8df054382fa713cc",
+      "/app/data/jodie_reddit_uu_meta.json": "591b06a6503f42566163dc66c0ea1c55b6294d6ad269ba2ca5434a886ed690a6"
+    },
+    "config_path": "/app/configs/jodie_reddit_uu.yaml",
+    "config_sha256": "dab9cd3a268702bb0362affa3e9daea356339a4cc2a056878f62363b84fc2c98",
+    "checkpoint_path": "/results/jodie_reddit_uu/sequential-ablation/seed2/checkpoint.pt"
+  }
+}

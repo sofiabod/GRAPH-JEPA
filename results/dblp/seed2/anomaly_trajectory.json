@@ -1,0 +1,383 @@
+{
+  "seed": 2,
+  "dataset": "dblp",
+  "year_labels": [
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+  ],
+  "graph": {
+    "per_snapshot": [
+      {
+        "snapshot_idx": 4,
+        "year": 1999,
+        "mean_pred_cos": 0.3349897265434265,
+        "deviation": 0.6650102734565735,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 5,
+        "year": 2000,
+        "mean_pred_cos": 0.3676830232143402,
+        "deviation": 0.6323169767856598,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 6,
+        "year": 2001,
+        "mean_pred_cos": 0.378449022769928,
+        "deviation": 0.621550977230072,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 7,
+        "year": 2002,
+        "mean_pred_cos": 0.38914725184440613,
+        "deviation": 0.6108527481555939,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 8,
+        "year": 2003,
+        "mean_pred_cos": 0.40928998589515686,
+        "deviation": 0.5907100141048431,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 9,
+        "year": 2004,
+        "mean_pred_cos": 0.44176918268203735,
+        "deviation": 0.5582308173179626,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 10,
+        "year": 2005,
+        "mean_pred_cos": 0.4532058537006378,
+        "deviation": 0.5467941462993622,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 11,
+        "year": 2006,
+        "mean_pred_cos": 0.4814143180847168,
+        "deviation": 0.5185856819152832,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 12,
+        "year": 2007,
+        "mean_pred_cos": 0.5048296451568604,
+        "deviation": 0.49517035484313965,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 13,
+        "year": 2008,
+        "mean_pred_cos": 0.5007646679878235,
+        "deviation": 0.4992353320121765,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 14,
+        "year": 2009,
+        "mean_pred_cos": 0.5098352432250977,
+        "deviation": 0.49016475677490234,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 15,
+        "year": 2010,
+        "mean_pred_cos": 0.5439690947532654,
+        "deviation": 0.4560309052467346,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 16,
+        "year": 2011,
+        "mean_pred_cos": 0.5324864983558655,
+        "deviation": 0.4675135016441345,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 17,
+        "year": 2012,
+        "mean_pred_cos": 0.5236033797264099,
+        "deviation": 0.4763966202735901,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 18,
+        "year": 2013,
+        "mean_pred_cos": 0.5598198771476746,
+        "deviation": 0.44018012285232544,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 19,
+        "year": 2014,
+        "mean_pred_cos": 0.5506777763366699,
+        "deviation": 0.4493222236633301,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 20,
+        "year": 2015,
+        "mean_pred_cos": 0.53537517786026,
+        "deviation": 0.46462482213974,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 21,
+        "year": 2016,
+        "mean_pred_cos": 0.5247124433517456,
+        "deviation": 0.4752875566482544,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 22,
+        "year": 2017,
+        "mean_pred_cos": 0.5258035063743591,
+        "deviation": 0.47419649362564087,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 23,
+        "year": 2018,
+        "mean_pred_cos": 0.5399710536003113,
+        "deviation": 0.4600289463996887,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 24,
+        "year": 2019,
+        "mean_pred_cos": 0.5403146743774414,
+        "deviation": 0.4596853256225586,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 25,
+        "year": 2020,
+        "mean_pred_cos": 0.5123357176780701,
+        "deviation": 0.48766428232192993,
+        "n_masked": 200
+      }
+    ],
+    "context_k": 4,
+    "mask_ratio": 0.2,
+    "mask_seed": 2,
+    "n_snapshots_evaluated": 22
+  },
+  "sequential": {
+    "per_snapshot": [
+      {
+        "snapshot_idx": 4,
+        "year": 1999,
+        "mean_pred_cos": 0.45307105779647827,
+        "deviation": 0.5469289422035217,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 5,
+        "year": 2000,
+        "mean_pred_cos": 0.48129940032958984,
+        "deviation": 0.5187005996704102,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 6,
+        "year": 2001,
+        "mean_pred_cos": 0.4874277412891388,
+        "deviation": 0.5125722587108612,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 7,
+        "year": 2002,
+        "mean_pred_cos": 0.49795758724212646,
+        "deviation": 0.5020424127578735,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 8,
+        "year": 2003,
+        "mean_pred_cos": 0.5129165053367615,
+        "deviation": 0.4870834946632385,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 9,
+        "year": 2004,
+        "mean_pred_cos": 0.536083459854126,
+        "deviation": 0.463916540145874,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 10,
+        "year": 2005,
+        "mean_pred_cos": 0.5461283922195435,
+        "deviation": 0.45387160778045654,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 11,
+        "year": 2006,
+        "mean_pred_cos": 0.569788932800293,
+        "deviation": 0.43021106719970703,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 12,
+        "year": 2007,
+        "mean_pred_cos": 0.5890632271766663,
+        "deviation": 0.41093677282333374,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 13,
+        "year": 2008,
+        "mean_pred_cos": 0.5860419869422913,
+        "deviation": 0.41395801305770874,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 14,
+        "year": 2009,
+        "mean_pred_cos": 0.5975663065910339,
+        "deviation": 0.40243369340896606,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 15,
+        "year": 2010,
+        "mean_pred_cos": 0.6187517642974854,
+        "deviation": 0.38124823570251465,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 16,
+        "year": 2011,
+        "mean_pred_cos": 0.6147001385688782,
+        "deviation": 0.3852998614311218,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 17,
+        "year": 2012,
+        "mean_pred_cos": 0.6062597632408142,
+        "deviation": 0.3937402367591858,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 18,
+        "year": 2013,
+        "mean_pred_cos": 0.6266950368881226,
+        "deviation": 0.37330496311187744,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 19,
+        "year": 2014,
+        "mean_pred_cos": 0.6195377111434937,
+        "deviation": 0.38046228885650635,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 20,
+        "year": 2015,
+        "mean_pred_cos": 0.6145069599151611,
+        "deviation": 0.38549304008483887,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 21,
+        "year": 2016,
+        "mean_pred_cos": 0.6087307333946228,
+        "deviation": 0.3912692666053772,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 22,
+        "year": 2017,
+        "mean_pred_cos": 0.6032246351242065,
+        "deviation": 0.39677536487579346,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 23,
+        "year": 2018,
+        "mean_pred_cos": 0.6086804866790771,
+        "deviation": 0.39131951332092285,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 24,
+        "year": 2019,
+        "mean_pred_cos": 0.6179741621017456,
+        "deviation": 0.3820258378982544,
+        "n_masked": 200
+      },
+      {
+        "snapshot_idx": 25,
+        "year": 2020,
+        "mean_pred_cos": 0.5935009121894836,
+        "deviation": 0.40649908781051636,
+        "n_masked": 200
+      }
+    ],
+    "context_k": 4,
+    "mask_ratio": 0.2,
+    "mask_seed": 2,
+    "n_snapshots_evaluated": 22
+  },
+  "_repro": {
+    "git_sha": null,
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": false
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/dblp_graphs.pt": "5498c297abeda0c66539aaedeeba2c6cf0211ca0fa48e101e921306d92ada980",
+      "/app/data/dblp_meta.json": "ef3d8cfc4295a1597529d4e290815d3954c2204e72bccfe946239bebb3c806ec"
+    },
+    "config_path": "/app/configs/dblp.yaml",
+    "config_sha256": "13db1c6dd8aea900e8f1ed69ab7aa2202fa1ded1e6fefba1be800ee160ee160f",
+    "eval": "anomaly_trajectory"
+  }
+}

@@ -2,23 +2,48 @@
   "seed": 4,
   "condition": "sequential-ablation",
   "eval1_node_prediction": {
-    "mean_pred_cos": 0.7195419092388714,
-    "mean_copy_cos": 0.6491800348623655,
-    "mean_graph_avg_cos": 0.40300471533783805,
-    "wilcoxon_p_vs_copy": 0.00205556944397162,
-    "wilcoxon_stat_vs_copy": 19703.0,
-    "wilcoxon_p_vs_graph_avg": 1.2177799482386203e-20,
-    "wilcoxon_stat_vs_graph_avg": 27215.0,
+    "mean_pred_cos": 0.7400858466312581,
+    "mean_copy_cos": 0.5004659136501597,
+    "mean_graph_avg_cos": 0.11877383274921015,
+    "wilcoxon_p_vs_copy": 1.5502451636103744e-14,
+    "wilcoxon_stat_vs_copy": 25273.0,
+    "wilcoxon_p_vs_graph_avg": 6.274477750012255e-38,
+    "wilcoxon_stat_vs_graph_avg": 31435.0,
     "n_pairs": 255,
-    "wilcoxon_p_vs_copy_bonferroni": 0.00411113888794324,
-    "wilcoxon_p_vs_graph_avg_bonferroni": 2.4355598964772405e-20
+    "wilcoxon_p_vs_copy_bonferroni": 3.100490327220749e-14,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 1.254895550002451e-37
   },
   "eval3_multistep_rollout": {
-    "status": "not_implemented"
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.7400858091153935,
+      "mean_copy_cos": 0.5004658945050894,
+      "wilcoxon_p_vs_copy": 1.5502451636103744e-14,
+      "wilcoxon_stat_vs_copy": 25273.0,
+      "n_pairs": 255
+    },
+    "h2": {
+      "mean_pred_cos": 0.7372446184904844,
+      "mean_copy_cos": 0.49868547414228614,
+      "wilcoxon_p_vs_copy": 2.912307631196281e-11,
+      "wilcoxon_stat_vs_copy": 15983.0,
+      "n_pairs": 204
+    },
+    "h4": {
+      "mean_pred_cos": 0.7564185462234652,
+      "mean_copy_cos": 0.4443950892572163,
+      "wilcoxon_p_vs_copy": 1.1812818133700114e-08,
+      "wilcoxon_stat_vs_copy": 4299.0,
+      "n_pairs": 102
+    }
   },
   "eval6_representation_quality": {
-    "effective_rank": 18.848594665527344,
-    "mean_pairwise_cosine": 0.30013367533683777
+    "effective_rank": 6.546231746673584,
+    "mean_pairwise_cosine": 0.08750392496585846
   },
   "family_size": 2
 }

@@ -1,0 +1,15 @@
+{
+  "seed": 3,
+  "mean_graph_cos": 0.9569205237759484,
+  "mean_sequential_cos": 0.7579529757301012,
+  "wilcoxon_p": 1.8788618526570044e-31,
+  "wilcoxon_stat": 16271.0,
+  "n_pairs": 180,
+  "win_rate": 0.9722222222222222,
+  "shared_target_mode": "self",
+  "eval_split": "test",
+  "mean_delta": 0.19896754804584715,
+  "delta_ci95_low": 0.1787928159886764,
+  "delta_ci95_high": 0.21936777866755922,
+  "bootstrap_n_resamples": 10000
+}

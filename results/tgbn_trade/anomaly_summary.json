@@ -1,0 +1,181 @@
+{
+  "dataset": "tgbn_trade",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "per_year": [
+    {
+      "year": 4,
+      "graph_dev": 0.22902166843414307,
+      "sequential_dev": 0.26930510997772217,
+      "shock": false
+    },
+    {
+      "year": 5,
+      "graph_dev": 0.2032199501991272,
+      "sequential_dev": 0.2594444751739502,
+      "shock": false
+    },
+    {
+      "year": 6,
+      "graph_dev": 0.09645962715148926,
+      "sequential_dev": 0.21408915519714355,
+      "shock": false
+    },
+    {
+      "year": 7,
+      "graph_dev": 0.10183906555175781,
+      "sequential_dev": 0.20199936628341675,
+      "shock": false
+    },
+    {
+      "year": 8,
+      "graph_dev": 0.08731299638748169,
+      "sequential_dev": 0.19412994384765625,
+      "shock": false
+    },
+    {
+      "year": 9,
+      "graph_dev": 0.08994531631469727,
+      "sequential_dev": 0.19357025623321533,
+      "shock": false
+    },
+    {
+      "year": 10,
+      "graph_dev": 0.10061943531036377,
+      "sequential_dev": 0.2097187638282776,
+      "shock": false
+    },
+    {
+      "year": 11,
+      "graph_dev": 0.09626227617263794,
+      "sequential_dev": 0.2331150770187378,
+      "shock": false
+    },
+    {
+      "year": 12,
+      "graph_dev": 0.09902846813201904,
+      "sequential_dev": 0.1727880835533142,
+      "shock": false
+    },
+    {
+      "year": 13,
+      "graph_dev": 0.11131948232650757,
+      "sequential_dev": 0.21108347177505493,
+      "shock": false
+    },
+    {
+      "year": 14,
+      "graph_dev": 0.1501585841178894,
+      "sequential_dev": 0.2279273271560669,
+      "shock": false
+    },
+    {
+      "year": 15,
+      "graph_dev": 0.2264636754989624,
+      "sequential_dev": 0.3161882758140564,
+      "shock": false
+    },
+    {
+      "year": 16,
+      "graph_dev": 0.18206214904785156,
+      "sequential_dev": 0.26014453172683716,
+      "shock": false
+    },
+    {
+      "year": 17,
+      "graph_dev": 0.19040602445602417,
+      "sequential_dev": 0.2674066424369812,
+      "shock": false
+    },
+    {
+      "year": 18,
+      "graph_dev": 0.1740744709968567,
+      "sequential_dev": 0.24480241537094116,
+      "shock": false
+    },
+    {
+      "year": 19,
+      "graph_dev": 0.2230626940727234,
+      "sequential_dev": 0.2771074175834656,
+      "shock": false
+    },
+    {
+      "year": 20,
+      "graph_dev": 0.191658616065979,
+      "sequential_dev": 0.2679594159126282,
+      "shock": false
+    },
+    {
+      "year": 21,
+      "graph_dev": 0.20776015520095825,
+      "sequential_dev": 0.2732055187225342,
+      "shock": false
+    },
+    {
+      "year": 22,
+      "graph_dev": 0.2060663104057312,
+      "sequential_dev": 0.2752707600593567,
+      "shock": false
+    },
+    {
+      "year": 23,
+      "graph_dev": 0.2056294083595276,
+      "sequential_dev": 0.2856137156486511,
+      "shock": false
+    },
+    {
+      "year": 24,
+      "graph_dev": 0.2089635729789734,
+      "sequential_dev": 0.2766132354736328,
+      "shock": false
+    },
+    {
+      "year": 25,
+      "graph_dev": 0.1939050555229187,
+      "sequential_dev": 0.32875925302505493,
+      "shock": false
+    },
+    {
+      "year": 26,
+      "graph_dev": 0.21347492933273315,
+      "sequential_dev": 0.29193246364593506,
+      "shock": false
+    },
+    {
+      "year": 27,
+      "graph_dev": 0.1858113408088684,
+      "sequential_dev": 0.27562904357910156,
+      "shock": false
+    },
+    {
+      "year": 28,
+      "graph_dev": 0.13949191570281982,
+      "sequential_dev": 0.24730068445205688,
+      "shock": false
+    },
+    {
+      "year": 29,
+      "graph_dev": 0.16129344701766968,
+      "sequential_dev": 0.23585158586502075,
+      "shock": false
+    },
+    {
+      "year": 30,
+      "graph_dev": 0.13443434238433838,
+      "sequential_dev": 0.2385392189025879,
+      "shock": false
+    }
+  ],
+  "shocks_known": {
+    "2008": "Global Financial Crisis",
+    "2009": "GFC trough",
+    "2014": "Oil price collapse",
+    "2018": "US-China trade war",
+    "2020": "COVID-19"
+  }
+}

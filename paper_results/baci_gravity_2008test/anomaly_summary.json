@@ -1,0 +1,139 @@
+{
+  "dataset": "baci_gravity_2008test",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "per_year": [
+    {
+      "year": 2000,
+      "graph_dev": 0.049651920795440674,
+      "sequential_dev": 0.10575664043426514,
+      "shock": false
+    },
+    {
+      "year": 2001,
+      "graph_dev": 0.03644692897796631,
+      "sequential_dev": 0.10620439052581787,
+      "shock": false
+    },
+    {
+      "year": 2002,
+      "graph_dev": 0.05151575803756714,
+      "sequential_dev": 0.09453624486923218,
+      "shock": false
+    },
+    {
+      "year": 2003,
+      "graph_dev": 0.01933187246322632,
+      "sequential_dev": 0.11713540554046631,
+      "shock": false
+    },
+    {
+      "year": 2004,
+      "graph_dev": 0.03607863187789917,
+      "sequential_dev": 0.1004563570022583,
+      "shock": false
+    },
+    {
+      "year": 2005,
+      "graph_dev": 0.035720884799957275,
+      "sequential_dev": 0.10388725996017456,
+      "shock": false
+    },
+    {
+      "year": 2006,
+      "graph_dev": 0.03385186195373535,
+      "sequential_dev": 0.10513591766357422,
+      "shock": false
+    },
+    {
+      "year": 2007,
+      "graph_dev": 0.03710240125656128,
+      "sequential_dev": 0.09534263610839844,
+      "shock": false
+    },
+    {
+      "year": 2008,
+      "graph_dev": 0.03696906566619873,
+      "sequential_dev": 0.09940224885940552,
+      "shock": false
+    },
+    {
+      "year": 2009,
+      "graph_dev": 0.03418111801147461,
+      "sequential_dev": 0.09521585702896118,
+      "shock": false
+    },
+    {
+      "year": 2010,
+      "graph_dev": 0.02096235752105713,
+      "sequential_dev": 0.09141027927398682,
+      "shock": false
+    },
+    {
+      "year": 2011,
+      "graph_dev": 0.03993254899978638,
+      "sequential_dev": 0.10409533977508545,
+      "shock": false
+    },
+    {
+      "year": 2012,
+      "graph_dev": 0.022038161754608154,
+      "sequential_dev": 0.09512251615524292,
+      "shock": false
+    },
+    {
+      "year": 2013,
+      "graph_dev": 0.03660792112350464,
+      "sequential_dev": 0.10372751951217651,
+      "shock": false
+    },
+    {
+      "year": 2014,
+      "graph_dev": 0.02396535873413086,
+      "sequential_dev": 0.09767240285873413,
+      "shock": false
+    },
+    {
+      "year": 2015,
+      "graph_dev": 0.03650754690170288,
+      "sequential_dev": 0.10669636726379395,
+      "shock": false
+    },
+    {
+      "year": 2016,
+      "graph_dev": 0.02338641881942749,
+      "sequential_dev": 0.09380561113357544,
+      "shock": false
+    },
+    {
+      "year": 2017,
+      "graph_dev": 0.020673751831054688,
+      "sequential_dev": 0.09646254777908325,
+      "shock": false
+    },
+    {
+      "year": 2018,
+      "graph_dev": 0.021677732467651367,
+      "sequential_dev": 0.10558217763900757,
+      "shock": false
+    },
+    {
+      "year": 2019,
+      "graph_dev": 0.02012646198272705,
+      "sequential_dev": 0.09218442440032959,
+      "shock": false
+    },
+    {
+      "year": 2020,
+      "graph_dev": 0.020085811614990234,
+      "sequential_dev": 0.1061897873878479,
+      "shock": false
+    }
+  ],
+  "shocks_known": {}
+}

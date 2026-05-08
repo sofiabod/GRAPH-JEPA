@@ -1,0 +1,76 @@
+{
+  "seed": 4,
+  "condition": "jodie_reddit_uu",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.7085933730304241,
+    "mean_copy_cos": 0.3531706240959466,
+    "mean_graph_avg_cos": 0.21944660659134388,
+    "wilcoxon_p_vs_copy": 2.3549936532862566e-30,
+    "wilcoxon_stat_vs_copy": 99440.0,
+    "wilcoxon_p_vs_graph_avg": 6.51649133422914e-84,
+    "wilcoxon_stat_vs_graph_avg": 125245.0,
+    "n_pairs": 500,
+    "wilcoxon_p_vs_copy_bonferroni": 4.709987306572513e-30,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 1.303298266845828e-83
+  },
+  "eval3_multistep_rollout": {
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.7085933386832476,
+      "mean_copy_cos": 0.35317061027511953,
+      "wilcoxon_p_vs_copy": 2.3549936532862566e-30,
+      "wilcoxon_stat_vs_copy": 99440.0,
+      "n_pairs": 500
+    },
+    "h2": {
+      "mean_pred_cos": 0.6865875422116369,
+      "mean_copy_cos": 0.30269658866338434,
+      "wilcoxon_p_vs_copy": 8.14036864700346e-27,
+      "wilcoxon_stat_vs_copy": 64756.0,
+      "n_pairs": 400
+    },
+    "h4": {
+      "mean_pred_cos": 0.6729952426068485,
+      "mean_copy_cos": 0.33318022919818757,
+      "wilcoxon_p_vs_copy": 3.6259270550449506e-13,
+      "wilcoxon_stat_vs_copy": 15930.0,
+      "n_pairs": 200
+    }
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 10.436312675476074,
+    "mean_pairwise_cosine": 0.06921756267547607
+  },
+  "family_size": 2,
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/jodie_reddit_uu_graphs.pt": "5b00e823d28aaf916fa6bc44e7c84886a451b424fcb0addc8df054382fa713cc",
+      "/app/data/jodie_reddit_uu_meta.json": "591b06a6503f42566163dc66c0ea1c55b6294d6ad269ba2ca5434a886ed690a6"
+    },
+    "config_path": "/app/configs/jodie_reddit_uu.yaml",
+    "config_sha256": "dab9cd3a268702bb0362affa3e9daea356339a4cc2a056878f62363b84fc2c98",
+    "checkpoint_path": "/results/jodie_reddit_uu/seed4/checkpoint.pt"
+  }
+}

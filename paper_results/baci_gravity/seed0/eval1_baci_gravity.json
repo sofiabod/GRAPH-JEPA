@@ -1,0 +1,76 @@
+{
+  "seed": 0,
+  "condition": "baci_gravity",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.9752006249295341,
+    "mean_copy_cos": 0.2935064467291037,
+    "mean_graph_avg_cos": 0.20176532168148292,
+    "wilcoxon_p_vs_copy": 1.3674435455247996e-31,
+    "wilcoxon_stat_vs_copy": 16290.0,
+    "wilcoxon_p_vs_graph_avg": 1.3674435455247996e-31,
+    "wilcoxon_stat_vs_graph_avg": 16290.0,
+    "n_pairs": 180,
+    "wilcoxon_p_vs_copy_bonferroni": 2.7348870910495993e-31,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 2.7348870910495993e-31
+  },
+  "eval3_multistep_rollout": {
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.9752005798949136,
+      "mean_copy_cos": 0.29350643166237406,
+      "wilcoxon_p_vs_copy": 1.3674435455247996e-31,
+      "wilcoxon_stat_vs_copy": 16290.0,
+      "n_pairs": 180
+    },
+    "h2": {
+      "mean_pred_cos": 0.9748415483368768,
+      "mean_copy_cos": 0.28927298919470223,
+      "wilcoxon_p_vs_copy": 3.357002477018928e-24,
+      "wilcoxon_stat_vs_copy": 9180.0,
+      "n_pairs": 135
+    },
+    "h4": {
+      "mean_pred_cos": 0.9739009539286295,
+      "mean_copy_cos": 0.2863267319069968,
+      "wilcoxon_p_vs_copy": 2.842170943040401e-14,
+      "wilcoxon_stat_vs_copy": 1035.0,
+      "n_pairs": 45
+    }
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 7.2262864112854,
+    "mean_pairwise_cosine": 0.2826102375984192
+  },
+  "family_size": 2,
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/baci_gravity_graphs.pt": "45bafb5fe65de3e725f9dafb64e8d21a97e272e149ee6dd6f363c79c5aa57b77",
+      "/app/data/baci_gravity_meta.json": "ee8ded31230d90a9d76ee25fbd66f46a396f0f5b1959a80c4c47c3cce083ab91"
+    },
+    "config_path": "/app/configs/baci_gravity.yaml",
+    "config_sha256": "a6f0f6234a90ba9e155f5164d45ca896b5ee3627a2f66e2a84fa4e59aff777a8",
+    "checkpoint_path": "/results/baci_gravity/seed0/checkpoint.pt"
+  }
+}

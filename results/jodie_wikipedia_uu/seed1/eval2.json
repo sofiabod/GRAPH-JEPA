@@ -1,0 +1,45 @@
+{
+  "seed": 1,
+  "mean_graph_cos": 0.688890111961402,
+  "mean_sequential_cos": 0.6261710382848978,
+  "wilcoxon_p": 0.6421210093315037,
+  "wilcoxon_stat": 61448.0,
+  "n_pairs": 500,
+  "win_rate": 0.358,
+  "shared_target_mode": "self",
+  "eval_split": "test",
+  "mean_delta": 0.0627190736765042,
+  "delta_ci95_low": 0.05254721439119895,
+  "delta_ci95_high": 0.07325751537899486,
+  "bootstrap_n_resamples": 10000,
+  "_repro": {
+    "git_sha": null,
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": false
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/jodie_wikipedia_uu_graphs.pt": "a8bf27f906f338c0d7f79bd01c4eb6d15c9f481bb0c49a4bb70ffee9cacd67f5",
+      "/app/data/jodie_wikipedia_uu_meta.json": "bbb54f57511bd8d7705db2ff58469adaeb5e2c7516aa0fd8c0c167f70fbbcfc8"
+    },
+    "config_path": "/app/configs/jodie_wikipedia_uu.yaml",
+    "config_sha256": "8b07099c0290ff875797111facb118dd97775a629a06ca80431c67cb05a40b17",
+    "graph_ckpt_path": "/results/jodie_wikipedia_uu/seed1/checkpoint.pt",
+    "sequential_ckpt_path": "/results/jodie_wikipedia_uu/sequential-ablation/seed1/checkpoint.pt",
+    "shared_target_mode": "self",
+    "eval_split": "test"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "seed": 2,
+  "mean_graph_cos": 0.9139414059619109,
+  "mean_sequential_cos": 0.725228268156449,
+  "wilcoxon_p": 3.2253294930792214e-30,
+  "wilcoxon_stat": 16099.0,
+  "n_pairs": 180,
+  "win_rate": 0.9277777777777778,
+  "shared_target_mode": "self",
+  "eval_split": "test",
+  "mean_delta": 0.1887131378054619,
+  "delta_ci95_low": 0.1705013562614719,
+  "delta_ci95_high": 0.2068500968855288,
+  "bootstrap_n_resamples": 10000,
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/baci_gravity_graphs.pt": "45bafb5fe65de3e725f9dafb64e8d21a97e272e149ee6dd6f363c79c5aa57b77",
+      "/app/data/baci_gravity_meta.json": "ee8ded31230d90a9d76ee25fbd66f46a396f0f5b1959a80c4c47c3cce083ab91"
+    },
+    "config_path": "/app/configs/baci_gravity.yaml",
+    "config_sha256": "a6f0f6234a90ba9e155f5164d45ca896b5ee3627a2f66e2a84fa4e59aff777a8",
+    "graph_ckpt_path": "/results/baci_gravity/seed2/checkpoint.pt",
+    "sequential_ckpt_path": "/results/baci_gravity/sequential-ablation/seed2/checkpoint.pt",
+    "shared_target_mode": "self",
+    "eval_split": "test"
+  }
+}

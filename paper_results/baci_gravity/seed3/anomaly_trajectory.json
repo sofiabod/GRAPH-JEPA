@@ -1,0 +1,368 @@
+{
+  "seed": 3,
+  "dataset": "baci_gravity",
+  "year_labels": [
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+  ],
+  "graph": {
+    "per_snapshot": [
+      {
+        "snapshot_idx": 4,
+        "year": 2000,
+        "mean_pred_cos": 0.8997043371200562,
+        "deviation": 0.10029566287994385,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 5,
+        "year": 2001,
+        "mean_pred_cos": 0.9032116532325745,
+        "deviation": 0.09678834676742554,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 6,
+        "year": 2002,
+        "mean_pred_cos": 0.9124384522438049,
+        "deviation": 0.08756154775619507,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 7,
+        "year": 2003,
+        "mean_pred_cos": 0.9719709753990173,
+        "deviation": 0.028029024600982666,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 8,
+        "year": 2004,
+        "mean_pred_cos": 0.940371572971344,
+        "deviation": 0.059628427028656006,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 9,
+        "year": 2005,
+        "mean_pred_cos": 0.9446669816970825,
+        "deviation": 0.05533301830291748,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 10,
+        "year": 2006,
+        "mean_pred_cos": 0.9522618651390076,
+        "deviation": 0.04773813486099243,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 11,
+        "year": 2007,
+        "mean_pred_cos": 0.9407350420951843,
+        "deviation": 0.059264957904815674,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 12,
+        "year": 2008,
+        "mean_pred_cos": 0.93646639585495,
+        "deviation": 0.06353360414505005,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 13,
+        "year": 2009,
+        "mean_pred_cos": 0.939115583896637,
+        "deviation": 0.06088441610336304,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 14,
+        "year": 2010,
+        "mean_pred_cos": 0.9194056987762451,
+        "deviation": 0.08059430122375488,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 15,
+        "year": 2011,
+        "mean_pred_cos": 0.9522455334663391,
+        "deviation": 0.04775446653366089,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 16,
+        "year": 2012,
+        "mean_pred_cos": 0.952122688293457,
+        "deviation": 0.04787731170654297,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 17,
+        "year": 2013,
+        "mean_pred_cos": 0.9663179516792297,
+        "deviation": 0.033682048320770264,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 18,
+        "year": 2014,
+        "mean_pred_cos": 0.9626327753067017,
+        "deviation": 0.03736722469329834,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 19,
+        "year": 2015,
+        "mean_pred_cos": 0.9592971801757812,
+        "deviation": 0.04070281982421875,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 20,
+        "year": 2016,
+        "mean_pred_cos": 0.9535635709762573,
+        "deviation": 0.046436429023742676,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 21,
+        "year": 2017,
+        "mean_pred_cos": 0.9605146646499634,
+        "deviation": 0.03948533535003662,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 22,
+        "year": 2018,
+        "mean_pred_cos": 0.9572117328643799,
+        "deviation": 0.04278826713562012,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 23,
+        "year": 2019,
+        "mean_pred_cos": 0.9591411352157593,
+        "deviation": 0.04085886478424072,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 24,
+        "year": 2020,
+        "mean_pred_cos": 0.9508102536201477,
+        "deviation": 0.049189746379852295,
+        "n_masked": 45
+      }
+    ],
+    "context_k": 4,
+    "mask_ratio": 0.2,
+    "mask_seed": 3,
+    "n_snapshots_evaluated": 21
+  },
+  "sequential": {
+    "per_snapshot": [
+      {
+        "snapshot_idx": 4,
+        "year": 2000,
+        "mean_pred_cos": 0.6993924379348755,
+        "deviation": 0.3006075620651245,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 5,
+        "year": 2001,
+        "mean_pred_cos": 0.7072350978851318,
+        "deviation": 0.29276490211486816,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 6,
+        "year": 2002,
+        "mean_pred_cos": 0.7357460856437683,
+        "deviation": 0.2642539143562317,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 7,
+        "year": 2003,
+        "mean_pred_cos": 0.8248597979545593,
+        "deviation": 0.17514020204544067,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 8,
+        "year": 2004,
+        "mean_pred_cos": 0.7657020688056946,
+        "deviation": 0.23429793119430542,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 9,
+        "year": 2005,
+        "mean_pred_cos": 0.7856990694999695,
+        "deviation": 0.21430093050003052,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 10,
+        "year": 2006,
+        "mean_pred_cos": 0.7348546385765076,
+        "deviation": 0.26514536142349243,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 11,
+        "year": 2007,
+        "mean_pred_cos": 0.7497466206550598,
+        "deviation": 0.2502533793449402,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 12,
+        "year": 2008,
+        "mean_pred_cos": 0.7493011951446533,
+        "deviation": 0.2506988048553467,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 13,
+        "year": 2009,
+        "mean_pred_cos": 0.7475025653839111,
+        "deviation": 0.25249743461608887,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 14,
+        "year": 2010,
+        "mean_pred_cos": 0.7523576617240906,
+        "deviation": 0.24764233827590942,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 15,
+        "year": 2011,
+        "mean_pred_cos": 0.8109450936317444,
+        "deviation": 0.18905490636825562,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 16,
+        "year": 2012,
+        "mean_pred_cos": 0.714022159576416,
+        "deviation": 0.285977840423584,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 17,
+        "year": 2013,
+        "mean_pred_cos": 0.7700555920600891,
+        "deviation": 0.2299444079399109,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 18,
+        "year": 2014,
+        "mean_pred_cos": 0.7641828656196594,
+        "deviation": 0.23581713438034058,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 19,
+        "year": 2015,
+        "mean_pred_cos": 0.7643520832061768,
+        "deviation": 0.23564791679382324,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 20,
+        "year": 2016,
+        "mean_pred_cos": 0.7189282178878784,
+        "deviation": 0.2810717821121216,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 21,
+        "year": 2017,
+        "mean_pred_cos": 0.7528449296951294,
+        "deviation": 0.2471550703048706,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 22,
+        "year": 2018,
+        "mean_pred_cos": 0.7512352466583252,
+        "deviation": 0.2487647533416748,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 23,
+        "year": 2019,
+        "mean_pred_cos": 0.7884811758995056,
+        "deviation": 0.21151882410049438,
+        "n_masked": 45
+      },
+      {
+        "snapshot_idx": 24,
+        "year": 2020,
+        "mean_pred_cos": 0.7392500042915344,
+        "deviation": 0.2607499957084656,
+        "n_masked": 45
+      }
+    ],
+    "context_k": 4,
+    "mask_ratio": 0.2,
+    "mask_seed": 3,
+    "n_snapshots_evaluated": 21
+  },
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/baci_gravity_graphs.pt": "45bafb5fe65de3e725f9dafb64e8d21a97e272e149ee6dd6f363c79c5aa57b77",
+      "/app/data/baci_gravity_meta.json": "ee8ded31230d90a9d76ee25fbd66f46a396f0f5b1959a80c4c47c3cce083ab91"
+    },
+    "config_path": "/app/configs/baci_gravity.yaml",
+    "config_sha256": "a6f0f6234a90ba9e155f5164d45ca896b5ee3627a2f66e2a84fa4e59aff777a8",
+    "eval": "anomaly_trajectory"
+  }
+}

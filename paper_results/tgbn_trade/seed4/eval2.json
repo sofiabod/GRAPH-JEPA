@@ -1,0 +1,45 @@
+{
+  "seed": 4,
+  "mean_graph_cos": 0.8316651401274344,
+  "mean_sequential_cos": 0.7400848624095613,
+  "wilcoxon_p": 6.983385066215696e-23,
+  "wilcoxon_stat": 27848.0,
+  "n_pairs": 255,
+  "win_rate": 0.7764705882352941,
+  "shared_target_mode": "self",
+  "eval_split": "test",
+  "mean_delta": 0.09158027771787317,
+  "delta_ci95_low": 0.07600949119557353,
+  "delta_ci95_high": 0.10780163056947581,
+  "bootstrap_n_resamples": 10000,
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/tgbn_trade_graphs.pt": "0b7d4384f1c68e2b952693855b6076b3ba4c5469e57092f6a089f1ca06be1d26",
+      "/app/data/tgbn_trade_meta.json": "628259642ade2c784d7b5c26220e7791e1ed86ca5081d7185ef9e72558cc40fc"
+    },
+    "config_path": "/app/configs/tgbn_trade.yaml",
+    "config_sha256": "00f77d760c76ae41cf43f4dd5893c1c8daa2488238ecf9da05adb297071b88af",
+    "graph_ckpt_path": "/results/tgbn_trade/seed4/checkpoint.pt",
+    "sequential_ckpt_path": "/results/tgbn_trade/sequential-ablation/seed4/checkpoint.pt",
+    "shared_target_mode": "self",
+    "eval_split": "test"
+  }
+}

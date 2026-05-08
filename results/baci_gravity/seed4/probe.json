@@ -1,0 +1,118 @@
+{
+  "seed": 4,
+  "dataset": "baci_gravity",
+  "graph": {
+    "r2_mean": 0.006152073923224033,
+    "r2_std": 0.03635015444188249,
+    "r2_per_fold": [
+      -0.05636323360668438,
+      0.044790825726055195,
+      0.03649208767945933,
+      0.01441267373547217,
+      -0.008571983918182147
+    ],
+    "mae_mean": 0.1591406434774399,
+    "mae_per_fold": [
+      0.13482332229614258,
+      0.16693438589572906,
+      0.16157491505146027,
+      0.17847612500190735,
+      0.15389446914196014
+    ],
+    "n_test_total": 4540,
+    "n_folds": 5,
+    "kind": "graph",
+    "n_samples": 4540,
+    "embedding_dim": 256,
+    "snapshots_used": [
+      4,
+      23
+    ],
+    "feature_idx_used_for_volume": 0
+  },
+  "sequential": {
+    "r2_mean": -0.0028615476356698586,
+    "r2_std": 0.034414000060806395,
+    "r2_per_fold": [
+      -0.06450271800528973,
+      0.03329422108335489,
+      0.020932878183329784,
+      0.009100124540889376,
+      -0.013132243980633618
+    ],
+    "mae_mean": 0.1625322163105011,
+    "mae_per_fold": [
+      0.13411875069141388,
+      0.1705062836408615,
+      0.16815702617168427,
+      0.18169768154621124,
+      0.1581813395023346
+    ],
+    "n_test_total": 4540,
+    "n_folds": 5,
+    "kind": "sequential",
+    "n_samples": 4540,
+    "embedding_dim": 256,
+    "snapshots_used": [
+      4,
+      23
+    ],
+    "feature_idx_used_for_volume": 0
+  },
+  "raw_features": {
+    "r2_mean": -0.006042441841985635,
+    "r2_std": 0.040665065933391135,
+    "r2_per_fold": [
+      -0.08005280949153137,
+      0.03581647094199514,
+      0.02201900540104762,
+      0.007019048142459128,
+      -0.015013924203898688
+    ],
+    "mae_mean": 0.16269873082637787,
+    "mae_per_fold": [
+      0.13524986803531647,
+      0.17019222676753998,
+      0.1676388382911682,
+      0.18224766850471497,
+      0.15816505253314972
+    ],
+    "n_test_total": 4540,
+    "n_folds": 5,
+    "kind": "raw_features",
+    "n_samples": 4540,
+    "embedding_dim": 6,
+    "snapshots_used": [
+      4,
+      23
+    ],
+    "feature_idx_used_for_volume": 0
+  },
+  "_repro": {
+    "git_sha": null,
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": false
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/baci_gravity_graphs.pt": "45bafb5fe65de3e725f9dafb64e8d21a97e272e149ee6dd6f363c79c5aa57b77",
+      "/app/data/baci_gravity_meta.json": "ee8ded31230d90a9d76ee25fbd66f46a396f0f5b1959a80c4c47c3cce083ab91"
+    },
+    "config_path": "/app/configs/baci_gravity.yaml",
+    "config_sha256": "a6f0f6234a90ba9e155f5164d45ca896b5ee3627a2f66e2a84fa4e59aff777a8",
+    "eval": "linear_probe_growth"
+  }
+}

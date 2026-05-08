@@ -1,0 +1,45 @@
+{
+  "seed": 3,
+  "mean_graph_cos": 0.44454087475804904,
+  "mean_sequential_cos": 0.4845136486287964,
+  "wilcoxon_p": 0.9513483336484081,
+  "wilcoxon_stat": 7814.0,
+  "n_pairs": 190,
+  "win_rate": 0.5684210526315789,
+  "shared_target_mode": "self",
+  "eval_split": "test",
+  "mean_delta": -0.03997277387074734,
+  "delta_ci95_low": -0.06990811723774591,
+  "delta_ci95_high": -0.009661974680462962,
+  "bootstrap_n_resamples": 10000,
+  "_repro": {
+    "git_sha": null,
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": false
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/enron_graphs.pt": "633eeedeb1b8ef96689fa16e23bc7f0cfc527c7282ee35a58bbd7801fd7d35e9",
+      "/app/data/enron_meta.json": "05ff93e2f78213cfd350ec096d2c69755df99b7ea26a1a41374c8c185cfa0a85"
+    },
+    "config_path": "/app/configs/enron.yaml",
+    "config_sha256": "b4955bf708c987d012ba4dbec897d03f8577c23c9c1a977244a41dd98867bbb8",
+    "graph_ckpt_path": "/results/enron/seed3/checkpoint.pt",
+    "sequential_ckpt_path": "/results/enron/sequential-ablation/seed3/checkpoint.pt",
+    "shared_target_mode": "self",
+    "eval_split": "test"
+  }
+}

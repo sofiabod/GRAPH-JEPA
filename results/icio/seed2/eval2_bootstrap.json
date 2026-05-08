@@ -1,0 +1,45 @@
+{
+  "seed": 2,
+  "mean_graph_cos": 0.9795231797077038,
+  "mean_sequential_cos": 0.9569192087208783,
+  "wilcoxon_p": 7.450580596923828e-08,
+  "wilcoxon_stat": 373.0,
+  "n_pairs": 27,
+  "win_rate": 0.9259259259259259,
+  "shared_target_mode": "self",
+  "eval_split": "test",
+  "mean_delta": 0.02260397098682545,
+  "delta_ci95_low": 0.005083948428984045,
+  "delta_ci95_high": 0.04532514573247344,
+  "bootstrap_n_resamples": 10000,
+  "_repro": {
+    "git_sha": null,
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": false
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/icio_graphs.pt": "18c2227aca4bf7fc4edd6d98ef0123f4c41ef97b46494b9fb798bac7666c4871",
+      "/app/data/icio_meta.json": "9f434e2655e8eab1b18276bcaf5acf41da87e69f7a1a4ffdc27fd83d108007d5"
+    },
+    "config_path": "/app/configs/icio.yaml",
+    "config_sha256": "1370e4a715a6ae08ff8c08a770dc895c9e38fc961eca237512b80aae69cfc5ea",
+    "graph_ckpt_path": "/results/icio/seed2/checkpoint.pt",
+    "sequential_ckpt_path": "/results/icio/sequential-ablation/seed2/checkpoint.pt",
+    "shared_target_mode": "self",
+    "eval_split": "test"
+  }
+}

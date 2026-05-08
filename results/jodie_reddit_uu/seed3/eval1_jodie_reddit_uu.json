@@ -1,0 +1,76 @@
+{
+  "seed": 3,
+  "condition": "jodie_reddit_uu",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.7041206288635731,
+    "mean_copy_cos": 0.38926794854551555,
+    "mean_graph_avg_cos": 0.23217023579776286,
+    "wilcoxon_p_vs_copy": 7.48159883734709e-30,
+    "wilcoxon_stat_vs_copy": 99113.0,
+    "wilcoxon_p_vs_graph_avg": 6.323594743460744e-84,
+    "wilcoxon_stat_vs_graph_avg": 125250.0,
+    "n_pairs": 500,
+    "wilcoxon_p_vs_copy_bonferroni": 1.496319767469418e-29,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 1.2647189486921487e-83
+  },
+  "eval3_multistep_rollout": {
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.7041205953657627,
+      "mean_copy_cos": 0.389267935231328,
+      "wilcoxon_p_vs_copy": 7.48159883734709e-30,
+      "wilcoxon_stat_vs_copy": 99113.0,
+      "n_pairs": 500
+    },
+    "h2": {
+      "mean_pred_cos": 0.7162903092801571,
+      "mean_copy_cos": 0.3137887981976382,
+      "wilcoxon_p_vs_copy": 1.1370438052484699e-32,
+      "wilcoxon_stat_vs_copy": 67507.0,
+      "n_pairs": 400
+    },
+    "h4": {
+      "mean_pred_cos": 0.7247917938604951,
+      "mean_copy_cos": 0.37476881926879285,
+      "wilcoxon_p_vs_copy": 5.0986196598184944e-18,
+      "wilcoxon_stat_vs_copy": 17075.0,
+      "n_pairs": 200
+    }
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 10.06558895111084,
+    "mean_pairwise_cosine": 0.09245005249977112
+  },
+  "family_size": 2,
+  "_repro": {
+    "git_sha": null,
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": false
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/jodie_reddit_uu_graphs.pt": "5b00e823d28aaf916fa6bc44e7c84886a451b424fcb0addc8df054382fa713cc",
+      "/app/data/jodie_reddit_uu_meta.json": "591b06a6503f42566163dc66c0ea1c55b6294d6ad269ba2ca5434a886ed690a6"
+    },
+    "config_path": "/app/configs/jodie_reddit_uu.yaml",
+    "config_sha256": "dab9cd3a268702bb0362affa3e9daea356339a4cc2a056878f62363b84fc2c98",
+    "checkpoint_path": "/results/jodie_reddit_uu/seed3/checkpoint.pt"
+  }
+}

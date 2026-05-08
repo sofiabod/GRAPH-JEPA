@@ -1,0 +1,76 @@
+{
+  "seed": 2,
+  "condition": "sequential-ablation",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.6426218692362309,
+    "mean_copy_cos": 0.4278070327751338,
+    "mean_graph_avg_cos": 0.6594727775258944,
+    "wilcoxon_p_vs_copy": 1.993366813267292e-23,
+    "wilcoxon_stat_vs_copy": 94639.0,
+    "wilcoxon_p_vs_graph_avg": 4.821936654128734e-08,
+    "wilcoxon_stat_vs_graph_avg": 79864.0,
+    "n_pairs": 500,
+    "wilcoxon_p_vs_copy_bonferroni": 3.986733626534584e-23,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 9.643873308257468e-08
+  },
+  "eval3_multistep_rollout": {
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.64262180814147,
+      "mean_copy_cos": 0.4278069787286222,
+      "wilcoxon_p_vs_copy": 1.993366813267292e-23,
+      "wilcoxon_stat_vs_copy": 94639.0,
+      "n_pairs": 500
+    },
+    "h2": {
+      "mean_pred_cos": 0.6130389200523496,
+      "mean_copy_cos": 0.41175058838445694,
+      "wilcoxon_p_vs_copy": 4.266304513054176e-16,
+      "wilcoxon_stat_vs_copy": 58717.0,
+      "n_pairs": 400
+    },
+    "h4": {
+      "mean_pred_cos": 0.699420061558485,
+      "mean_copy_cos": 0.3578231145069003,
+      "wilcoxon_p_vs_copy": 3.388823508810265e-17,
+      "wilcoxon_stat_vs_copy": 16894.0,
+      "n_pairs": 200
+    }
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 3.192318916320801,
+    "mean_pairwise_cosine": 0.21257038414478302
+  },
+  "family_size": 2,
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/jodie_wikipedia_uu_graphs.pt": "a8bf27f906f338c0d7f79bd01c4eb6d15c9f481bb0c49a4bb70ffee9cacd67f5",
+      "/app/data/jodie_wikipedia_uu_meta.json": "bbb54f57511bd8d7705db2ff58469adaeb5e2c7516aa0fd8c0c167f70fbbcfc8"
+    },
+    "config_path": "/app/configs/jodie_wikipedia_uu.yaml",
+    "config_sha256": "8b07099c0290ff875797111facb118dd97775a629a06ca80431c67cb05a40b17",
+    "checkpoint_path": "/results/jodie_wikipedia_uu/sequential-ablation/seed2/checkpoint.pt"
+  }
+}

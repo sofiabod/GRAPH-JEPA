@@ -1,0 +1,76 @@
+{
+  "seed": 2,
+  "condition": "jodie_wikipedia_uu",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.7318097571879625,
+    "mean_copy_cos": 0.31103069308400155,
+    "mean_graph_avg_cos": 0.4317188376486301,
+    "wilcoxon_p_vs_copy": 2.6968763766964724e-28,
+    "wilcoxon_stat_vs_copy": 98080.0,
+    "wilcoxon_p_vs_graph_avg": 5.62087908352535e-13,
+    "wilcoxon_stat_vs_graph_avg": 85621.0,
+    "n_pairs": 500,
+    "wilcoxon_p_vs_copy_bonferroni": 5.393752753392945e-28,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 1.12417581670507e-12
+  },
+  "eval3_multistep_rollout": {
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.7318097356706857,
+      "mean_copy_cos": 0.3110306643545628,
+      "wilcoxon_p_vs_copy": 2.696874419780108e-28,
+      "wilcoxon_stat_vs_copy": 98080.0,
+      "n_pairs": 500
+    },
+    "h2": {
+      "mean_pred_cos": 0.7119992529042065,
+      "mean_copy_cos": 0.30567990880459545,
+      "wilcoxon_p_vs_copy": 2.4807496738571178e-20,
+      "wilcoxon_stat_vs_copy": 61305.0,
+      "n_pairs": 400
+    },
+    "h4": {
+      "mean_pred_cos": 0.7726745000481605,
+      "mean_copy_cos": 0.24653018571436405,
+      "wilcoxon_p_vs_copy": 6.774781310830511e-19,
+      "wilcoxon_stat_vs_copy": 17263.0,
+      "n_pairs": 200
+    }
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 3.4462637901306152,
+    "mean_pairwise_cosine": 0.3193591237068176
+  },
+  "family_size": 2,
+  "_repro": {
+    "git_sha": null,
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": false
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/jodie_wikipedia_uu_graphs.pt": "a8bf27f906f338c0d7f79bd01c4eb6d15c9f481bb0c49a4bb70ffee9cacd67f5",
+      "/app/data/jodie_wikipedia_uu_meta.json": "bbb54f57511bd8d7705db2ff58469adaeb5e2c7516aa0fd8c0c167f70fbbcfc8"
+    },
+    "config_path": "/app/configs/jodie_wikipedia_uu.yaml",
+    "config_sha256": "8b07099c0290ff875797111facb118dd97775a629a06ca80431c67cb05a40b17",
+    "checkpoint_path": "/results/jodie_wikipedia_uu/seed2/checkpoint.pt"
+  }
+}

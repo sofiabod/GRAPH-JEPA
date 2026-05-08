@@ -1,0 +1,45 @@
+{
+  "seed": 3,
+  "mean_graph_cos": 0.9938997575422612,
+  "mean_sequential_cos": 0.9987260999314507,
+  "wilcoxon_p": 1.0,
+  "wilcoxon_stat": 2443.0,
+  "n_pairs": 1476,
+  "win_rate": 0.007452574525745257,
+  "shared_target_mode": "self",
+  "eval_split": "test",
+  "mean_delta": -0.004826342389189454,
+  "delta_ci95_low": -0.0053353949926975295,
+  "delta_ci95_high": -0.004361249440851897,
+  "bootstrap_n_resamples": 10000,
+  "_repro": {
+    "git_sha": null,
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": false
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/metrla_graphs.pt": "ac9f778dab257fd69f662c20f55c6b82cb7ccade1ee6e9ed04359b1c6ce8633f",
+      "/app/data/metrla_meta.json": "7f7817b87402dcc6603f1cd97bd207e55fb9407aaa665d4891f2db8669f7ed64"
+    },
+    "config_path": "/app/configs/metrla.yaml",
+    "config_sha256": "e932f37153a8f5ac6e37eff4a7d71d01195e1271f082150cb880ae7a0bc2495d",
+    "graph_ckpt_path": "/results/metrla/seed3/checkpoint.pt",
+    "sequential_ckpt_path": "/results/metrla/sequential-ablation/seed3/checkpoint.pt",
+    "shared_target_mode": "self",
+    "eval_split": "test"
+  }
+}

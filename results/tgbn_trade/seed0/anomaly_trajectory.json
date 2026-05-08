@@ -1,0 +1,458 @@
+{
+  "seed": 0,
+  "dataset": "tgbn_trade",
+  "year_labels": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ],
+  "graph": {
+    "per_snapshot": [
+      {
+        "snapshot_idx": 4,
+        "year": 4,
+        "mean_pred_cos": 0.7658655643463135,
+        "deviation": 0.23413443565368652,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 5,
+        "year": 5,
+        "mean_pred_cos": 0.7967800498008728,
+        "deviation": 0.2032199501991272,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 6,
+        "year": 6,
+        "mean_pred_cos": 0.8070017695426941,
+        "deviation": 0.1929982304573059,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 7,
+        "year": 7,
+        "mean_pred_cos": 0.8271694779396057,
+        "deviation": 0.1728305220603943,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 8,
+        "year": 8,
+        "mean_pred_cos": 0.9126870036125183,
+        "deviation": 0.08731299638748169,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 9,
+        "year": 9,
+        "mean_pred_cos": 0.9350393414497375,
+        "deviation": 0.06496065855026245,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 10,
+        "year": 10,
+        "mean_pred_cos": 0.8248579502105713,
+        "deviation": 0.1751420497894287,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 11,
+        "year": 11,
+        "mean_pred_cos": 0.8792810440063477,
+        "deviation": 0.12071895599365234,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 12,
+        "year": 12,
+        "mean_pred_cos": 0.900971531867981,
+        "deviation": 0.09902846813201904,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 13,
+        "year": 13,
+        "mean_pred_cos": 0.8886805176734924,
+        "deviation": 0.11131948232650757,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 14,
+        "year": 14,
+        "mean_pred_cos": 0.8317112922668457,
+        "deviation": 0.1682887077331543,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 15,
+        "year": 15,
+        "mean_pred_cos": 0.8532899022102356,
+        "deviation": 0.1467100977897644,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 16,
+        "year": 16,
+        "mean_pred_cos": 0.6843622326850891,
+        "deviation": 0.3156377673149109,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 17,
+        "year": 17,
+        "mean_pred_cos": 0.7606472373008728,
+        "deviation": 0.2393527626991272,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 18,
+        "year": 18,
+        "mean_pred_cos": 0.8696287870407104,
+        "deviation": 0.13037121295928955,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 19,
+        "year": 19,
+        "mean_pred_cos": 0.7704140543937683,
+        "deviation": 0.2295859456062317,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 20,
+        "year": 20,
+        "mean_pred_cos": 0.8217642307281494,
+        "deviation": 0.17823576927185059,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 21,
+        "year": 21,
+        "mean_pred_cos": 0.7795051336288452,
+        "deviation": 0.22049486637115479,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 22,
+        "year": 22,
+        "mean_pred_cos": 0.7522149682044983,
+        "deviation": 0.2477850317955017,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 23,
+        "year": 23,
+        "mean_pred_cos": 0.7943705916404724,
+        "deviation": 0.2056294083595276,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 24,
+        "year": 24,
+        "mean_pred_cos": 0.7529783248901367,
+        "deviation": 0.24702167510986328,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 25,
+        "year": 25,
+        "mean_pred_cos": 0.6645790934562683,
+        "deviation": 0.3354209065437317,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 26,
+        "year": 26,
+        "mean_pred_cos": 0.7232633829116821,
+        "deviation": 0.27673661708831787,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 27,
+        "year": 27,
+        "mean_pred_cos": 0.8141886591911316,
+        "deviation": 0.1858113408088684,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 28,
+        "year": 28,
+        "mean_pred_cos": 0.8605080842971802,
+        "deviation": 0.13949191570281982,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 29,
+        "year": 29,
+        "mean_pred_cos": 0.8387065529823303,
+        "deviation": 0.16129344701766968,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 30,
+        "year": 30,
+        "mean_pred_cos": 0.8400660157203674,
+        "deviation": 0.15993398427963257,
+        "n_masked": 51
+      }
+    ],
+    "context_k": 4,
+    "mask_ratio": 0.2,
+    "mask_seed": 0,
+    "n_snapshots_evaluated": 27
+  },
+  "sequential": {
+    "per_snapshot": [
+      {
+        "snapshot_idx": 4,
+        "year": 4,
+        "mean_pred_cos": 0.7477264404296875,
+        "deviation": 0.2522735595703125,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 5,
+        "year": 5,
+        "mean_pred_cos": 0.7405555248260498,
+        "deviation": 0.2594444751739502,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 6,
+        "year": 6,
+        "mean_pred_cos": 0.7498206496238708,
+        "deviation": 0.25017935037612915,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 7,
+        "year": 7,
+        "mean_pred_cos": 0.7794880270957947,
+        "deviation": 0.22051197290420532,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 8,
+        "year": 8,
+        "mean_pred_cos": 0.7899007797241211,
+        "deviation": 0.2100992202758789,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 9,
+        "year": 9,
+        "mean_pred_cos": 0.8216547966003418,
+        "deviation": 0.1783452033996582,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 10,
+        "year": 10,
+        "mean_pred_cos": 0.7663984298706055,
+        "deviation": 0.23360157012939453,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 11,
+        "year": 11,
+        "mean_pred_cos": 0.7668849229812622,
+        "deviation": 0.2331150770187378,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 12,
+        "year": 12,
+        "mean_pred_cos": 0.7930434942245483,
+        "deviation": 0.20695650577545166,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 13,
+        "year": 13,
+        "mean_pred_cos": 0.7889165282249451,
+        "deviation": 0.21108347177505493,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 14,
+        "year": 14,
+        "mean_pred_cos": 0.7720726728439331,
+        "deviation": 0.2279273271560669,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 15,
+        "year": 15,
+        "mean_pred_cos": 0.7751795649528503,
+        "deviation": 0.22482043504714966,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 16,
+        "year": 16,
+        "mean_pred_cos": 0.6460475921630859,
+        "deviation": 0.35395240783691406,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 17,
+        "year": 17,
+        "mean_pred_cos": 0.7121737599372864,
+        "deviation": 0.2878262400627136,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 18,
+        "year": 18,
+        "mean_pred_cos": 0.7551975846290588,
+        "deviation": 0.24480241537094116,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 19,
+        "year": 19,
+        "mean_pred_cos": 0.701246976852417,
+        "deviation": 0.298753023147583,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 20,
+        "year": 20,
+        "mean_pred_cos": 0.766058087348938,
+        "deviation": 0.233941912651062,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 21,
+        "year": 21,
+        "mean_pred_cos": 0.7219318747520447,
+        "deviation": 0.2780681252479553,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 22,
+        "year": 22,
+        "mean_pred_cos": 0.7074302434921265,
+        "deviation": 0.29256975650787354,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 23,
+        "year": 23,
+        "mean_pred_cos": 0.7188170552253723,
+        "deviation": 0.2811829447746277,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 24,
+        "year": 24,
+        "mean_pred_cos": 0.7130685448646545,
+        "deviation": 0.28693145513534546,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 25,
+        "year": 25,
+        "mean_pred_cos": 0.669012188911438,
+        "deviation": 0.330987811088562,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 26,
+        "year": 26,
+        "mean_pred_cos": 0.6849848628044128,
+        "deviation": 0.31501513719558716,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 27,
+        "year": 27,
+        "mean_pred_cos": 0.7385013103485107,
+        "deviation": 0.26149868965148926,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 28,
+        "year": 28,
+        "mean_pred_cos": 0.7560498118400574,
+        "deviation": 0.24395018815994263,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 29,
+        "year": 29,
+        "mean_pred_cos": 0.7641484141349792,
+        "deviation": 0.23585158586502075,
+        "n_masked": 51
+      },
+      {
+        "snapshot_idx": 30,
+        "year": 30,
+        "mean_pred_cos": 0.7559247612953186,
+        "deviation": 0.2440752387046814,
+        "n_masked": 51
+      }
+    ],
+    "context_k": 4,
+    "mask_ratio": 0.2,
+    "mask_seed": 0,
+    "n_snapshots_evaluated": 27
+  },
+  "_repro": {
+    "git_sha": null,
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": false
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/tgbn_trade_graphs.pt": "0b7d4384f1c68e2b952693855b6076b3ba4c5469e57092f6a089f1ca06be1d26",
+      "/app/data/tgbn_trade_meta.json": "b22f44f64185a31bf2f7f0b7d111f5e57f8d35d062838431c090302861ccd152"
+    },
+    "config_path": "/app/configs/tgbn_trade.yaml",
+    "config_sha256": "00f77d760c76ae41cf43f4dd5893c1c8daa2488238ecf9da05adb297071b88af",
+    "eval": "anomaly_trajectory"
+  }
+}

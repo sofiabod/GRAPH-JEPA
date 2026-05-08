@@ -1,0 +1,45 @@
+{
+  "seed": 2,
+  "mean_graph_cos": 0.5296060031652451,
+  "mean_sequential_cos": 0.6058449292555451,
+  "wilcoxon_p": 1.0,
+  "wilcoxon_stat": 3732.0,
+  "n_pairs": 800,
+  "win_rate": 0.0425,
+  "shared_target_mode": "self",
+  "eval_split": "test",
+  "mean_delta": -0.07623892609030009,
+  "delta_ci95_low": -0.08024321752786637,
+  "delta_ci95_high": -0.07224116955883801,
+  "bootstrap_n_resamples": 10000,
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/dblp_graphs.pt": "5498c297abeda0c66539aaedeeba2c6cf0211ca0fa48e101e921306d92ada980",
+      "/app/data/dblp_meta.json": "ef3d8cfc4295a1597529d4e290815d3954c2204e72bccfe946239bebb3c806ec"
+    },
+    "config_path": "/app/configs/dblp.yaml",
+    "config_sha256": "13db1c6dd8aea900e8f1ed69ab7aa2202fa1ded1e6fefba1be800ee160ee160f",
+    "graph_ckpt_path": "/results/dblp/seed2/checkpoint.pt",
+    "sequential_ckpt_path": "/results/dblp/sequential-ablation/seed2/checkpoint.pt",
+    "shared_target_mode": "self",
+    "eval_split": "test"
+  }
+}

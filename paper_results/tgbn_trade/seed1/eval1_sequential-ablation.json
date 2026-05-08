@@ -1,0 +1,76 @@
+{
+  "seed": 1,
+  "condition": "sequential-ablation",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.7452555799089811,
+    "mean_copy_cos": 0.515903131094049,
+    "mean_graph_avg_cos": 0.11138034906311363,
+    "wilcoxon_p_vs_copy": 2.5950709633849536e-14,
+    "wilcoxon_stat_vs_copy": 25194.0,
+    "wilcoxon_p_vs_graph_avg": 5.495033871437696e-39,
+    "wilcoxon_stat_vs_graph_avg": 31656.0,
+    "n_pairs": 255,
+    "wilcoxon_p_vs_copy_bonferroni": 5.190141926769907e-14,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 1.0990067742875392e-38
+  },
+  "eval3_multistep_rollout": {
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.7452555456874417,
+      "mean_copy_cos": 0.5159031037460355,
+      "wilcoxon_p_vs_copy": 2.5950709633849536e-14,
+      "wilcoxon_stat_vs_copy": 25194.0,
+      "n_pairs": 255
+    },
+    "h2": {
+      "mean_pred_cos": 0.7555700321727451,
+      "mean_copy_cos": 0.4893821831609981,
+      "wilcoxon_p_vs_copy": 9.72832230157598e-14,
+      "wilcoxon_stat_vs_copy": 16662.0,
+      "n_pairs": 204
+    },
+    "h4": {
+      "mean_pred_cos": 0.7664103925082029,
+      "mean_copy_cos": 0.44801392975975485,
+      "wilcoxon_p_vs_copy": 5.867015864980474e-10,
+      "wilcoxon_stat_vs_copy": 4449.0,
+      "n_pairs": 102
+    }
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 5.939051151275635,
+    "mean_pairwise_cosine": 0.07337787747383118
+  },
+  "family_size": 2,
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/tgbn_trade_graphs.pt": "0b7d4384f1c68e2b952693855b6076b3ba4c5469e57092f6a089f1ca06be1d26",
+      "/app/data/tgbn_trade_meta.json": "628259642ade2c784d7b5c26220e7791e1ed86ca5081d7185ef9e72558cc40fc"
+    },
+    "config_path": "/app/configs/tgbn_trade.yaml",
+    "config_sha256": "00f77d760c76ae41cf43f4dd5893c1c8daa2488238ecf9da05adb297071b88af",
+    "checkpoint_path": "/results/tgbn_trade/sequential-ablation/seed1/checkpoint.pt"
+  }
+}

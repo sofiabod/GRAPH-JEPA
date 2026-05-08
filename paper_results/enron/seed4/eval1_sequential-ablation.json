@@ -1,0 +1,76 @@
+{
+  "seed": 4,
+  "condition": "sequential-ablation",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.4272407424538151,
+    "mean_copy_cos": 0.5418542100410713,
+    "mean_graph_avg_cos": 0.4541106652468443,
+    "wilcoxon_p_vs_copy": 0.7738638218818401,
+    "wilcoxon_stat_vs_copy": 8502.0,
+    "wilcoxon_p_vs_graph_avg": 0.4214117065767098,
+    "wilcoxon_stat_vs_graph_avg": 9223.0,
+    "n_pairs": 190,
+    "wilcoxon_p_vs_copy_bonferroni": 1.0,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 0.8428234131534196
+  },
+  "eval3_multistep_rollout": {
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.42724072338130914,
+      "mean_copy_cos": 0.5418541779643611,
+      "wilcoxon_p_vs_copy": 0.7738638218818401,
+      "wilcoxon_stat_vs_copy": 8502.0,
+      "n_pairs": 190
+    },
+    "h2": {
+      "mean_pred_cos": 0.38903266270644965,
+      "mean_copy_cos": 0.4904178524182902,
+      "wilcoxon_p_vs_copy": 0.6674314964367148,
+      "wilcoxon_stat_vs_copy": 7842.0,
+      "n_pairs": 180
+    },
+    "h4": {
+      "mean_pred_cos": 0.44034530175849795,
+      "mean_copy_cos": 0.43312278650701047,
+      "wilcoxon_p_vs_copy": 0.12578260248631712,
+      "wilcoxon_stat_vs_copy": 7113.0,
+      "n_pairs": 160
+    }
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 5.133544445037842,
+    "mean_pairwise_cosine": 0.019561665132641792
+  },
+  "family_size": 2,
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/enron_graphs.pt": "1d4646f0459a093da6df5d1b64a021486f359fb9aed01b70c3656aed766ea2b1",
+      "/app/data/enron_meta.json": "3e5cc2fb804fb0f1447e523f1f8ae76a8105b841c084bd122ece517e31045757"
+    },
+    "config_path": "/app/configs/enron.yaml",
+    "config_sha256": "8360bf4ce1960d7ef37e8ddaeaef2ba45a2e1da30286cbd274a38e41c66b1ea7",
+    "checkpoint_path": "/results/enron/sequential-ablation/seed4/checkpoint.pt"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "seed": 4,
+  "condition": "icio",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.9868448155897634,
+    "mean_copy_cos": 0.080071487084583,
+    "mean_graph_avg_cos": 0.025278291699511034,
+    "wilcoxon_p_vs_copy": 7.450580596923828e-09,
+    "wilcoxon_stat_vs_copy": 378.0,
+    "wilcoxon_p_vs_graph_avg": 7.450580596923828e-09,
+    "wilcoxon_stat_vs_graph_avg": 378.0,
+    "n_pairs": 27,
+    "wilcoxon_p_vs_copy_bonferroni": 1.4901161193847656e-08,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 1.4901161193847656e-08
+  },
+  "eval3_multistep_rollout": {
+    "horizons_evaluated": [
+      1,
+      2
+    ],
+    "h1": {
+      "mean_pred_cos": 0.9868447692305954,
+      "mean_copy_cos": 0.0800715898750005,
+      "wilcoxon_p_vs_copy": 7.450580596923828e-09,
+      "wilcoxon_stat_vs_copy": 378.0,
+      "n_pairs": 27
+    },
+    "h2": {
+      "mean_pred_cos": 0.9846089647875892,
+      "mean_copy_cos": 0.08021402286572589,
+      "wilcoxon_p_vs_copy": 3.814697265625e-06,
+      "wilcoxon_stat_vs_copy": 171.0,
+      "n_pairs": 18
+    }
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 2.363070249557495,
+    "mean_pairwise_cosine": 0.695286214351654
+  },
+  "family_size": 2
+}

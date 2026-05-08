@@ -1,0 +1,76 @@
+{
+  "seed": 0,
+  "condition": "metrla",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.9945429125371664,
+    "mean_copy_cos": 0.9862836019456548,
+    "mean_graph_avg_cos": 0.682989537710864,
+    "wilcoxon_p_vs_copy": 1.6720112920992875e-218,
+    "wilcoxon_stat_vs_copy": 1061414.0,
+    "wilcoxon_p_vs_graph_avg": 4.120718481691643e-243,
+    "wilcoxon_stat_vs_graph_avg": 1090026.0,
+    "n_pairs": 1476,
+    "wilcoxon_p_vs_copy_bonferroni": 3.344022584198575e-218,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 8.241436963383286e-243
+  },
+  "eval3_multistep_rollout": {
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.9945428613724747,
+      "mean_copy_cos": 0.9862835541730974,
+      "wilcoxon_p_vs_copy": 1.672008578231393e-218,
+      "wilcoxon_stat_vs_copy": 1061414.0,
+      "n_pairs": 1476
+    },
+    "h2": {
+      "mean_pred_cos": 0.9944567259180421,
+      "mean_copy_cos": 0.9867877733832037,
+      "wilcoxon_p_vs_copy": 7.905136793349338e-204,
+      "wilcoxon_stat_vs_copy": 993103.0,
+      "n_pairs": 1435
+    },
+    "h4": {
+      "mean_pred_cos": 0.994133601299675,
+      "mean_copy_cos": 0.9859960144392579,
+      "wilcoxon_p_vs_copy": 1.2015921722722343e-196,
+      "wilcoxon_stat_vs_copy": 887696.0,
+      "n_pairs": 1353
+    }
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 21.61577606201172,
+    "mean_pairwise_cosine": 0.011061067692935467
+  },
+  "family_size": 2,
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/metrla_graphs.pt": "ac9f778dab257fd69f662c20f55c6b82cb7ccade1ee6e9ed04359b1c6ce8633f",
+      "/app/data/metrla_meta.json": "7f7817b87402dcc6603f1cd97bd207e55fb9407aaa665d4891f2db8669f7ed64"
+    },
+    "config_path": "/app/configs/metrla.yaml",
+    "config_sha256": "e932f37153a8f5ac6e37eff4a7d71d01195e1271f082150cb880ae7a0bc2495d",
+    "checkpoint_path": "/results/metrla/seed0/checkpoint.pt"
+  }
+}

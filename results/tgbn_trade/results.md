@@ -2,7 +2,9 @@
 
 ##  result
 
-Across 5 random seeds on TGBN-Trade, graph-JEPA achieves mean test-set cosine of 0.827 ± 0.010 vs sequential-ablation's 0.746 ± 0.016 (Δ = 0.081). The paired Wilcoxon test (n = 255 masked-node pairs per seed) yields p < 10⁻¹² in every seed (Bonferroni-corrected for n=5 family). Graph-JEPA wins on 87% of per-node paired comparisons. Both conditions decisively beat copy-forward (cos 0.51 / 0.59) and graph-average baselines (after Bonferroni).
+Across 5 random seeds on TGBN-Trade, graph-JEPA achieves mean test-set cosine of 0.827 ± 0.010 vs sequential-ablation's 0.746 ± 0.016 (Δ = 0.081). The paired Wilcoxon test (n = 255 masked-node pairs per seed) yields p ≤ 10⁻¹² in every seed (min p = 1.23 × 10⁻¹⁷ at seed 4; max p = 1.00 × 10⁻¹² at seed 2). After Bonferroni correction for the 3-test eval family (eval1 vs copy, eval1 vs graph-avg, eval2 graph vs sequential), corrected p ≤ 3 × 10⁻¹² in every seed. Graph-JEPA wins on 87% of per-node paired comparisons (mean across seeds: 0.870 ± 0.015). Both conditions decisively beat copy-forward (cos 0.51 / 0.59) and graph-average baselines (after Bonferroni).
+
+> **Audit caveat (2026-05-07):** the Sequential ablation in the runs reported here used the original 200K-param SequentialMLP, while GraphEncoder is ~400K params — capacity mismatch flagged by stress-test audit. SequentialMLP has been rewritten with capacity-matched FFN blocks (`src/models/sequential_encoder.py` post-2026-05-07) and these numbers are pending re-run. The eff_rank measurement (Graph 8.04, Sequential 19.12) is unaffected since it's measured per-condition independently and does not depend on a controlled ablation.
 
 ## per-seed table
 

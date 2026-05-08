@@ -1,0 +1,76 @@
+{
+  "seed": 2,
+  "condition": "enron",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.45793878144927713,
+    "mean_copy_cos": 0.5720473640843442,
+    "mean_graph_avg_cos": 0.47182026078042233,
+    "wilcoxon_p_vs_copy": 0.564626961781896,
+    "wilcoxon_stat_vs_copy": 8949.0,
+    "wilcoxon_p_vs_graph_avg": 0.251025945372676,
+    "wilcoxon_stat_vs_graph_avg": 9582.0,
+    "n_pairs": 190,
+    "wilcoxon_p_vs_copy_bonferroni": 1.0,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 0.502051890745352
+  },
+  "eval3_multistep_rollout": {
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.45793876830292374,
+      "mean_copy_cos": 0.5720473580454525,
+      "wilcoxon_p_vs_copy": 0.564626961781896,
+      "wilcoxon_stat_vs_copy": 8949.0,
+      "n_pairs": 190
+    },
+    "h2": {
+      "mean_pred_cos": 0.40585451974636977,
+      "mean_copy_cos": 0.4142177950176928,
+      "wilcoxon_p_vs_copy": 0.09853846827629986,
+      "wilcoxon_stat_vs_copy": 9048.0,
+      "n_pairs": 180
+    },
+    "h4": {
+      "mean_pred_cos": 0.4045416332199238,
+      "mean_copy_cos": 0.4478138505015522,
+      "wilcoxon_p_vs_copy": 0.21561578162495204,
+      "wilcoxon_stat_vs_copy": 6902.0,
+      "n_pairs": 160
+    }
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 7.7010369300842285,
+    "mean_pairwise_cosine": 0.02414846420288086
+  },
+  "family_size": 2,
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/enron_graphs.pt": "1d4646f0459a093da6df5d1b64a021486f359fb9aed01b70c3656aed766ea2b1",
+      "/app/data/enron_meta.json": "3e5cc2fb804fb0f1447e523f1f8ae76a8105b841c084bd122ece517e31045757"
+    },
+    "config_path": "/app/configs/enron.yaml",
+    "config_sha256": "8360bf4ce1960d7ef37e8ddaeaef2ba45a2e1da30286cbd274a38e41c66b1ea7",
+    "checkpoint_path": "/results/enron/seed2/checkpoint.pt"
+  }
+}

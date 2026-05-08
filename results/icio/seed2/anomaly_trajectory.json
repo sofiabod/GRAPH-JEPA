@@ -1,0 +1,218 @@
+{
+  "seed": 2,
+  "dataset": "icio",
+  "year_labels": [
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014
+  ],
+  "graph": {
+    "per_snapshot": [
+      {
+        "snapshot_idx": 4,
+        "year": 2004,
+        "mean_pred_cos": 0.9780070185661316,
+        "deviation": 0.021992981433868408,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 5,
+        "year": 2005,
+        "mean_pred_cos": 0.994105875492096,
+        "deviation": 0.005894124507904053,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 6,
+        "year": 2006,
+        "mean_pred_cos": 0.9915316104888916,
+        "deviation": 0.008468389511108398,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 7,
+        "year": 2007,
+        "mean_pred_cos": 0.9932870864868164,
+        "deviation": 0.006712913513183594,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 8,
+        "year": 2008,
+        "mean_pred_cos": 0.98295658826828,
+        "deviation": 0.01704341173171997,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 9,
+        "year": 2009,
+        "mean_pred_cos": 0.990007221698761,
+        "deviation": 0.009992778301239014,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 10,
+        "year": 2010,
+        "mean_pred_cos": 0.99217289686203,
+        "deviation": 0.00782710313796997,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 11,
+        "year": 2011,
+        "mean_pred_cos": 0.9840143322944641,
+        "deviation": 0.01598566770553589,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 12,
+        "year": 2012,
+        "mean_pred_cos": 0.9699947834014893,
+        "deviation": 0.030005216598510742,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 13,
+        "year": 2013,
+        "mean_pred_cos": 0.9915650486946106,
+        "deviation": 0.008434951305389404,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 14,
+        "year": 2014,
+        "mean_pred_cos": 0.977009654045105,
+        "deviation": 0.02299034595489502,
+        "n_masked": 9
+      }
+    ],
+    "context_k": 4,
+    "mask_ratio": 0.2,
+    "mask_seed": 2,
+    "n_snapshots_evaluated": 11
+  },
+  "sequential": {
+    "per_snapshot": [
+      {
+        "snapshot_idx": 4,
+        "year": 2004,
+        "mean_pred_cos": 0.9506104588508606,
+        "deviation": 0.049389541149139404,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 5,
+        "year": 2005,
+        "mean_pred_cos": 0.9890918731689453,
+        "deviation": 0.010908126831054688,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 6,
+        "year": 2006,
+        "mean_pred_cos": 0.9818070530891418,
+        "deviation": 0.018192946910858154,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 7,
+        "year": 2007,
+        "mean_pred_cos": 0.9876940250396729,
+        "deviation": 0.012305974960327148,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 8,
+        "year": 2008,
+        "mean_pred_cos": 0.9604280591011047,
+        "deviation": 0.039571940898895264,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 9,
+        "year": 2009,
+        "mean_pred_cos": 0.9805039167404175,
+        "deviation": 0.01949608325958252,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 10,
+        "year": 2010,
+        "mean_pred_cos": 0.986487627029419,
+        "deviation": 0.013512372970581055,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 11,
+        "year": 2011,
+        "mean_pred_cos": 0.9641318917274475,
+        "deviation": 0.03586810827255249,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 12,
+        "year": 2012,
+        "mean_pred_cos": 0.9307116270065308,
+        "deviation": 0.06928837299346924,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 13,
+        "year": 2013,
+        "mean_pred_cos": 0.9883998036384583,
+        "deviation": 0.011600196361541748,
+        "n_masked": 9
+      },
+      {
+        "snapshot_idx": 14,
+        "year": 2014,
+        "mean_pred_cos": 0.9516461491584778,
+        "deviation": 0.04835385084152222,
+        "n_masked": 9
+      }
+    ],
+    "context_k": 4,
+    "mask_ratio": 0.2,
+    "mask_seed": 2,
+    "n_snapshots_evaluated": 11
+  },
+  "_repro": {
+    "git_sha": null,
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": false
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/icio_graphs.pt": "18c2227aca4bf7fc4edd6d98ef0123f4c41ef97b46494b9fb798bac7666c4871",
+      "/app/data/icio_meta.json": "9f434e2655e8eab1b18276bcaf5acf41da87e69f7a1a4ffdc27fd83d108007d5"
+    },
+    "config_path": "/app/configs/icio.yaml",
+    "config_sha256": "1370e4a715a6ae08ff8c08a770dc895c9e38fc961eca237512b80aae69cfc5ea",
+    "eval": "anomaly_trajectory"
+  }
+}

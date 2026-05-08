@@ -1,0 +1,76 @@
+{
+  "seed": 3,
+  "condition": "sequential-ablation",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.9987423213193733,
+    "mean_copy_cos": 0.9765032555675766,
+    "mean_graph_avg_cos": 0.10986079926145714,
+    "wilcoxon_p_vs_copy": 4.120714224926429e-243,
+    "wilcoxon_stat_vs_copy": 1090026.0,
+    "wilcoxon_p_vs_graph_avg": 4.1207195458822286e-243,
+    "wilcoxon_stat_vs_graph_avg": 1090026.0,
+    "n_pairs": 1476,
+    "wilcoxon_p_vs_copy_bonferroni": 8.241428449852858e-243,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 8.241439091764457e-243
+  },
+  "eval3_multistep_rollout": {
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.9987422716892186,
+      "mean_copy_cos": 0.9765032050086231,
+      "wilcoxon_p_vs_copy": 4.1207163533075476e-243,
+      "wilcoxon_stat_vs_copy": 1090026.0,
+      "n_pairs": 1476
+    },
+    "h2": {
+      "mean_pred_cos": 0.9987479685906334,
+      "mean_copy_cos": 0.9766056974175085,
+      "wilcoxon_p_vs_copy": 1.987718001396736e-236,
+      "wilcoxon_stat_vs_copy": 1030330.0,
+      "n_pairs": 1435
+    },
+    "h4": {
+      "mean_pred_cos": 0.9987570659284317,
+      "mean_copy_cos": 0.9764446828071047,
+      "wilcoxon_p_vs_copy": 4.630848097715518e-223,
+      "wilcoxon_stat_vs_copy": 915981.0,
+      "n_pairs": 1353
+    }
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 6.39554500579834,
+    "mean_pairwise_cosine": -7.503543747588992e-05
+  },
+  "family_size": 2,
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/metrla_graphs.pt": "ac9f778dab257fd69f662c20f55c6b82cb7ccade1ee6e9ed04359b1c6ce8633f",
+      "/app/data/metrla_meta.json": "7f7817b87402dcc6603f1cd97bd207e55fb9407aaa665d4891f2db8669f7ed64"
+    },
+    "config_path": "/app/configs/metrla.yaml",
+    "config_sha256": "e932f37153a8f5ac6e37eff4a7d71d01195e1271f082150cb880ae7a0bc2495d",
+    "checkpoint_path": "/results/metrla/sequential-ablation/seed3/checkpoint.pt"
+  }
+}

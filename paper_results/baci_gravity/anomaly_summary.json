@@ -1,0 +1,149 @@
+{
+  "dataset": "baci_gravity",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "per_year": [
+    {
+      "year": 2000,
+      "graph_dev": 0.09968030452728271,
+      "sequential_dev": 0.3041066527366638,
+      "shock": false
+    },
+    {
+      "year": 2001,
+      "graph_dev": 0.09678834676742554,
+      "sequential_dev": 0.29276490211486816,
+      "shock": true
+    },
+    {
+      "year": 2002,
+      "graph_dev": 0.08297812938690186,
+      "sequential_dev": 0.27859967947006226,
+      "shock": false
+    },
+    {
+      "year": 2003,
+      "graph_dev": 0.0662539005279541,
+      "sequential_dev": 0.2623280882835388,
+      "shock": false
+    },
+    {
+      "year": 2004,
+      "graph_dev": 0.07157003879547119,
+      "sequential_dev": 0.23525965213775635,
+      "shock": false
+    },
+    {
+      "year": 2005,
+      "graph_dev": 0.08625942468643188,
+      "sequential_dev": 0.24638277292251587,
+      "shock": false
+    },
+    {
+      "year": 2006,
+      "graph_dev": 0.05555856227874756,
+      "sequential_dev": 0.2524791359901428,
+      "shock": false
+    },
+    {
+      "year": 2007,
+      "graph_dev": 0.06616884469985962,
+      "sequential_dev": 0.2502533793449402,
+      "shock": false
+    },
+    {
+      "year": 2008,
+      "graph_dev": 0.06353360414505005,
+      "sequential_dev": 0.2506988048553467,
+      "shock": true
+    },
+    {
+      "year": 2009,
+      "graph_dev": 0.06088441610336304,
+      "sequential_dev": 0.25249743461608887,
+      "shock": true
+    },
+    {
+      "year": 2010,
+      "graph_dev": 0.04469418525695801,
+      "sequential_dev": 0.24764233827590942,
+      "shock": false
+    },
+    {
+      "year": 2011,
+      "graph_dev": 0.06664502620697021,
+      "sequential_dev": 0.28564655780792236,
+      "shock": false
+    },
+    {
+      "year": 2012,
+      "graph_dev": 0.04787731170654297,
+      "sequential_dev": 0.26021862030029297,
+      "shock": false
+    },
+    {
+      "year": 2013,
+      "graph_dev": 0.04559469223022461,
+      "sequential_dev": 0.2715476155281067,
+      "shock": false
+    },
+    {
+      "year": 2014,
+      "graph_dev": 0.06227231025695801,
+      "sequential_dev": 0.24501502513885498,
+      "shock": true
+    },
+    {
+      "year": 2015,
+      "graph_dev": 0.07053005695343018,
+      "sequential_dev": 0.25918322801589966,
+      "shock": true
+    },
+    {
+      "year": 2016,
+      "graph_dev": 0.05098229646682739,
+      "sequential_dev": 0.26110637187957764,
+      "shock": false
+    },
+    {
+      "year": 2017,
+      "graph_dev": 0.04707503318786621,
+      "sequential_dev": 0.2471550703048706,
+      "shock": false
+    },
+    {
+      "year": 2018,
+      "graph_dev": 0.04278826713562012,
+      "sequential_dev": 0.2487647533416748,
+      "shock": true
+    },
+    {
+      "year": 2019,
+      "graph_dev": 0.04492998123168945,
+      "sequential_dev": 0.2509521245956421,
+      "shock": false
+    },
+    {
+      "year": 2020,
+      "graph_dev": 0.07667440176010132,
+      "sequential_dev": 0.27056533098220825,
+      "shock": true
+    }
+  ],
+  "shocks_known": {
+    "1997": "Asian Financial Crisis",
+    "1998": "Asian Financial Crisis (continued)",
+    "2001": "Dot-com / 9-11",
+    "2008": "Global Financial Crisis",
+    "2009": "GFC trough",
+    "2014": "Oil price collapse",
+    "2015": "Oil collapse / Russia sanctions",
+    "2018": "US-China trade war",
+    "2020": "COVID-19"
+  }
+}

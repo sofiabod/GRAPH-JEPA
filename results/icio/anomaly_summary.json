@@ -1,0 +1,83 @@
+{
+  "dataset": "icio",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "per_year": [
+    {
+      "year": 2004,
+      "graph_dev": 0.01314610242843628,
+      "sequential_dev": 0.04495769739151001,
+      "shock": false
+    },
+    {
+      "year": 2005,
+      "graph_dev": 0.02629786729812622,
+      "sequential_dev": 0.09957313537597656,
+      "shock": false
+    },
+    {
+      "year": 2006,
+      "graph_dev": 0.008468389511108398,
+      "sequential_dev": 0.03424757719039917,
+      "shock": false
+    },
+    {
+      "year": 2007,
+      "graph_dev": 0.021727561950683594,
+      "sequential_dev": 0.057717859745025635,
+      "shock": false
+    },
+    {
+      "year": 2008,
+      "graph_dev": 0.01704341173171997,
+      "sequential_dev": 0.060748517513275146,
+      "shock": true
+    },
+    {
+      "year": 2009,
+      "graph_dev": 0.008991360664367676,
+      "sequential_dev": 0.020251989364624023,
+      "shock": true
+    },
+    {
+      "year": 2010,
+      "graph_dev": 0.010815322399139404,
+      "sequential_dev": 0.023711323738098145,
+      "shock": false
+    },
+    {
+      "year": 2011,
+      "graph_dev": 0.01598566770553589,
+      "sequential_dev": 0.03586810827255249,
+      "shock": false
+    },
+    {
+      "year": 2012,
+      "graph_dev": 0.029468297958374023,
+      "sequential_dev": 0.06928837299346924,
+      "shock": false
+    },
+    {
+      "year": 2013,
+      "graph_dev": 0.023157954216003418,
+      "sequential_dev": 0.0833890438079834,
+      "shock": false
+    },
+    {
+      "year": 2014,
+      "graph_dev": 0.01720881462097168,
+      "sequential_dev": 0.04921317100524902,
+      "shock": false
+    }
+  ],
+  "shocks_known": {
+    "2008": "Global Financial Crisis",
+    "2009": "GFC trough",
+    "2020": "COVID-19"
+  }
+}

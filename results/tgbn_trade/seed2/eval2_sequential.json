@@ -1,0 +1,10 @@
+{
+  "seed": 2,
+  "mean_graph_cos": 0.0805194954734807,
+  "mean_sequential_cos": 0.6909431909393592,
+  "wilcoxon_p": 1.0,
+  "wilcoxon_stat": 774.0,
+  "n_pairs": 255,
+  "win_rate": 0.1411764705882353,
+  "shared_target_mode": "sequential"
+}

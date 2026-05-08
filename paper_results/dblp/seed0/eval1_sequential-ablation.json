@@ -1,0 +1,76 @@
+{
+  "seed": 0,
+  "condition": "sequential-ablation",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.610389938391745,
+    "mean_copy_cos": 0.5046008881181479,
+    "mean_graph_avg_cos": 0.3312079333979636,
+    "wilcoxon_p_vs_copy": 1.0,
+    "wilcoxon_stat_vs_copy": 104271.0,
+    "wilcoxon_p_vs_graph_avg": 1.561919553449329e-10,
+    "wilcoxon_stat_vs_graph_avg": 201341.0,
+    "n_pairs": 800,
+    "wilcoxon_p_vs_copy_bonferroni": 1.0,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 3.123839106898658e-10
+  },
+  "eval3_multistep_rollout": {
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.6103899066150188,
+      "mean_copy_cos": 0.5046008599549532,
+      "wilcoxon_p_vs_copy": 1.0,
+      "wilcoxon_stat_vs_copy": 104271.0,
+      "n_pairs": 800
+    },
+    "h2": {
+      "mean_pred_cos": 0.6049367794891198,
+      "mean_copy_cos": 0.46488674292961757,
+      "wilcoxon_p_vs_copy": 0.9999998220689172,
+      "wilcoxon_stat_vs_copy": 68523.0,
+      "n_pairs": 600
+    },
+    "h4": {
+      "mean_pred_cos": 0.6033371263742446,
+      "mean_copy_cos": 0.47128222286701205,
+      "wilcoxon_p_vs_copy": 0.9973985027864366,
+      "wilcoxon_stat_vs_copy": 7760.0,
+      "n_pairs": 200
+    }
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 3.4810361862182617,
+    "mean_pairwise_cosine": 0.2569740414619446
+  },
+  "family_size": 2,
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/dblp_graphs.pt": "5498c297abeda0c66539aaedeeba2c6cf0211ca0fa48e101e921306d92ada980",
+      "/app/data/dblp_meta.json": "ef3d8cfc4295a1597529d4e290815d3954c2204e72bccfe946239bebb3c806ec"
+    },
+    "config_path": "/app/configs/dblp.yaml",
+    "config_sha256": "13db1c6dd8aea900e8f1ed69ab7aa2202fa1ded1e6fefba1be800ee160ee160f",
+    "checkpoint_path": "/results/dblp/sequential-ablation/seed0/checkpoint.pt"
+  }
+}

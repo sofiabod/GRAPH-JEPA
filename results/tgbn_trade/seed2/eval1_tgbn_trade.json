@@ -2,9 +2,9 @@
   "seed": 2,
   "condition": "tgbn_trade",
   "eval1_node_prediction": {
-    "mean_pred_cos": 0.827181766817675,
-    "mean_copy_cos": 0.46918805884379966,
-    "mean_graph_avg_cos": 0.16649892094965074,
+    "mean_pred_cos": 0.8271817653567768,
+    "mean_copy_cos": 0.4691880873605317,
+    "mean_graph_avg_cos": 0.16649892341856862,
     "wilcoxon_p_vs_copy": 1.8350613463123882e-10,
     "wilcoxon_stat_vs_copy": 23709.0,
     "wilcoxon_p_vs_graph_avg": 7.026945239659058e-44,
@@ -14,11 +14,36 @@
     "wilcoxon_p_vs_graph_avg_bonferroni": 1.4053890479318117e-43
   },
   "eval3_multistep_rollout": {
-    "status": "not_implemented"
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.827181722793509,
+      "mean_copy_cos": 0.4691880516123538,
+      "wilcoxon_p_vs_copy": 1.8350613463123882e-10,
+      "wilcoxon_stat_vs_copy": 23709.0,
+      "n_pairs": 255
+    },
+    "h2": {
+      "mean_pred_cos": 0.8454931617038799,
+      "mean_copy_cos": 0.43045731896863265,
+      "wilcoxon_p_vs_copy": 1.706691211511612e-11,
+      "wilcoxon_stat_vs_copy": 16050.0,
+      "n_pairs": 204
+    },
+    "h4": {
+      "mean_pred_cos": 0.8504510577037638,
+      "mean_copy_cos": 0.3868994607644923,
+      "wilcoxon_p_vs_copy": 8.822101686261659e-08,
+      "wilcoxon_stat_vs_copy": 4191.0,
+      "n_pairs": 102
+    }
   },
   "eval6_representation_quality": {
-    "effective_rank": 7.99895715713501,
-    "mean_pairwise_cosine": 0.3330901265144348
+    "effective_rank": 7.99896240234375,
+    "mean_pairwise_cosine": 0.3330901563167572
   },
   "family_size": 2
 }

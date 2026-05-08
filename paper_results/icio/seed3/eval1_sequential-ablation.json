@@ -1,0 +1,68 @@
+{
+  "seed": 3,
+  "condition": "sequential-ablation",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.9303318306251809,
+    "mean_copy_cos": 0.2463127300143242,
+    "mean_graph_avg_cos": 0.3671751508006343,
+    "wilcoxon_p_vs_copy": 3.725290298461914e-08,
+    "wilcoxon_stat_vs_copy": 375.0,
+    "wilcoxon_p_vs_graph_avg": 7.450580596923828e-09,
+    "wilcoxon_stat_vs_graph_avg": 378.0,
+    "n_pairs": 27,
+    "wilcoxon_p_vs_copy_bonferroni": 7.450580596923828e-08,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 1.4901161193847656e-08
+  },
+  "eval3_multistep_rollout": {
+    "horizons_evaluated": [
+      1,
+      2
+    ],
+    "h1": {
+      "mean_pred_cos": 0.9303318041342276,
+      "mean_copy_cos": 0.24631271207774127,
+      "wilcoxon_p_vs_copy": 3.725290298461914e-08,
+      "wilcoxon_stat_vs_copy": 375.0,
+      "n_pairs": 27
+    },
+    "h2": {
+      "mean_pred_cos": 0.9415082467926873,
+      "mean_copy_cos": 0.26734777602056664,
+      "wilcoxon_p_vs_copy": 7.62939453125e-06,
+      "wilcoxon_stat_vs_copy": 170.0,
+      "n_pairs": 18
+    }
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 3.224592447280884,
+    "mean_pairwise_cosine": 0.02880815975368023
+  },
+  "family_size": 2,
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/icio_graphs.pt": "18c2227aca4bf7fc4edd6d98ef0123f4c41ef97b46494b9fb798bac7666c4871",
+      "/app/data/icio_meta.json": "9f434e2655e8eab1b18276bcaf5acf41da87e69f7a1a4ffdc27fd83d108007d5"
+    },
+    "config_path": "/app/configs/icio.yaml",
+    "config_sha256": "1370e4a715a6ae08ff8c08a770dc895c9e38fc961eca237512b80aae69cfc5ea",
+    "checkpoint_path": "/results/icio/sequential-ablation/seed3/checkpoint.pt"
+  }
+}

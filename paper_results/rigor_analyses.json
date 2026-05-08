@@ -1,0 +1,133 @@
+{
+  "rows": [
+    {
+      "dataset": "baci_gravity",
+      "n_seeds": 5,
+      "delta_mean": 0.19812103232782746,
+      "delta_sd": 0.02911145640662108,
+      "delta_cs_bootstrap_ci": [
+        0.1768816843359835,
+        0.22369115514887702
+      ],
+      "win_rate_mean": 0.9577777777777777,
+      "win_rate_sd": 0.030832082056692446,
+      "min_p": 1.3674435455247996e-31,
+      "max_p": 9.148420228753029e-30,
+      "bonferroni_corrected_min_p": 1.0939548364198397e-30,
+      "cliffs_delta": 1.0
+    },
+    {
+      "dataset": "tgbn_trade",
+      "n_seeds": 5,
+      "delta_mean": 0.08426510459725178,
+      "delta_sd": 0.022449525678339445,
+      "delta_cs_bootstrap_ci": [
+        0.06926815112285753,
+        0.10331339675640942
+      ],
+      "win_rate_mean": 0.7725490196078432,
+      "win_rate_sd": 0.040088330000511534,
+      "min_p": 4.718679117174941e-27,
+      "max_p": 3.0091736625659374e-15,
+      "bonferroni_corrected_min_p": 3.774943293739953e-26,
+      "cliffs_delta": 1.0
+    },
+    {
+      "dataset": "icio",
+      "n_seeds": 5,
+      "delta_mean": 0.0376477422537627,
+      "delta_sd": 0.011335853781039646,
+      "delta_cs_bootstrap_ci": [
+        0.029138282934824622,
+        0.046190411514706084
+      ],
+      "win_rate_mean": 0.9851851851851852,
+      "win_rate_sd": 0.03312693299999688,
+      "min_p": 7.450580596923828e-09,
+      "max_p": 7.450580596923828e-08,
+      "bonferroni_corrected_min_p": 5.960464477539063e-08,
+      "cliffs_delta": 1.0
+    },
+    {
+      "dataset": "metrla",
+      "n_seeds": 5,
+      "delta_mean": -0.004189776776605828,
+      "delta_sd": 0.0010516448678106931,
+      "delta_cs_bootstrap_ci": [
+        -0.004998674334549322,
+        -0.0033635620744570808
+      ],
+      "win_rate_mean": 0.07750677506775068,
+      "win_rate_sd": 0.07031169098064985,
+      "min_p": 1.0,
+      "max_p": 1.0,
+      "bonferroni_corrected_min_p": 1.0,
+      "cliffs_delta": -1.0
+    },
+    {
+      "dataset": "dblp",
+      "n_seeds": 5,
+      "delta_mean": -0.016038290340453384,
+      "delta_sd": 0.1680323629814425,
+      "delta_cs_bootstrap_ci": [
+        -0.1374426979329437,
+        0.12029979682434351
+      ],
+      "win_rate_mean": 0.383,
+      "win_rate_sd": 0.49908243933242136,
+      "min_p": 3.946652176480939e-129,
+      "max_p": 1.0,
+      "bonferroni_corrected_min_p": 3.157321741184751e-128,
+      "cliffs_delta": -0.2
+    },
+    {
+      "dataset": "enron",
+      "n_seeds": 5,
+      "delta_mean": -0.04573581561740291,
+      "delta_sd": 0.0496287323028034,
+      "delta_cs_bootstrap_ci": [
+        -0.08412983735925272,
+        -0.005788868485312712
+      ],
+      "win_rate_mean": 0.38105263157894737,
+      "win_rate_sd": 0.05336333412899612,
+      "min_p": 0.11540721404546173,
+      "max_p": 0.999999764112556,
+      "bonferroni_corrected_min_p": 0.9232577123636938,
+      "cliffs_delta": -0.6
+    },
+    {
+      "dataset": "jodie_reddit_uu",
+      "n_seeds": 5,
+      "delta_mean": 0.10530225706994537,
+      "delta_sd": 0.03470565373471946,
+      "delta_cs_bootstrap_ci": [
+        0.07606831588149071,
+        0.13004444952383637
+      ],
+      "win_rate_mean": 0.7172000000000001,
+      "win_rate_sd": 0.15698789762271484,
+      "min_p": 1.0408609027696073e-65,
+      "max_p": 0.0019232253501689164,
+      "bonferroni_corrected_min_p": 8.326887222156858e-65,
+      "cliffs_delta": 1.0
+    },
+    {
+      "dataset": "jodie_wikipedia_uu",
+      "n_seeds": 5,
+      "delta_mean": 0.057588586566224696,
+      "delta_sd": 0.022569421898906438,
+      "delta_cs_bootstrap_ci": [
+        0.04122845252640545,
+        0.07423034934289753
+      ],
+      "win_rate_mean": 0.526,
+      "win_rate_sd": 0.30440762145517974,
+      "min_p": 7.046908090992081e-59,
+      "max_p": 0.9516465377213195,
+      "bonferroni_corrected_min_p": 5.637526472793665e-58,
+      "cliffs_delta": 1.0
+    }
+  ],
+  "n_datasets_for_bonferroni": 8
+}

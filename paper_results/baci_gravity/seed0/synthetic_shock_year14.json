@@ -1,0 +1,312 @@
+{
+  "year_idx": 14,
+  "n_countries_tested": 30,
+  "baseline_dev_mean": 0.03571969270706177,
+  "per_country_results": [
+    {
+      "country_idx": 214,
+      "knocked_out_volume": 3013409568.5233603,
+      "knocked_out_degree": 431,
+      "delta_dev_mean": 1.1920928955078125e-07,
+      "delta_dev_excluding_self": 7.450580596923828e-08,
+      "baseline_dev_at_country": 0.13024818897247314,
+      "perturbed_dev_at_country": 0.13025057315826416
+    },
+    {
+      "country_idx": 39,
+      "knocked_out_volume": 2816652752.9573216,
+      "knocked_out_degree": 413,
+      "delta_dev_mean": 5.960464477539063e-08,
+      "delta_dev_excluding_self": 1.0058283805847168e-07,
+      "baseline_dev_at_country": 0.1210625171661377,
+      "perturbed_dev_at_country": 0.12106430530548096
+    },
+    {
+      "country_idx": 55,
+      "knocked_out_volume": 2176832065.3994665,
+      "knocked_out_degree": 432,
+      "delta_dev_mean": 1.1920928955078125e-07,
+      "delta_dev_excluding_self": 7.078051567077637e-08,
+      "baseline_dev_at_country": 0.08281064033508301,
+      "perturbed_dev_at_country": 0.08281189203262329
+    },
+    {
+      "country_idx": 103,
+      "knocked_out_volume": 1386138994.981739,
+      "knocked_out_degree": 424,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 4.842877388000488e-08,
+      "baseline_dev_at_country": 0.04840540885925293,
+      "perturbed_dev_at_country": 0.04840588569641113
+    },
+    {
+      "country_idx": 70,
+      "knocked_out_volume": 1105990958.2517064,
+      "knocked_out_degree": 436,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 2.2351741790771484e-08,
+      "baseline_dev_at_country": 0.05060410499572754,
+      "perturbed_dev_at_country": 0.05060434341430664
+    },
+    {
+      "country_idx": 73,
+      "knocked_out_volume": 971709996.4921526,
+      "knocked_out_degree": 438,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 1.4901161193847656e-08,
+      "baseline_dev_at_country": 0.04354679584503174,
+      "perturbed_dev_at_country": 0.04354703426361084
+    },
+    {
+      "country_idx": 150,
+      "knocked_out_volume": 956749295.1366863,
+      "knocked_out_degree": 428,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 2.2351741790771484e-08,
+      "baseline_dev_at_country": 0.04748255014419556,
+      "perturbed_dev_at_country": 0.04748272895812988
+    },
+    {
+      "country_idx": 100,
+      "knocked_out_volume": 934760903.5538507,
+      "knocked_out_degree": 422,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 1.4901161193847656e-08,
+      "baseline_dev_at_country": 0.040760040283203125,
+      "perturbed_dev_at_country": 0.040760159492492676
+    },
+    {
+      "country_idx": 110,
+      "knocked_out_volume": 884604521.014293,
+      "knocked_out_degree": 429,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 2.60770320892334e-08,
+      "baseline_dev_at_country": 0.03874784708023071,
+      "perturbed_dev_at_country": 0.038747966289520264
+    },
+    {
+      "country_idx": 35,
+      "knocked_out_volume": 760497604.1182412,
+      "knocked_out_degree": 425,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 1.862645149230957e-08,
+      "baseline_dev_at_country": 0.03833019733428955,
+      "perturbed_dev_at_country": 0.03833019733428955
+    },
+    {
+      "country_idx": 171,
+      "knocked_out_volume": 610066162.207347,
+      "knocked_out_degree": 385,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 7.450580596923828e-09,
+      "baseline_dev_at_country": 0.03053414821624756,
+      "perturbed_dev_at_country": 0.03053426742553711
+    },
+    {
+      "country_idx": 16,
+      "knocked_out_volume": 604570935.5605791,
+      "knocked_out_degree": 424,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 7.450580596923828e-09,
+      "baseline_dev_at_country": 0.03575479984283447,
+      "perturbed_dev_at_country": 0.03575491905212402
+    },
+    {
+      "country_idx": 93,
+      "knocked_out_volume": 602380851.7561748,
+      "knocked_out_degree": 429,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 3.725290298461914e-09,
+      "baseline_dev_at_country": 0.03399157524108887,
+      "perturbed_dev_at_country": 0.03399157524108887
+    },
+    {
+      "country_idx": 209,
+      "knocked_out_volume": 569510791.6828382,
+      "knocked_out_degree": 425,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 7.450580596923828e-09,
+      "baseline_dev_at_country": 0.03427433967590332,
+      "perturbed_dev_at_country": 0.03427457809448242
+    },
+    {
+      "country_idx": 87,
+      "knocked_out_volume": 569327231.3232272,
+      "knocked_out_degree": 392,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 2.9802322387695312e-08,
+      "baseline_dev_at_country": 0.0255587100982666,
+      "perturbed_dev_at_country": 0.025558769702911377
+    },
+    {
+      "country_idx": 127,
+      "knocked_out_volume": 568619485.8247882,
+      "knocked_out_degree": 415,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 1.4901161193847656e-08,
+      "baseline_dev_at_country": 0.034065306186676025,
+      "perturbed_dev_at_country": 0.03406548500061035
+    },
+    {
+      "country_idx": 64,
+      "knocked_out_volume": 565243601.3908708,
+      "knocked_out_degree": 431,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 1.1175870895385742e-08,
+      "baseline_dev_at_country": 0.04084467887878418,
+      "perturbed_dev_at_country": 0.04084467887878418
+    },
+    {
+      "country_idx": 177,
+      "knocked_out_volume": 534930043.63616294,
+      "knocked_out_degree": 365,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 1.4901161193847656e-08,
+      "baseline_dev_at_country": 0.029554903507232666,
+      "perturbed_dev_at_country": 0.02955496311187744
+    },
+    {
+      "country_idx": 37,
+      "knocked_out_volume": 445553411.15936357,
+      "knocked_out_degree": 430,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 1.1175870895385742e-08,
+      "baseline_dev_at_country": 0.038262367248535156,
+      "perturbed_dev_at_country": 0.038262248039245605
+    },
+    {
+      "country_idx": 12,
+      "knocked_out_volume": 407514084.14785016,
+      "knocked_out_degree": 421,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 7.450580596923828e-09,
+      "baseline_dev_at_country": 0.035145699977874756,
+      "perturbed_dev_at_country": 0.035145699977874756
+    },
+    {
+      "country_idx": 29,
+      "knocked_out_volume": 397919474.7323966,
+      "knocked_out_degree": 418,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 7.450580596923828e-09,
+      "baseline_dev_at_country": 0.03189206123352051,
+      "perturbed_dev_at_country": 0.03189206123352051
+    },
+    {
+      "country_idx": 141,
+      "knocked_out_volume": 388881879.9262581,
+      "knocked_out_degree": 413,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 0.0,
+      "baseline_dev_at_country": 0.02691584825515747,
+      "perturbed_dev_at_country": 0.026915788650512695
+    },
+    {
+      "country_idx": 199,
+      "knocked_out_volume": 376135243.7797783,
+      "knocked_out_degree": 432,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 3.725290298461914e-09,
+      "baseline_dev_at_country": 0.037474989891052246,
+      "perturbed_dev_at_country": 0.037474989891052246
+    },
+    {
+      "country_idx": 173,
+      "knocked_out_volume": 346592270.424425,
+      "knocked_out_degree": 372,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 3.725290298461914e-09,
+      "baseline_dev_at_country": 0.018874526023864746,
+      "perturbed_dev_at_country": 0.018874526023864746
+    },
+    {
+      "country_idx": 163,
+      "knocked_out_volume": 343992713.8927129,
+      "knocked_out_degree": 420,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 1.1175870895385742e-08,
+      "baseline_dev_at_country": 0.03868955373764038,
+      "perturbed_dev_at_country": 0.03868943452835083
+    },
+    {
+      "country_idx": 92,
+      "knocked_out_volume": 317223410.91410017,
+      "knocked_out_degree": 424,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 1.1175870895385742e-08,
+      "baseline_dev_at_country": 0.031279921531677246,
+      "perturbed_dev_at_country": 0.031279921531677246
+    },
+    {
+      "country_idx": 7,
+      "knocked_out_volume": 309123074.2967565,
+      "knocked_out_degree": 326,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": -1.1175870895385742e-08,
+      "baseline_dev_at_country": 0.010889112949371338,
+      "perturbed_dev_at_country": 0.010888993740081787
+    },
+    {
+      "country_idx": 191,
+      "knocked_out_volume": 293702946.90916854,
+      "knocked_out_degree": 422,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 0.0,
+      "baseline_dev_at_country": 0.0306856632232666,
+      "perturbed_dev_at_country": 0.030685603618621826
+    },
+    {
+      "country_idx": 13,
+      "knocked_out_volume": 292100208.34308696,
+      "knocked_out_degree": 424,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 3.725290298461914e-09,
+      "baseline_dev_at_country": 0.032321810722351074,
+      "perturbed_dev_at_country": 0.032321810722351074
+    },
+    {
+      "country_idx": 207,
+      "knocked_out_volume": 288254504.91212106,
+      "knocked_out_degree": 409,
+      "delta_dev_mean": 0.0,
+      "delta_dev_excluding_self": 0.0,
+      "baseline_dev_at_country": 0.034359097480773926,
+      "perturbed_dev_at_country": 0.034359097480773926
+    }
+  ],
+  "spearman_dev_vs_volume": 0.7944382647385985,
+  "spearman_dev_vs_degree": 0.3103448275862069,
+  "mean_delta_dev_excl_self": 1.862645149230957e-08,
+  "max_delta_dev_excl_self": 1.0058283805847168e-07,
+  "seed": 0,
+  "dataset": "baci_gravity",
+  "_repro": {
+    "git_sha": "1450c3ba03d432d68a44925e8dacd4ecf88f55f5-dirty",
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": true
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/baci_gravity_graphs.pt": "45bafb5fe65de3e725f9dafb64e8d21a97e272e149ee6dd6f363c79c5aa57b77",
+      "/app/data/baci_gravity_meta.json": "ee8ded31230d90a9d76ee25fbd66f46a396f0f5b1959a80c4c47c3cce083ab91"
+    },
+    "config_path": "/app/configs/baci_gravity.yaml",
+    "config_sha256": "a6f0f6234a90ba9e155f5164d45ca896b5ee3627a2f66e2a84fa4e59aff777a8",
+    "eval": "synthetic_shock",
+    "year_idx": 14,
+    "n_top": 30
+  }
+}

@@ -2,23 +2,48 @@
   "seed": 2,
   "condition": "sequential-ablation",
   "eval1_node_prediction": {
-    "mean_pred_cos": 0.7515193513795442,
-    "mean_copy_cos": 0.5641449269710802,
-    "mean_graph_avg_cos": 0.36299458224983777,
-    "wilcoxon_p_vs_copy": 6.518700303159902e-09,
-    "wilcoxon_stat_vs_copy": 23023.0,
-    "wilcoxon_p_vs_graph_avg": 2.8548032758728745e-30,
-    "wilcoxon_stat_vs_graph_avg": 29728.0,
+    "mean_pred_cos": 0.6909431909393592,
+    "mean_copy_cos": 0.5369760003890477,
+    "mean_graph_avg_cos": 0.08945701476916963,
+    "wilcoxon_p_vs_copy": 1.0172636761232823e-07,
+    "wilcoxon_stat_vs_copy": 22446.0,
+    "wilcoxon_p_vs_graph_avg": 9.484297676147223e-33,
+    "wilcoxon_stat_vs_graph_avg": 30303.0,
     "n_pairs": 255,
-    "wilcoxon_p_vs_copy_bonferroni": 1.3037400606319804e-08,
-    "wilcoxon_p_vs_graph_avg_bonferroni": 5.709606551745749e-30
+    "wilcoxon_p_vs_copy_bonferroni": 2.0345273522465646e-07,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 1.8968595352294446e-32
   },
   "eval3_multistep_rollout": {
-    "status": "not_implemented"
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.6909431622181015,
+      "mean_copy_cos": 0.5369759815288525,
+      "wilcoxon_p_vs_copy": 1.0172636761232823e-07,
+      "wilcoxon_stat_vs_copy": 22446.0,
+      "n_pairs": 255
+    },
+    "h2": {
+      "mean_pred_cos": 0.6991454532835633,
+      "mean_copy_cos": 0.4961943005750358,
+      "wilcoxon_p_vs_copy": 1.9787251057127503e-08,
+      "wilcoxon_stat_vs_copy": 15092.0,
+      "n_pairs": 204
+    },
+    "h4": {
+      "mean_pred_cos": 0.7037912335557243,
+      "mean_copy_cos": 0.45253959871536376,
+      "wilcoxon_p_vs_copy": 2.1985753424013646e-06,
+      "wilcoxon_stat_vs_copy": 4002.0,
+      "n_pairs": 102
+    }
   },
   "eval6_representation_quality": {
-    "effective_rank": 19.5146484375,
-    "mean_pairwise_cosine": 0.2974642217159271
+    "effective_rank": 6.2158284187316895,
+    "mean_pairwise_cosine": 0.08228935301303864
   },
   "family_size": 2
 }

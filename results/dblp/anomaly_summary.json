@@ -1,0 +1,145 @@
+{
+  "dataset": "dblp",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "per_year": [
+    {
+      "year": 1999,
+      "graph_dev": 0.6650102734565735,
+      "sequential_dev": 0.5759812295436859,
+      "shock": false
+    },
+    {
+      "year": 2000,
+      "graph_dev": 0.6323169767856598,
+      "sequential_dev": 0.5574943721294403,
+      "shock": false
+    },
+    {
+      "year": 2001,
+      "graph_dev": 0.621550977230072,
+      "sequential_dev": 0.5544812977313995,
+      "shock": false
+    },
+    {
+      "year": 2002,
+      "graph_dev": 0.6108527481555939,
+      "sequential_dev": 0.536354124546051,
+      "shock": false
+    },
+    {
+      "year": 2003,
+      "graph_dev": 0.5907100141048431,
+      "sequential_dev": 0.519666314125061,
+      "shock": false
+    },
+    {
+      "year": 2004,
+      "graph_dev": 0.5604220032691956,
+      "sequential_dev": 0.4844003915786743,
+      "shock": false
+    },
+    {
+      "year": 2005,
+      "graph_dev": 0.5474152565002441,
+      "sequential_dev": 0.4965253472328186,
+      "shock": false
+    },
+    {
+      "year": 2006,
+      "graph_dev": 0.5336374640464783,
+      "sequential_dev": 0.46897631883621216,
+      "shock": false
+    },
+    {
+      "year": 2007,
+      "graph_dev": 0.517283707857132,
+      "sequential_dev": 0.4575955271720886,
+      "shock": false
+    },
+    {
+      "year": 2008,
+      "graph_dev": 0.4992353320121765,
+      "sequential_dev": 0.44207751750946045,
+      "shock": false
+    },
+    {
+      "year": 2009,
+      "graph_dev": 0.4994162917137146,
+      "sequential_dev": 0.44833338260650635,
+      "shock": false
+    },
+    {
+      "year": 2010,
+      "graph_dev": 0.47283637523651123,
+      "sequential_dev": 0.4229912757873535,
+      "shock": false
+    },
+    {
+      "year": 2011,
+      "graph_dev": 0.49107497930526733,
+      "sequential_dev": 0.43680500984191895,
+      "shock": false
+    },
+    {
+      "year": 2012,
+      "graph_dev": 0.48206305503845215,
+      "sequential_dev": 0.43169867992401123,
+      "shock": false
+    },
+    {
+      "year": 2013,
+      "graph_dev": 0.47141051292419434,
+      "sequential_dev": 0.4340629577636719,
+      "shock": false
+    },
+    {
+      "year": 2014,
+      "graph_dev": 0.4794021248817444,
+      "sequential_dev": 0.43958747386932373,
+      "shock": false
+    },
+    {
+      "year": 2015,
+      "graph_dev": 0.46621882915496826,
+      "sequential_dev": 0.42072737216949463,
+      "shock": false
+    },
+    {
+      "year": 2016,
+      "graph_dev": 0.4752875566482544,
+      "sequential_dev": 0.4285203814506531,
+      "shock": false
+    },
+    {
+      "year": 2017,
+      "graph_dev": 0.47419649362564087,
+      "sequential_dev": 0.42136234045028687,
+      "shock": false
+    },
+    {
+      "year": 2018,
+      "graph_dev": 0.47658640146255493,
+      "sequential_dev": 0.4177309274673462,
+      "shock": false
+    },
+    {
+      "year": 2019,
+      "graph_dev": 0.47463828325271606,
+      "sequential_dev": 0.4347362518310547,
+      "shock": false
+    },
+    {
+      "year": 2020,
+      "graph_dev": 0.49764442443847656,
+      "sequential_dev": 0.427775502204895,
+      "shock": false
+    }
+  ],
+  "shocks_known": {}
+}

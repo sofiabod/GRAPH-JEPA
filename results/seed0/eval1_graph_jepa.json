@@ -1,0 +1,26 @@
+{
+  "seed": 0,
+  "dataset": "tgbn_trade",
+  "condition": "tgbn_trade",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.8153465177498612,
+    "mean_copy_cos": 0.541820516868257,
+    "mean_graph_avg_cos": null,
+    "_paste_corruption_note": "mean_graph_avg_cos and wilcoxon_p_vs_copy were corrupted in the terminal paste; pull authoritative json from modal volume to fill them in: modal volume get tgjepa-results /eval/tgbn_trade/seed0/eval_summary.json",
+    "wilcoxon_p_vs_copy": null,
+    "wilcoxon_stat_vs_copy": 25485.0,
+    "wilcoxon_p_vs_graph_avg": 7.026945239659058e-44,
+    "wilcoxon_stat_vs_graph_avg": 32640.0,
+    "n_pairs": 255,
+    "wilcoxon_p_vs_copy_bonferroni": 7.612070635173903e-15,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 1.4053890479318117e-43
+  },
+  "eval3_multistep_rollout": {
+    "status": "not_implemented"
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 8.358497619628906,
+    "mean_pairwise_cosine": 0.36165666580200195
+  },
+  "family_size": 2
+}

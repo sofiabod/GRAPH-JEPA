@@ -1,0 +1,76 @@
+{
+  "seed": 4,
+  "condition": "sequential-ablation",
+  "eval1_node_prediction": {
+    "mean_pred_cos": 0.6299046385884285,
+    "mean_copy_cos": 0.4327598626054823,
+    "mean_graph_avg_cos": 0.6371255670413375,
+    "wilcoxon_p_vs_copy": 2.683269074624683e-19,
+    "wilcoxon_stat_vs_copy": 91407.0,
+    "wilcoxon_p_vs_graph_avg": 3.350865106891938e-06,
+    "wilcoxon_stat_vs_graph_avg": 77180.0,
+    "n_pairs": 500,
+    "wilcoxon_p_vs_copy_bonferroni": 5.366538149249366e-19,
+    "wilcoxon_p_vs_graph_avg_bonferroni": 6.701730213783876e-06
+  },
+  "eval3_multistep_rollout": {
+    "horizons_evaluated": [
+      1,
+      2,
+      4
+    ],
+    "h1": {
+      "mean_pred_cos": 0.6299046212136745,
+      "mean_copy_cos": 0.432759833519347,
+      "wilcoxon_p_vs_copy": 2.683269074624683e-19,
+      "wilcoxon_stat_vs_copy": 91407.0,
+      "n_pairs": 500
+    },
+    "h2": {
+      "mean_pred_cos": 0.6506781154125929,
+      "mean_copy_cos": 0.43893590074032546,
+      "wilcoxon_p_vs_copy": 8.171161701380095e-16,
+      "wilcoxon_stat_vs_copy": 58532.0,
+      "n_pairs": 400
+    },
+    "h4": {
+      "mean_pred_cos": 0.6119271348416805,
+      "mean_copy_cos": 0.3540238054096699,
+      "wilcoxon_p_vs_copy": 1.4700536485201015e-09,
+      "wilcoxon_stat_vs_copy": 14914.0,
+      "n_pairs": 200
+    }
+  },
+  "eval6_representation_quality": {
+    "effective_rank": 3.085853099822998,
+    "mean_pairwise_cosine": 0.22933514416217804
+  },
+  "family_size": 2,
+  "_repro": {
+    "git_sha": null,
+    "git_dirty": null,
+    "lib_versions": {
+      "python": "3.11.12",
+      "platform": "Linux-4.4.0-x86_64-with-glibc2.36",
+      "torch": "2.1.0+cu121",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1",
+      "torch_geometric": "2.7.0",
+      "omegaconf": "2.3.0"
+    },
+    "cuda": {
+      "cublas_workspace_config": ":4096:8",
+      "deterministic": false
+    },
+    "argv": [
+      "/pkg/modal/_container_entrypoint.py"
+    ],
+    "dataset_sha256": {
+      "/app/data/jodie_wikipedia_uu_graphs.pt": "a8bf27f906f338c0d7f79bd01c4eb6d15c9f481bb0c49a4bb70ffee9cacd67f5",
+      "/app/data/jodie_wikipedia_uu_meta.json": "bbb54f57511bd8d7705db2ff58469adaeb5e2c7516aa0fd8c0c167f70fbbcfc8"
+    },
+    "config_path": "/app/configs/jodie_wikipedia_uu.yaml",
+    "config_sha256": "8b07099c0290ff875797111facb118dd97775a629a06ca80431c67cb05a40b17",
+    "checkpoint_path": "/results/jodie_wikipedia_uu/sequential-ablation/seed4/checkpoint.pt"
+  }
+}

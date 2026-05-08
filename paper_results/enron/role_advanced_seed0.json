@@ -1,0 +1,175 @@
+{
+  "e2_subclusters": {
+    "graph": {
+      "govaffairs": {
+        "n_total": 6,
+        "sub_cluster_a": [
+          "christi.nicolay@enron.com",
+          "james.steffes@enron.com"
+        ],
+        "sub_cluster_b": [
+          "jeff.dasovich@enron.com",
+          "susan.mara@enron.com",
+          "richard.shapiro@enron.com",
+          "alan.comnes@enron.com"
+        ],
+        "within_a_median_cos": 0.999507461696115,
+        "within_b_median_cos": 0.915471619850611
+      },
+      "admin": {
+        "n_total": 13,
+        "sub_cluster_a": [
+          "rhonda.denton@enron.com",
+          "lorna.brennan@enron.com",
+          "janette.elbertson@enron.com",
+          "julie.clyatt@enron.com",
+          "miyung.buster@enron.com",
+          "janet.butler@enron.com",
+          "rosalee.fleming@enron.com",
+          "taffy.milligan@enron.com",
+          "tamara.black@enron.com"
+        ],
+        "sub_cluster_b": [
+          "veronica.espinoza@enron.com",
+          "cheryl.johnson@enron.com",
+          "ginger.dernehl@enron.com",
+          "susan.bailey@enron.com"
+        ],
+        "within_a_median_cos": 0.9677277157920429,
+        "within_b_median_cos": 0.8115128961154423
+      },
+      "trading": {
+        "n_total": 5,
+        "sub_cluster_a": [
+          "chris.germany@enron.com",
+          "eric.bass@enron.com"
+        ],
+        "sub_cluster_b": [
+          "david.forster@enron.com",
+          "kate.symes@enron.com",
+          "mike.grigsby@enron.com"
+        ],
+        "within_a_median_cos": 0.3161535283917877,
+        "within_b_median_cos": 0.8208410387557602
+      },
+      "legal": {
+        "n_total": 8,
+        "sub_cluster_a": [
+          "mary.hain@enron.com",
+          "mark.taylor@enron.com"
+        ],
+        "sub_cluster_b": [
+          "kay.mann@enron.com",
+          "sara.shackleton@enron.com",
+          "stephanie.panus@enron.com",
+          "mary.cook@enron.com",
+          "gerald.nemec@enron.com",
+          "sarah.novosel@enron.com"
+        ],
+        "within_a_median_cos": 1.0000000849179742,
+        "within_b_median_cos": 0.9475020772905571
+      }
+    },
+    "sequential": {
+      "govaffairs": {
+        "n_total": 6,
+        "sub_cluster_a": [
+          "christi.nicolay@enron.com",
+          "james.steffes@enron.com"
+        ],
+        "sub_cluster_b": [
+          "jeff.dasovich@enron.com",
+          "susan.mara@enron.com",
+          "richard.shapiro@enron.com",
+          "alan.comnes@enron.com"
+        ],
+        "within_a_median_cos": 0.9994206096246789,
+        "within_b_median_cos": 0.7261243911016937
+      },
+      "admin": {
+        "n_total": 13,
+        "sub_cluster_a": [
+          "rhonda.denton@enron.com",
+          "lorna.brennan@enron.com",
+          "janette.elbertson@enron.com",
+          "julie.clyatt@enron.com",
+          "miyung.buster@enron.com",
+          "janet.butler@enron.com",
+          "rosalee.fleming@enron.com",
+          "taffy.milligan@enron.com",
+          "tamara.black@enron.com"
+        ],
+        "sub_cluster_b": [
+          "veronica.espinoza@enron.com",
+          "cheryl.johnson@enron.com",
+          "ginger.dernehl@enron.com",
+          "susan.bailey@enron.com"
+        ],
+        "within_a_median_cos": 0.9638168520845608,
+        "within_b_median_cos": 0.6647059465105748
+      },
+      "trading": {
+        "n_total": 5,
+        "sub_cluster_a": [
+          "chris.germany@enron.com",
+          "eric.bass@enron.com"
+        ],
+        "sub_cluster_b": [
+          "david.forster@enron.com",
+          "kate.symes@enron.com",
+          "mike.grigsby@enron.com"
+        ],
+        "within_a_median_cos": 0.6776918864870521,
+        "within_b_median_cos": 0.9285865250331169
+      },
+      "legal": {
+        "n_total": 8,
+        "sub_cluster_a": [
+          "mary.hain@enron.com",
+          "mark.taylor@enron.com"
+        ],
+        "sub_cluster_b": [
+          "kay.mann@enron.com",
+          "sara.shackleton@enron.com",
+          "stephanie.panus@enron.com",
+          "mary.cook@enron.com",
+          "gerald.nemec@enron.com",
+          "sarah.novosel@enron.com"
+        ],
+        "within_a_median_cos": 1.0000000925178703,
+        "within_b_median_cos": 0.9533409436784007
+      }
+    }
+  },
+  "e3_shuffle_null": {
+    "graph": {
+      "actual_gap": 0.8154589100659307,
+      "null_mean": -0.07261396809077517,
+      "null_std": 0.4555040385830985,
+      "null_p5": -0.6434960554424615,
+      "null_p95": 0.8559737706119832,
+      "shuffle_p_one_sided": 0.058,
+      "n_shuffles": 1000
+    },
+    "sequential": {
+      "actual_gap": 0.6858394682233586,
+      "null_mean": -0.007841512164699298,
+      "null_std": 0.2781718628812216,
+      "null_p5": -0.39648374218208543,
+      "null_p95": 0.499250160911724,
+      "shuffle_p_one_sided": 0.018,
+      "n_shuffles": 1000
+    },
+    "raw_features": {
+      "actual_gap": -0.0010923586789249873,
+      "null_mean": -0.0037034509286296437,
+      "null_std": 0.039365735944250885,
+      "null_p5": -0.060345091873845694,
+      "null_p95": 0.058198730502490484,
+      "shuffle_p_one_sided": 0.471,
+      "n_shuffles": 1000
+    }
+  },
+  "n_shuffles": 1000,
+  "seed": 0
+}
