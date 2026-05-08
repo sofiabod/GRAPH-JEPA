@@ -22,7 +22,6 @@ import torch
 import torch.nn.functional as F
 from torch.distributions.laplace import Laplace
 
-
 _INV_SQRT_2 = 1.0 / math.sqrt(2)
 
 
