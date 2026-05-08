@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional, Tuple
-
 import torch
 import torch.distributed as dist
 import torch.nn as nn
@@ -154,9 +152,7 @@ class EppsPulley(nn.Module):
         self.register_buffer("phi", phi)
         self.register_buffer("w", w)
 
-    def forward(
-        self, x: torch.Tensor, total_batch_size: Optional[int] = None
-    ) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, total_batch_size: int | None = None) -> torch.Tensor:
         if total_batch_size is None:
             total_batch_size = x.shape[0]
         x_t = x.unsqueeze(2) * self.t  # [N, M, T]
@@ -174,7 +170,7 @@ def _sliced_epps_pulley(
     num_slices: int,
     total_batch_size: int,
     epps: EppsPulley,
-) -> Tuple[torch.Tensor, int]:
+) -> tuple[torch.Tensor, int]:
     # random-project x and return (epps_pulley_mean, next_step)
     with torch.no_grad():
         dev = x.device
@@ -201,9 +197,7 @@ class BCS(nn.Module):
         # compute total batch size fresh each call so smaller last batches scale correctly
         if z2 is not None:
             total_n = _total_batch_size(z1.shape[0])
-            bcs1, _ = _sliced_epps_pulley(
-                z1, self.step, self.num_slices, total_n, self.epps
-            )
+            bcs1, _ = _sliced_epps_pulley(z1, self.step, self.num_slices, total_n, self.epps)
             bcs2, self.step = _sliced_epps_pulley(
                 z2, self.step, self.num_slices, total_n, self.epps
             )

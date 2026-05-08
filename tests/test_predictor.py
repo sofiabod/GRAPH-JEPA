@@ -2,7 +2,6 @@ import torch
 
 from src.models.predictor import TemporalGraphPredictor
 
-
 # small predictor config for attention tests
 SMALL_KWARGS = dict(embed_dim=32, n_heads=4, n_layers=2, n_nodes=10, max_time_steps=20)
 
@@ -38,8 +37,9 @@ def test_bidirectional_attention():
     out2 = predictor(tokens2, time_indices, node_ids)
 
     # position 1 should change because attention is bidirectional
-    assert not torch.allclose(out1[0, 1], out2[0, 1], atol=1e-4), \
+    assert not torch.allclose(out1[0, 1], out2[0, 1], atol=1e-4), (
         "output at position 1 should change when position 0 token changes (bidirectional attention)"
+    )
 
 
 def test_full_context_changes_mask_output():
@@ -58,8 +58,9 @@ def test_full_context_changes_mask_output():
 
     # mask token at last position should change
     mask_pos = T - 1
-    assert not torch.allclose(out1[0, mask_pos], out2[0, mask_pos], atol=1e-4), \
+    assert not torch.allclose(out1[0, mask_pos], out2[0, mask_pos], atol=1e-4), (
         "mask token output should change when context token changes"
+    )
 
 
 def test_node_id_embedding_matters():
@@ -75,8 +76,9 @@ def test_node_id_embedding_matters():
     out1 = predictor(tokens, time_indices, node_ids1)
     out2 = predictor(tokens, time_indices, node_ids2)
 
-    assert not torch.allclose(out1[0, -1], out2[0, -1], atol=1e-4), \
+    assert not torch.allclose(out1[0, -1], out2[0, -1], atol=1e-4), (
         "different node ids at mask position should produce different outputs"
+    )
 
 
 def test_temporal_pos_embedding_matters():
@@ -92,13 +94,14 @@ def test_temporal_pos_embedding_matters():
     out1 = predictor(tokens, time_indices1, node_ids)
     out2 = predictor(tokens, time_indices2, node_ids)
 
-    assert not torch.allclose(out1[0, -1], out2[0, -1], atol=1e-4), \
+    assert not torch.allclose(out1[0, -1], out2[0, -1], atol=1e-4), (
         "different time indices at mask position should produce different outputs"
-
+    )
 
 
 def test_param_count():
     predictor = TemporalGraphPredictor()
     total = sum(p.numel() for p in predictor.parameters())
-    assert 100_000 <= total <= 5_000_000, \
+    assert 100_000 <= total <= 5_000_000, (
         f"param count {total} outside expected range [100_000, 5_000_000]"
+    )

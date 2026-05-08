@@ -13,22 +13,23 @@ claim under test:
   the model has recovered the COUNTRY-LEVEL pattern of the shock — not
   just registered "2020 is anomalous" in aggregate.
 """
+
 from __future__ import annotations
 
+import numpy as np
 import torch
 import torch.nn.functional as F
-import numpy as np
 
 from src.eval.metrics import cosine_sim
 
 
-def per_country_cosines_at_year(online, target, predictor, graphs, cfg,
-                                 year_idx: int, mask_seed: int = 0,
-                                 device=None) -> np.ndarray:
+def per_country_cosines_at_year(
+    online, target, predictor, graphs, cfg, year_idx: int, mask_seed: int = 0, device=None
+) -> np.ndarray:
     """mask ALL nodes at graphs[year_idx], predict from context window,
     return per-country cosine similarity [N]. nodes whose context spans
     require K previous snapshots, so year_idx must be >= context_k."""
-    from src.train import _encode_context, _build_tokens_for_sample
+    from src.train import _build_tokens_for_sample, _encode_context
 
     if device is None:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -48,7 +49,7 @@ def per_country_cosines_at_year(online, target, predictor, graphs, cfg,
     masked_ids = torch.arange(n_nodes, device=device)
     visible_ids = torch.tensor([], dtype=torch.long, device=device)
 
-    context_graphs = graphs[year_idx - K:year_idx]
+    context_graphs = graphs[year_idx - K : year_idx]
     sample = {
         "context_graphs": context_graphs,
         "target_graph": target_graph,
@@ -73,14 +74,16 @@ def per_country_cosines_at_year(online, target, predictor, graphs, cfg,
     return cosines.cpu().numpy()
 
 
-def compute_actual_trade_decline_per_country(graphs, ref_year_idx: int,
-                                              compare_year_idx: int) -> tuple[np.ndarray, np.ndarray]:
+def compute_actual_trade_decline_per_country(
+    graphs, ref_year_idx: int, compare_year_idx: int
+) -> tuple[np.ndarray, np.ndarray]:
     """compute (volume[compare_year] - volume[ref_year]) / volume[ref_year]
     per country from raw BACI graphs. negative values = trade decline.
 
     use as ground-truth for COVID-2020 country-level impact ranking.
     """
     n_nodes = graphs[0].x.shape[0]
+
     def _country_volume(g):
         # sum of incident edge weights per node = total trade volume
         if not hasattr(g, "edge_attr") or g.edge_attr is None:

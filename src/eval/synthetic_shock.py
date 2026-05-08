@@ -21,22 +21,24 @@ unlike anomaly detection on real shocks, this test is fully controlled:
 we manufacture the perturbation, so any signal is direct evidence the model
 has learned graph structure (not coincidence with external events).
 """
+
 from __future__ import annotations
 
 import copy
 
+import numpy as np
 import torch
 import torch.nn.functional as F
-import numpy as np
 
 from src.eval.metrics import cosine_sim
 
 
-def _predict_next_snapshot_cosines(online, target, predictor, context_graphs,
-                                    target_graph, masked_ids, device):
+def _predict_next_snapshot_cosines(
+    online, target, predictor, context_graphs, target_graph, masked_ids, device
+):
     """forward graph-jepa once: encoder on context, predictor on tokens,
     return cosine sims of predicted vs target latents at masked positions."""
-    from src.train import _encode_context, _build_tokens_for_sample
+    from src.train import _build_tokens_for_sample, _encode_context
 
     masked_ids = masked_ids.to(device)
     visible_ids = torch.tensor([], dtype=torch.long, device=device)
@@ -95,9 +97,18 @@ def _country_trade_volume(graph, n_nodes: int) -> np.ndarray:
     return vol
 
 
-def run_synthetic_shock(online, target, predictor, graphs, cfg, *,
-                        year_idx: int, n_top_countries: int = 30,
-                        seed: int = 0, device=None) -> dict:
+def run_synthetic_shock(
+    online,
+    target,
+    predictor,
+    graphs,
+    cfg,
+    *,
+    year_idx: int,
+    n_top_countries: int = 30,
+    seed: int = 0,
+    device=None,
+) -> dict:
     """run synthetic shock for top-N countries by trade volume.
 
     args:
@@ -105,7 +116,6 @@ def run_synthetic_shock(online, target, predictor, graphs, cfg, *,
       n_top_countries: pick the top-N highest-volume countries to test
         (so we get a meaningful range of centrality magnitudes)
     """
-    from src.data.dataset import TemporalGraphDataset
 
     if device is None:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -130,9 +140,15 @@ def run_synthetic_shock(online, target, predictor, graphs, cfg, *,
     # baseline: prediction error WITHOUT perturbation
     # mask all nodes in next_graph (predict every country) for comparable measurement
     masked_ids = torch.arange(n_nodes, device=device)
-    context_graphs = graphs[year_idx + 1 - K:year_idx + 1]  # K snapshots before next_graph
+    context_graphs = graphs[year_idx + 1 - K : year_idx + 1]  # K snapshots before next_graph
     baseline_cos = _predict_next_snapshot_cosines(
-        online, target, predictor, context_graphs, next_graph, masked_ids, device,
+        online,
+        target,
+        predictor,
+        context_graphs,
+        next_graph,
+        masked_ids,
+        device,
     )
     baseline_dev_mean = float(1.0 - np.mean(baseline_cos))
 
@@ -144,7 +160,13 @@ def run_synthetic_shock(online, target, predictor, graphs, cfg, *,
         # build perturbed context: same K-1 snapshots + perturbed year_idx
         perturbed_ctx = list(context_graphs[:-1]) + [perturbed]
         perturbed_cos = _predict_next_snapshot_cosines(
-            online, target, predictor, perturbed_ctx, next_graph, masked_ids, device,
+            online,
+            target,
+            predictor,
+            perturbed_ctx,
+            next_graph,
+            masked_ids,
+            device,
         )
         # change in prediction quality
         perturbed_dev_mean = float(1.0 - np.mean(perturbed_cos))
@@ -153,17 +175,20 @@ def run_synthetic_shock(online, target, predictor, graphs, cfg, *,
         # (not the knocked-out one — its self-prediction is corrupted by definition)
         other_mask = np.ones(n_nodes, dtype=bool)
         other_mask[ci] = False
-        delta_others = float(np.mean(1.0 - perturbed_cos[other_mask]) -
-                              np.mean(1.0 - baseline_cos[other_mask]))
-        results.append({
-            "country_idx": int(ci),
-            "knocked_out_volume": float(volumes[ci]),
-            "knocked_out_degree": int(degrees[ci]),
-            "delta_dev_mean": delta_dev,
-            "delta_dev_excluding_self": delta_others,
-            "baseline_dev_at_country": float(1.0 - baseline_cos[ci]),
-            "perturbed_dev_at_country": float(1.0 - perturbed_cos[ci]),
-        })
+        delta_others = float(
+            np.mean(1.0 - perturbed_cos[other_mask]) - np.mean(1.0 - baseline_cos[other_mask])
+        )
+        results.append(
+            {
+                "country_idx": int(ci),
+                "knocked_out_volume": float(volumes[ci]),
+                "knocked_out_degree": int(degrees[ci]),
+                "delta_dev_mean": delta_dev,
+                "delta_dev_excluding_self": delta_others,
+                "baseline_dev_at_country": float(1.0 - baseline_cos[ci]),
+                "perturbed_dev_at_country": float(1.0 - perturbed_cos[ci]),
+            }
+        )
 
     # spearman correlation: does delta_dev correlate with knocked-out country's volume/degree?
     deltas_excl_self = np.array([r["delta_dev_excluding_self"] for r in results])

@@ -1,28 +1,26 @@
 import numpy as np
 from scipy.stats import wilcoxon
-from typing import List, Tuple
 
 
-def paired_wilcoxon(a: np.ndarray, b: np.ndarray) -> Tuple[float, float]:
+def paired_wilcoxon(a: np.ndarray, b: np.ndarray) -> tuple[float, float]:
     # paired wilcoxon signed-rank test: is a > b?
     # returns (p_value, statistic)
     # if a == b exactly, scipy raises ValueError; handle it
     diff = a - b
     if np.all(diff == 0):
         return 1.0, 0.0
-    result = wilcoxon(diff, alternative='greater')
+    result = wilcoxon(diff, alternative="greater")
     return float(result.pvalue), float(result.statistic)
 
 
-def bonferroni_correct(pvals: List[float], n_tests: int) -> List[float]:
+def bonferroni_correct(pvals: list[float], n_tests: int) -> list[float]:
     # multiply each p-value by n_tests, clamp to 1.0
     return [min(p * n_tests, 1.0) for p in pvals]
 
 
-def bootstrap_ci_on_delta(a: np.ndarray, b: np.ndarray,
-                          n_resamples: int = 10000,
-                          ci: float = 0.95,
-                          seed: int = 0) -> dict:
+def bootstrap_ci_on_delta(
+    a: np.ndarray, b: np.ndarray, n_resamples: int = 10000, ci: float = 0.95, seed: int = 0
+) -> dict:
     """percentile bootstrap CI on the mean of (a - b), where (a, b) are paired.
 
     resamples paired observations with replacement, recomputes mean delta,
@@ -33,8 +31,12 @@ def bootstrap_ci_on_delta(a: np.ndarray, b: np.ndarray,
     diff = np.asarray(a) - np.asarray(b)
     n = diff.size
     if n == 0:
-        return {"mean_delta": float("nan"), "ci_low": float("nan"),
-                "ci_high": float("nan"), "n_resamples": 0}
+        return {
+            "mean_delta": float("nan"),
+            "ci_low": float("nan"),
+            "ci_high": float("nan"),
+            "n_resamples": 0,
+        }
     rng = np.random.default_rng(seed)
     idx = rng.integers(0, n, size=(n_resamples, n))
     boot_means = diff[idx].mean(axis=1)

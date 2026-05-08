@@ -6,12 +6,12 @@ unless the entrypoint chdir's to the mount root or absolute paths are used.
 
 these tests catch the class of bug locally.
 """
+
 import os
 from pathlib import Path
 
 import pytest
 from omegaconf import OmegaConf
-
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CONFIGS = [
@@ -31,8 +31,9 @@ def test_config_paths_are_relative_to_repo_root(config_path):
     assert hasattr(cfg.data, "graphs_path"), f"{config_path.name}: missing 'data.graphs_path'"
     # path is repo-relative; resolve from repo root and confirm it's a string
     p = Path(cfg.data.graphs_path)
-    assert not p.is_absolute(), \
+    assert not p.is_absolute(), (
         f"{config_path.name}: graphs_path should be repo-relative, got absolute {p}"
+    )
 
 
 def test_modal_entrypoint_files_chdir_or_abs_path():
@@ -67,6 +68,7 @@ def test_train_handles_relative_path_from_repo_root(tmp_path):
     if not tgbn_path.exists():
         pytest.skip("tgbn_trade_graphs.pt not built locally; run download_benchmarks.py")
     import torch
+
     cwd_before = os.getcwd()
     try:
         os.chdir(REPO_ROOT)

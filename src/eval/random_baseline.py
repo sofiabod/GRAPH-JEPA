@@ -11,6 +11,7 @@ method:
   3. report eff_rank for both graph and sequential architectures
   4. compare to trained eff_rank
 """
+
 from __future__ import annotations
 
 import torch
@@ -19,12 +20,13 @@ import torch.nn.functional as F
 from src.eval.metrics import effective_rank, mean_pairwise_cosine
 
 
-def random_encoder_eff_rank(online, graphs, cfg, *, kind: str = "graph",
-                             eval_indices=None, device=None) -> dict:
+def random_encoder_eff_rank(
+    online, graphs, cfg, *, kind: str = "graph", eval_indices=None, device=None
+) -> dict:
     """compute effective rank of a randomly-initialized encoder's outputs.
     do NOT load checkpoint — use random initial weights."""
     if device is None:
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     online.eval()  # eval mode (no dropout) but still random weights
     K = cfg.training.context_k
     if eval_indices is None:

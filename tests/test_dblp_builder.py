@@ -1,19 +1,20 @@
-import io
 import gzip
+import io
 
-import torch
 from torch_geometric.data import Data
 
 from src.data.dblp_builder import (
-    build_dblp_graphs_from_records,
     _iter_papers,
+    build_dblp_graphs_from_records,
 )
 
 
-def make_fake_records(n_authors=20, n_years=15, papers_per_year=40,
-                      avg_authors_per_paper=3, year_start=2000, seed=0):
+def make_fake_records(
+    n_authors=20, n_years=15, papers_per_year=40, avg_authors_per_paper=3, year_start=2000, seed=0
+):
     """generate fake (year, [author_name]) tuples with realistic per-author counts."""
     import random
+
     rng = random.Random(seed)
     author_names = [f"author_{i:03d}" for i in range(n_authors)]
 
@@ -37,7 +38,10 @@ def make_fake_records(n_authors=20, n_years=15, papers_per_year=40,
 def test_output_is_list_of_data():
     records, counts = make_fake_records()
     graphs, meta = build_dblp_graphs_from_records(
-        records, counts, min_papers=1, min_active_nodes=2,
+        records,
+        counts,
+        min_papers=1,
+        min_active_nodes=2,
     )
     assert isinstance(graphs, list)
     assert len(graphs) > 0
@@ -47,7 +51,10 @@ def test_output_is_list_of_data():
 def test_node_feature_dim_is_6():
     records, counts = make_fake_records()
     graphs, meta = build_dblp_graphs_from_records(
-        records, counts, min_papers=1, min_active_nodes=2,
+        records,
+        counts,
+        min_papers=1,
+        min_active_nodes=2,
     )
     for g in graphs:
         assert g.x.shape[1] == 6, f"expected in_dim=6, got {g.x.shape[1]}"
@@ -56,7 +63,10 @@ def test_node_feature_dim_is_6():
 def test_edge_index_valid():
     records, counts = make_fake_records()
     graphs, meta = build_dblp_graphs_from_records(
-        records, counts, min_papers=1, min_active_nodes=2,
+        records,
+        counts,
+        min_papers=1,
+        min_active_nodes=2,
     )
     for g in graphs:
         assert g.edge_index.shape[0] == 2
@@ -67,7 +77,10 @@ def test_edge_index_valid():
 def test_meta_has_split_ranges():
     records, counts = make_fake_records(n_years=20)
     graphs, meta = build_dblp_graphs_from_records(
-        records, counts, min_papers=1, min_active_nodes=2,
+        records,
+        counts,
+        min_papers=1,
+        min_active_nodes=2,
     )
     assert "train_range" in meta and "val_range" in meta and "test_range" in meta
     assert meta["dataset"] == "dblp"
@@ -78,7 +91,10 @@ def test_meta_has_split_ranges():
 def test_volume_feature_normalized():
     records, counts = make_fake_records()
     graphs, meta = build_dblp_graphs_from_records(
-        records, counts, min_papers=1, min_active_nodes=2,
+        records,
+        counts,
+        min_papers=1,
+        min_active_nodes=2,
     )
     for g in graphs:
         # col 0 = normalized publication count, must be in [0, 1]
@@ -101,7 +117,10 @@ def test_min_papers_filter_drops_low_count_authors():
         for a in authors:
             counts[a] += 1
     graphs, meta = build_dblp_graphs_from_records(
-        records, counts, min_papers=5, min_active_nodes=2,
+        records,
+        counts,
+        min_papers=5,
+        min_active_nodes=2,
     )
     # only prolific authors survive (one_shot have count 1 < 5)
     assert meta["n_nodes"] == 10
@@ -110,7 +129,11 @@ def test_min_papers_filter_drops_low_count_authors():
 def test_max_authors_caps_node_set():
     records, counts = make_fake_records(n_authors=50)
     graphs, meta = build_dblp_graphs_from_records(
-        records, counts, min_papers=1, min_active_nodes=2, max_authors=20,
+        records,
+        counts,
+        min_papers=1,
+        min_active_nodes=2,
+        max_authors=20,
     )
     assert meta["n_nodes"] == 20
     for g in graphs:
@@ -126,7 +149,10 @@ def test_min_active_nodes_filter():
         counts["x"] += 1
         counts["y"] += 1
     graphs, meta = build_dblp_graphs_from_records(
-        records, counts, min_papers=1, min_active_nodes=10,
+        records,
+        counts,
+        min_papers=1,
+        min_active_nodes=10,
     )
     assert len(graphs) == 0
     assert meta["n_snapshots"] == 0
@@ -137,7 +163,10 @@ def test_edge_index_symmetric():
     records = [(2000, ["a", "b", "c"])]
     counts = {"a": 1, "b": 1, "c": 1}
     graphs, meta = build_dblp_graphs_from_records(
-        records, counts, min_papers=1, min_active_nodes=2,
+        records,
+        counts,
+        min_papers=1,
+        min_active_nodes=2,
     )
     assert len(graphs) == 1
     g = graphs[0]
@@ -149,14 +178,14 @@ def test_iter_papers_streaming_xml_gz():
     # build a tiny in-memory xml.gz, stream-parse it back
     xml = (
         '<?xml version="1.0" encoding="ISO-8859-1"?>\n'
-        '<dblp>\n'
+        "<dblp>\n"
         '<article key="x/y/1"><author>Alice</author><author>Bob</author>'
-        '<title>T1</title><year>2010</year></article>\n'
+        "<title>T1</title><year>2010</year></article>\n"
         '<inproceedings key="x/y/2"><author>Bob</author><author>Carol</author>'
-        '<title>T2</title><year>2011</year></inproceedings>\n'
+        "<title>T2</title><year>2011</year></inproceedings>\n"
         '<article key="x/y/3"><author>Alice</author>'
-        '<title>T3</title><year>1990</year></article>\n'
-        '</dblp>\n'
+        "<title>T3</title><year>1990</year></article>\n"
+        "</dblp>\n"
     )
     buf = io.BytesIO()
     with gzip.GzipFile(fileobj=buf, mode="wb") as gz:
@@ -165,6 +194,7 @@ def test_iter_papers_streaming_xml_gz():
 
     # write to a tmp file, _iter_papers takes a path
     import tempfile
+
     with tempfile.NamedTemporaryFile(suffix=".xml.gz", delete=False) as f:
         f.write(buf.getvalue())
         tmp_path = f.name

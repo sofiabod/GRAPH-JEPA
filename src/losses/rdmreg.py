@@ -15,6 +15,7 @@ usage:
     loss = rdmreg_loss(z1, z2, proj, target_dist='rectified_lp_distribution',
                        lp_norm_parameter=1.0, chosen_sigma=sigma)
 """
+
 import math
 
 import torch
@@ -99,9 +100,14 @@ def build_projection_vectors(d, n_proj, device, dtype=torch.float32, seed=0):
     return p
 
 
-def _swd_one_view(features, projection_vectors, target_dist,
-                  mean_shift_value: float = 0.0, lp_norm_parameter: float = 1.0,
-                  chosen_sigma: float = 1.0):
+def _swd_one_view(
+    features,
+    projection_vectors,
+    target_dist,
+    mean_shift_value: float = 0.0,
+    lp_norm_parameter: float = 1.0,
+    chosen_sigma: float = 1.0,
+):
     """sliced wasserstein distance from features to target distribution.
 
     features: [B, D]
@@ -112,14 +118,24 @@ def _swd_one_view(features, projection_vectors, target_dist,
     projected_features = features @ projection_vectors.T  # [B, n_proj]
 
     if target_dist == "rectified_lp_distribution":
-        target_samples = torch.relu(sample_lp_distribution(
-            shape=(B, D), p=lp_norm_parameter, loc=mean_shift_value,
-            scale=float(chosen_sigma), device=features.device, dtype=features.dtype,
-        ))
+        target_samples = torch.relu(
+            sample_lp_distribution(
+                shape=(B, D),
+                p=lp_norm_parameter,
+                loc=mean_shift_value,
+                scale=float(chosen_sigma),
+                device=features.device,
+                dtype=features.dtype,
+            )
+        )
     elif target_dist == "lp_distribution":
         target_samples = sample_lp_distribution(
-            shape=(B, D), p=lp_norm_parameter, loc=mean_shift_value,
-            scale=float(chosen_sigma), device=features.device, dtype=features.dtype,
+            shape=(B, D),
+            p=lp_norm_parameter,
+            loc=mean_shift_value,
+            scale=float(chosen_sigma),
+            device=features.device,
+            dtype=features.dtype,
         )
     else:
         raise ValueError(f"unsupported target_dist: {target_dist}")
@@ -132,17 +148,25 @@ def _swd_one_view(features, projection_vectors, target_dist,
     return ((sorted_features - sorted_targets) ** 2).mean()
 
 
-def rdmreg_loss(z1, z2, projection_vectors, target_dist,
-                mean_shift_value: float = 0.0, lp_norm_parameter: float = 1.0,
-                chosen_sigma: float = 1.0):
+def rdmreg_loss(
+    z1,
+    z2,
+    projection_vectors,
+    target_dist,
+    mean_shift_value: float = 0.0,
+    lp_norm_parameter: float = 1.0,
+    chosen_sigma: float = 1.0,
+):
     """rectified distribution matching regularization across two views.
 
     z1, z2: [B, D] online encoder outputs for context and target views.
     chosen_sigma: precompute once via choose_sigma_for_unit_var.
     returns the swd-to-target averaged across both views.
     """
-    swd1 = _swd_one_view(z1, projection_vectors, target_dist,
-                         mean_shift_value, lp_norm_parameter, chosen_sigma)
-    swd2 = _swd_one_view(z2, projection_vectors, target_dist,
-                         mean_shift_value, lp_norm_parameter, chosen_sigma)
+    swd1 = _swd_one_view(
+        z1, projection_vectors, target_dist, mean_shift_value, lp_norm_parameter, chosen_sigma
+    )
+    swd2 = _swd_one_view(
+        z2, projection_vectors, target_dist, mean_shift_value, lp_norm_parameter, chosen_sigma
+    )
     return (swd1 + swd2) / 2

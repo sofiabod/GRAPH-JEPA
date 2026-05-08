@@ -1,16 +1,17 @@
 import torch
 from torch_geometric.data import Data
 
+from src.models.ema import EMAUpdater
 from src.models.graph_encoder import GraphEncoder
 from src.models.target_encoder import TargetEncoder
-from src.models.ema import EMAUpdater
 
 
 def test_target_no_grad():
     online = GraphEncoder()
     target = TargetEncoder(online)
-    assert all(not p.requires_grad for p in target.parameters()), \
+    assert all(not p.requires_grad for p in target.parameters()), (
         "all target encoder params must have requires_grad=False"
+    )
 
 
 def test_ema_formula(tiny_graph):
@@ -19,9 +20,7 @@ def test_ema_formula(tiny_graph):
     ema = EMAUpdater(momentum_start=0.9, momentum_end=0.9, total_steps=100)
 
     # snapshot target params before update
-    target_params_before = {
-        name: p.data.clone() for name, p in target.named_parameters()
-    }
+    target_params_before = {name: p.data.clone() for name, p in target.named_parameters()}
 
     # take one optimizer step on online encoder
     optimizer = torch.optim.SGD(online.parameters(), lr=0.1)
@@ -31,9 +30,7 @@ def test_ema_formula(tiny_graph):
     optimizer.step()
 
     # snapshot online params after step
-    online_params_after = {
-        name: p.data.clone() for name, p in online.named_parameters()
-    }
+    online_params_after = {name: p.data.clone() for name, p in online.named_parameters()}
 
     # run ema update at step 0
     m = ema.get_momentum(0)
@@ -42,8 +39,9 @@ def test_ema_formula(tiny_graph):
     # check formula: p_target_new = m * p_target_old + (1-m) * p_online_new
     for name, p_target_new in target.named_parameters():
         expected = m * target_params_before[name] + (1 - m) * online_params_after[name]
-        assert torch.allclose(p_target_new.data, expected, atol=1e-5), \
+        assert torch.allclose(p_target_new.data, expected, atol=1e-5), (
             f"EMA formula violated for param {name}"
+        )
 
 
 def test_ema_diverges_from_online():
@@ -51,9 +49,7 @@ def test_ema_diverges_from_online():
     target = TargetEncoder(online)
 
     # snapshot initial target params
-    target_params_initial = {
-        name: p.data.clone() for name, p in target.named_parameters()
-    }
+    target_params_initial = {name: p.data.clone() for name, p in target.named_parameters()}
 
     # take 10 gradient steps on online without calling ema.update
     optimizer = torch.optim.SGD(online.parameters(), lr=0.5)
@@ -71,14 +67,13 @@ def test_ema_diverges_from_online():
 
     # target should still match initial (no ema.update was called)
     for name, p_target in target.named_parameters():
-        assert torch.allclose(p_target.data, target_params_initial[name]), \
+        assert torch.allclose(p_target.data, target_params_initial[name]), (
             "target params should not change without ema.update"
+        )
 
     # online params should differ from target params now
     any_diff = False
-    for (_, p_o), (_, p_t) in zip(
-        online.named_parameters(), target.named_parameters()
-    ):
+    for (_, p_o), (_, p_t) in zip(online.named_parameters(), target.named_parameters()):
         if not torch.allclose(p_o.data, p_t.data):
             any_diff = True
             break

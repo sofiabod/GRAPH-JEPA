@@ -1,8 +1,8 @@
-import torch
 from torch_geometric.data import Data
+
 from src.data.tgb_builder import (
-    build_tgbn_trade_graphs_from_raw,
     build_tgbn_genre_graphs_from_raw,
+    build_tgbn_trade_graphs_from_raw,
 )
 
 
@@ -14,6 +14,7 @@ def test_tgb_pip_package_importable():
 def make_fake_trade_data(n_countries=10, n_years=15, edges_per_year=20):
     """generate fake trade data: list of (year, src, dst, volume) tuples."""
     import random
+
     records = []
     for year in range(2000, 2000 + n_years):
         for _ in range(edges_per_year):
@@ -70,6 +71,7 @@ def test_volume_feature_normalized():
 def make_fake_genre_data(n_nodes=30, n_weeks=20, edges_per_week=80):
     """generate fake (week, src, dst, edge_feat_value) tuples."""
     import random
+
     records = []
     for week in range(n_weeks):
         for _ in range(edges_per_week):

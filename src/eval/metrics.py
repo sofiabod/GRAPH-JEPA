@@ -68,7 +68,7 @@ def mean_velocity_cos(z_seq: torch.Tensor) -> float:
     returns: mean cosine in [-1, 1], or nan if T < 3 (need at least 2 velocities).
     """
     if z_seq.shape[0] < 3:
-        return float('nan')
+        return float("nan")
     # velocity at each consecutive pair: [T-1, N, D]
     v = z_seq[1:] - z_seq[:-1]
     # consecutive velocity pairs: [T-2, N, D]

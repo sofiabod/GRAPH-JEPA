@@ -4,32 +4,35 @@ this is the thesis experiment. both models are run on identical masked
 node sets (deterministic per-sample masking), per-sample cosines are
 collected, and a paired wilcoxon tests graph_sim > sequential_sim.
 """
+
+import numpy as np
 import torch
 import torch.nn.functional as F
-import numpy as np
 
 from src.eval.metrics import cosine_sim
-from src.eval.wilcoxon import paired_wilcoxon, bootstrap_ci_on_delta
+from src.eval.wilcoxon import bootstrap_ci_on_delta, paired_wilcoxon
 
 
 def _load_graph_jepa(ckpt_path, cfg, device):
-    from src.builders import build_graph_encoder, build_target_encoder, build_predictor
+    from src.builders import build_graph_encoder, build_predictor, build_target_encoder
+
     online = build_graph_encoder(cfg.encoder).to(device)
     target = build_target_encoder(online)
     target.encoder = target.encoder.to(device)
     predictor = build_predictor(cfg.predictor).to(device)
     state = torch.load(ckpt_path, map_location=device)
-    online.load_state_dict(state['online'])
-    predictor.load_state_dict(state['predictor'])
-    target.encoder.load_state_dict(state['target_encoder'])
+    online.load_state_dict(state["online"])
+    predictor.load_state_dict(state["predictor"])
+    target.encoder.load_state_dict(state["target_encoder"])
     online.eval()
     predictor.eval()
     return online, target, predictor
 
 
 def _load_sequential(ckpt_path, cfg, device):
+    from src.builders import build_predictor, build_target_encoder
     from src.models.sequential_encoder import SequentialMLP
-    from src.builders import build_target_encoder, build_predictor
+
     online = SequentialMLP(
         in_dim=cfg.encoder.in_dim,
         hidden_dim=cfg.encoder.hidden_dim,
@@ -40,9 +43,9 @@ def _load_sequential(ckpt_path, cfg, device):
     target.encoder = target.encoder.to(device)
     predictor = build_predictor(cfg.predictor).to(device)
     state = torch.load(ckpt_path, map_location=device)
-    online.load_state_dict(state['online'])
-    predictor.load_state_dict(state['predictor'])
-    target.encoder.load_state_dict(state['target_encoder'])
+    online.load_state_dict(state["online"])
+    predictor.load_state_dict(state["predictor"])
+    target.encoder.load_state_dict(state["target_encoder"])
     online.eval()
     predictor.eval()
     return online, target, predictor
@@ -59,13 +62,13 @@ def _per_sample_cos(online, target, predictor, sample, device, shared_target=Non
     # if shared_target is provided (a target encoder), both models predict against
     # the same reference. used for the bulletproof comparison: "graph and sequential
     # both try to match the SAME target signal" rather than each matching its own.
-    from src.train import _encode_context, _build_tokens_for_sample
+    from src.train import _build_tokens_for_sample, _encode_context
 
-    tgt_graph = sample['target_graph'].to(device)
-    masked_ids = sample['masked_node_ids'].to(device)
-    visible_ids = sample['visible_node_ids'].to(device)
+    tgt_graph = sample["target_graph"].to(device)
+    masked_ids = sample["masked_node_ids"].to(device)
+    visible_ids = sample["visible_node_ids"].to(device)
 
-    ctx_embs = _encode_context(online, sample['context_graphs'])
+    ctx_embs = _encode_context(online, sample["context_graphs"])
     # the predictor's input mask token positions are constructed from whatever
     # target encoder we pass to _build_tokens_for_sample; for the predictor's
     # own input we use the model's own target so the prediction has the right
@@ -90,11 +93,18 @@ def _per_sample_cos(online, target, predictor, sample, device, shared_target=Non
     return cosine_sim(z_pred, z_true).cpu().numpy().tolist()
 
 
-def eval2_compare(graph_models=None, graph_ckpt_path=None,
-                  sequential_ckpt_path=None, graphs=None, cfg=None,
-                  splits=None, mask_seed=0, device=None,
-                  shared_target_mode="self",
-                  eval_split="test") -> dict:
+def eval2_compare(
+    graph_models=None,
+    graph_ckpt_path=None,
+    sequential_ckpt_path=None,
+    graphs=None,
+    cfg=None,
+    splits=None,
+    mask_seed=0,
+    device=None,
+    shared_target_mode="self",
+    eval_split="test",
+) -> dict:
     """run the paired graph-vs-sequential comparison.
 
     args:
@@ -125,11 +135,11 @@ def eval2_compare(graph_models=None, graph_ckpt_path=None,
     from src.data.dataset import TemporalGraphDataset
 
     if device is None:
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     if graph_models is None:
         if graph_ckpt_path is None:
-            raise ValueError('either graph_models or graph_ckpt_path must be provided')
+            raise ValueError("either graph_models or graph_ckpt_path must be provided")
         g_online, g_target, g_predictor = _load_graph_jepa(graph_ckpt_path, cfg, device)
     else:
         g_online, g_target, g_predictor = graph_models
@@ -137,13 +147,13 @@ def eval2_compare(graph_models=None, graph_ckpt_path=None,
         g_predictor.eval()
 
     if sequential_ckpt_path is None:
-        raise ValueError('sequential_ckpt_path must be provided')
+        raise ValueError("sequential_ckpt_path must be provided")
     if splits is None:
-        raise ValueError('splits must be provided as (train_range, val_range, test_range)')
+        raise ValueError("splits must be provided as (train_range, val_range, test_range)")
     if cfg is None:
-        raise ValueError('cfg must be provided')
+        raise ValueError("cfg must be provided")
     if graphs is None:
-        raise ValueError('graphs must be provided')
+        raise ValueError("graphs must be provided")
     s_online, s_target, s_predictor = _load_sequential(sequential_ckpt_path, cfg, device)
 
     # decide which target encoder is used for the cosine comparison.
@@ -174,21 +184,24 @@ def eval2_compare(graph_models=None, graph_ckpt_path=None,
         seed=mask_seed,
     )
     if len(dataset) == 0:
-        return {'error': 'no test data'}
+        return {"error": "no test data"}
 
     graph_sims = []
     seq_sims = []
 
     with torch.no_grad():
         for sample in dataset:
-            g_cos = _per_sample_cos(g_online, g_target, g_predictor, sample, device,
-                                     shared_target=shared_for_graph)
-            s_cos = _per_sample_cos(s_online, s_target, s_predictor, sample, device,
-                                     shared_target=shared_for_seq)
+            g_cos = _per_sample_cos(
+                g_online, g_target, g_predictor, sample, device, shared_target=shared_for_graph
+            )
+            s_cos = _per_sample_cos(
+                s_online, s_target, s_predictor, sample, device, shared_target=shared_for_seq
+            )
             # both should produce identical lengths since masking is deterministic
-            assert len(g_cos) == len(s_cos), \
-                f"mask-set length mismatch ({len(g_cos)} vs {len(s_cos)}); " \
+            assert len(g_cos) == len(s_cos), (
+                f"mask-set length mismatch ({len(g_cos)} vs {len(s_cos)}); "
                 "deterministic masking is broken"
+            )
             graph_sims.extend(g_cos)
             seq_sims.extend(s_cos)
 
@@ -199,16 +212,16 @@ def eval2_compare(graph_models=None, graph_ckpt_path=None,
     boot = bootstrap_ci_on_delta(g_arr, s_arr, n_resamples=10000, seed=mask_seed)
 
     return {
-        'mean_graph_cos': float(g_arr.mean()),
-        'mean_sequential_cos': float(s_arr.mean()),
-        'wilcoxon_p': p,
-        'wilcoxon_stat': stat,
-        'n_pairs': int(g_arr.size),
-        'win_rate': win_rate,
-        'shared_target_mode': shared_target_mode,
-        'eval_split': eval_split,
-        'mean_delta': boot['mean_delta'],
-        'delta_ci95_low': boot['ci_low'],
-        'delta_ci95_high': boot['ci_high'],
-        'bootstrap_n_resamples': boot['n_resamples'],
+        "mean_graph_cos": float(g_arr.mean()),
+        "mean_sequential_cos": float(s_arr.mean()),
+        "wilcoxon_p": p,
+        "wilcoxon_stat": stat,
+        "n_pairs": int(g_arr.size),
+        "win_rate": win_rate,
+        "shared_target_mode": shared_target_mode,
+        "eval_split": eval_split,
+        "mean_delta": boot["mean_delta"],
+        "delta_ci95_low": boot["ci_low"],
+        "delta_ci95_high": boot["ci_high"],
+        "bootstrap_n_resamples": boot["n_resamples"],
     }

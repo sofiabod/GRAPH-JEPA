@@ -7,11 +7,11 @@ from torch.utils.data import DataLoader
 from torch_geometric.data import Batch
 
 from src.builders import (
-    build_graph_encoder,
-    build_target_encoder,
-    build_predictor,
-    build_loss,
     build_ema,
+    build_graph_encoder,
+    build_loss,
+    build_predictor,
+    build_target_encoder,
 )
 from src.data.dataset import TemporalGraphDataset
 from src.utils.seed import set_seed
@@ -28,9 +28,7 @@ def _encode_context(online, context_graphs):
     return [online(g.to(device)) for g in context_graphs]
 
 
-def _build_tokens_for_sample(
-    ctx_embs, tgt_emb_sg, masked_ids, visible_ids, predictor
-):
+def _build_tokens_for_sample(ctx_embs, tgt_emb_sg, masked_ids, visible_ids, predictor):
     """build token sequence for one sample.
 
     returns (tokens [T, D], time_indices [T], node_ids [T], mask_positions [M])
@@ -74,9 +72,9 @@ def _build_tokens_for_sample(
     time_list.append(torch.full((n_nodes,), tgt_time_idx, dtype=torch.long, device=device))
     node_list.append(all_node_ids)
 
-    tokens = torch.cat(tokens_list, dim=0)       # [(k+1)*N, D]
-    time_indices = torch.cat(time_list, dim=0)   # [(k+1)*N]
-    node_ids_seq = torch.cat(node_list, dim=0)   # [(k+1)*N]
+    tokens = torch.cat(tokens_list, dim=0)  # [(k+1)*N, D]
+    time_indices = torch.cat(time_list, dim=0)  # [(k+1)*N]
+    node_ids_seq = torch.cat(node_list, dim=0)  # [(k+1)*N]
 
     # mask positions are at the end (last N slots), offset by k*N
     mask_positions = k * n_nodes + masked_ids  # absolute indices in token sequence
@@ -95,20 +93,20 @@ def _step(batch, online, target, predictor, loss_fn):
     """run one forward pass over a list-batch of samples, return total loss."""
     device = next(online.parameters()).device
     B = len(batch)
-    k = len(batch[0]['context_graphs'])
-    n_nodes = batch[0]['target_graph'].x.shape[0]
+    k = len(batch[0]["context_graphs"])
+    n_nodes = batch[0]["target_graph"].x.shape[0]
 
     # vectorize encoder calls across the batch
     # for each timestep t, encode the t-th context graph for all samples in one call
     ctx_embs_per_sample = [[None] * k for _ in range(B)]  # ctx_embs_per_sample[b][t] = [N, D]
     for t in range(k):
-        graphs_t = [batch[b]['context_graphs'][t] for b in range(B)]
+        graphs_t = [batch[b]["context_graphs"][t] for b in range(B)]
         out_t = _encode_batched(online, graphs_t, n_nodes, device)  # [B, N, D]
         for b in range(B):
             ctx_embs_per_sample[b][t] = out_t[b]
 
     # batched encoders on target graphs
-    tgt_graphs = [batch[b]['target_graph'] for b in range(B)]
+    tgt_graphs = [batch[b]["target_graph"] for b in range(B)]
     tgt_emb_online_batched = _encode_batched(online, tgt_graphs, n_nodes, device)  # [B, N, D]
     # target encoder applies stop-grad inside; pass batched data directly
     batched_tgt = Batch.from_data_list([g.to(device) for g in tgt_graphs])
@@ -123,8 +121,8 @@ def _step(batch, online, target, predictor, loss_fn):
     mask_positions_list = []
     for b in range(B):
         sample = batch[b]
-        masked_ids = sample['masked_node_ids'].to(device)
-        visible_ids = sample['visible_node_ids'].to(device)
+        masked_ids = sample["masked_node_ids"].to(device)
+        visible_ids = sample["visible_node_ids"].to(device)
         ctx_embs = ctx_embs_per_sample[b]
         tgt_emb_sg = tgt_emb_sg_batched[b]
 
@@ -151,8 +149,8 @@ def _step(batch, online, target, predictor, loss_fn):
         z_pred_b = F.normalize(z_pred_b, dim=-1)
         z_pred_list.append(z_pred_b)
 
-    z_pred_all = torch.cat(z_pred_list, dim=0)              # [sum(M), D]
-    z_tgt_all = torch.cat(z_tgt_list, dim=0)                # [sum(M), D]
+    z_pred_all = torch.cat(z_pred_list, dim=0)  # [sum(M), D]
+    z_tgt_all = torch.cat(z_tgt_list, dim=0)  # [sum(M), D]
     z_online_all = tgt_emb_online_batched.reshape(B * n_nodes, -1)  # [B*N, D]
 
     total, _, _ = loss_fn(z_pred_all, z_tgt_all, z_online_all)
@@ -172,11 +170,12 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
         dict with 'train_losses', 'val_losses', 'target_encoder'
     """
     set_seed(seed)
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # load graphs if not provided
     if graphs is None:
         import json
+
         # weights_only=False: pyg data objects rely on pickle
         graphs = torch.load(cfg.data.graphs_path, weights_only=False)
 
@@ -185,9 +184,7 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
     if len(graphs) > 0:
         n_nodes_set = {g.x.shape[0] for g in graphs}
         if len(n_nodes_set) != 1:
-            raise ValueError(
-                f"all graphs must share n_nodes; found {sorted(n_nodes_set)}"
-            )
+            raise ValueError(f"all graphs must share n_nodes; found {sorted(n_nodes_set)}")
         n_nodes_data = next(iter(n_nodes_set))
         if n_nodes_data != cfg.predictor.n_nodes:
             raise ValueError(
@@ -196,21 +193,23 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
             )
 
     # resolve split ranges from config or meta.json
-    if hasattr(cfg.data, 'train_weeks') and cfg.data.train_weeks is not None:
+    if hasattr(cfg.data, "train_weeks") and cfg.data.train_weeks is not None:
         train_range = tuple(cfg.data.train_weeks)
         val_range = tuple(cfg.data.val_weeks)
         test_range = tuple(cfg.data.test_weeks)
     else:
         import json
+
         with open(cfg.data.meta_path) as f:
             meta = json.load(f)
-        train_range = tuple(meta['train_range'])
-        val_range = tuple(meta['val_range'])
-        test_range = tuple(meta['test_range'])
+        train_range = tuple(meta["train_range"])
+        val_range = tuple(meta["val_range"])
+        test_range = tuple(meta["test_range"])
 
     # build models
     if ablation:
         from src.models.sequential_encoder import SequentialMLP
+
         online = SequentialMLP(
             in_dim=cfg.encoder.in_dim,
             hidden_dim=cfg.encoder.hidden_dim,
@@ -250,23 +249,33 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
     batch_size = cfg.training.batch_size
 
     # mask_seed is plumbed so paired evals share the same mask sets
-    mask_seed = cfg.training.get('mask_seed', seed)
+    mask_seed = cfg.training.get("mask_seed", seed)
 
     train_dataset = TemporalGraphDataset(
-        graphs, context_k=context_k, mask_ratio=mask_ratio, split='train',
-        train_range=train_range, val_range=val_range, test_range=test_range,
+        graphs,
+        context_k=context_k,
+        mask_ratio=mask_ratio,
+        split="train",
+        train_range=train_range,
+        val_range=val_range,
+        test_range=test_range,
         seed=mask_seed,
     )
     val_dataset = TemporalGraphDataset(
-        graphs, context_k=context_k, mask_ratio=mask_ratio, split='val',
-        train_range=train_range, val_range=val_range, test_range=test_range,
+        graphs,
+        context_k=context_k,
+        mask_ratio=mask_ratio,
+        split="val",
+        train_range=train_range,
+        val_range=val_range,
+        test_range=test_range,
         seed=mask_seed,
     )
 
     train_losses = []
     val_losses = []
     global_step = 0
-    best_val_loss = float('inf')
+    best_val_loss = float("inf")
     patience_counter = 0
     patience = cfg.training.early_stopping_patience
 
@@ -326,13 +335,13 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
                     out_path.mkdir(parents=True, exist_ok=True)
                     torch.save(
                         {
-                            'online': online.state_dict(),
-                            'predictor': predictor.state_dict(),
-                            'target_encoder': target.encoder.state_dict(),
-                            'step': global_step,
-                            'val_loss': epoch_val_loss,
+                            "online": online.state_dict(),
+                            "predictor": predictor.state_dict(),
+                            "target_encoder": target.encoder.state_dict(),
+                            "step": global_step,
+                            "val_loss": epoch_val_loss,
                         },
-                        out_path / 'checkpoint_best.pt',
+                        out_path / "checkpoint_best.pt",
                     )
             else:
                 patience_counter += 1
@@ -345,16 +354,16 @@ def train(cfg, seed=0, graphs=None, out_dir=None, ablation=False):
         out_path.mkdir(parents=True, exist_ok=True)
         torch.save(
             {
-                'online': online.state_dict(),
-                'predictor': predictor.state_dict(),
-                'target_encoder': target.encoder.state_dict(),
-                'step': global_step,
+                "online": online.state_dict(),
+                "predictor": predictor.state_dict(),
+                "target_encoder": target.encoder.state_dict(),
+                "step": global_step,
             },
-            out_path / 'checkpoint.pt',
+            out_path / "checkpoint.pt",
         )
 
     return {
-        'train_losses': train_losses,
-        'val_losses': val_losses,
-        'best_val_loss': best_val_loss if best_val_loss != float('inf') else None,
+        "train_losses": train_losses,
+        "val_losses": val_losses,
+        "best_val_loss": best_val_loss if best_val_loss != float("inf") else None,
     }

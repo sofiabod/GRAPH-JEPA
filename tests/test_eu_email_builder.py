@@ -1,11 +1,12 @@
-import torch
 from torch_geometric.data import Data
+
 from src.data.eu_email_builder import build_eu_email_graphs_from_edges
 
 
 def make_fake_edge_lines(n_nodes=8, n_edges=20, n_weeks=15):
     """generate fake (src dst timestamp) lines spanning n_weeks."""
     import random
+
     lines = []
     week_sec = 7 * 24 * 3600
     for i in range(n_edges * n_weeks):

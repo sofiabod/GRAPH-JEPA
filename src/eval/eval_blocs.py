@@ -19,19 +19,20 @@ method:
 a clean win for graph means it discovers the bloc structure without
 supervision; sequential and raw-features should be noticeably worse.
 """
+
 from __future__ import annotations
 
 import json
 from collections import Counter
-from typing import Optional
 
 import numpy as np
 import torch
 import torch.nn.functional as F
 
 
-def _country_embeddings(online, graphs, context_k: int, device,
-                        eval_indices: Optional[list[int]] = None) -> np.ndarray:
+def _country_embeddings(
+    online, graphs, context_k: int, device, eval_indices: list[int] | None = None
+) -> np.ndarray:
     """produce one embedding per node by averaging the online encoder's
     output across all valid context windows in eval_indices.
 
@@ -43,9 +44,11 @@ def _country_embeddings(online, graphs, context_k: int, device,
     if eval_indices is None:
         eval_indices = list(range(context_k, len(graphs)))
 
-    accum = torch.zeros(n_nodes, online.out_dim if hasattr(online, 'out_dim')
-                        else _infer_out_dim(online, graphs[0], device),
-                        device=device)
+    accum = torch.zeros(
+        n_nodes,
+        online.out_dim if hasattr(online, "out_dim") else _infer_out_dim(online, graphs[0], device),
+        device=device,
+    )
     count = 0
     with torch.no_grad():
         for t_idx in eval_indices:
@@ -73,6 +76,7 @@ def _kmeans_clustering(embeddings: np.ndarray, k: int, seed: int) -> np.ndarray:
     a simple numpy implementation if not."""
     try:
         from sklearn.cluster import KMeans
+
         km = KMeans(n_clusters=k, n_init=20, random_state=seed)
         return km.fit_predict(embeddings)
     except ImportError:
@@ -104,6 +108,7 @@ def _kmeans_numpy(X: np.ndarray, k: int, seed: int, n_iter: int = 100) -> np.nda
 def _adjusted_rand_index(labels_true, labels_pred) -> float:
     try:
         from sklearn.metrics import adjusted_rand_score
+
         return float(adjusted_rand_score(labels_true, labels_pred))
     except ImportError:
         return _ari_numpy(labels_true, labels_pred)
@@ -112,6 +117,7 @@ def _adjusted_rand_index(labels_true, labels_pred) -> float:
 def _normalized_mutual_info(labels_true, labels_pred) -> float:
     try:
         from sklearn.metrics import normalized_mutual_info_score
+
         return float(normalized_mutual_info_score(labels_true, labels_pred))
     except ImportError:
         return _nmi_numpy(labels_true, labels_pred)
@@ -129,7 +135,10 @@ def _ari_numpy(t, p) -> float:
     for (a, b), v in contingency.items():
         a_marg[a] = a_marg.get(a, 0) + v
         b_marg[b] = b_marg.get(b, 0) + v
-    def comb2(x): return x * (x - 1) // 2
+
+    def comb2(x):
+        return x * (x - 1) // 2
+
     sum_comb = sum(comb2(v) for v in contingency.values())
     sum_a = sum(comb2(v) for v in a_marg.values())
     sum_b = sum(comb2(v) for v in b_marg.values())
@@ -144,10 +153,12 @@ def _nmi_numpy(t, p) -> float:
     t = np.asarray(t)
     p = np.asarray(p)
     n = len(t)
+
     def entropy(x):
         _, c = np.unique(x, return_counts=True)
         pr = c / n
         return float(-np.sum(pr * np.log(pr + 1e-12)))
+
     h_t = entropy(t)
     h_p = entropy(p)
     pairs: dict = {}
@@ -179,10 +190,16 @@ def _cluster_purity(labels_true, labels_pred) -> float:
     return float(total / n)
 
 
-def run_bloc_discovery(online, graphs, cfg, iso3_codes: list[str],
-                       seed: int = 0, device=None,
-                       partition: str = "subregion",
-                       k_override: int | None = None) -> dict:
+def run_bloc_discovery(
+    online,
+    graphs,
+    cfg,
+    iso3_codes: list[str],
+    seed: int = 0,
+    device=None,
+    partition: str = "subregion",
+    k_override: int | None = None,
+) -> dict:
     """run bloc discovery for one model. returns embeddings, cluster labels,
     and scores against ground-truth partition.
 
@@ -195,7 +212,7 @@ def run_bloc_discovery(online, graphs, cfg, iso3_codes: list[str],
     from src.eval.iso3_regions import label_iso3_list, label_iso3_list_continent
 
     if device is None:
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     if partition == "continent":
         region_labels, missing = label_iso3_list_continent(iso3_codes)
@@ -218,8 +235,9 @@ def run_bloc_discovery(online, graphs, cfg, iso3_codes: list[str],
         test_lo, test_hi = meta["test_range"]
     eval_indices = list(range(test_lo, test_hi + 1))
 
-    emb = _country_embeddings(online, graphs, cfg.training.context_k, device,
-                               eval_indices=eval_indices)
+    emb = _country_embeddings(
+        online, graphs, cfg.training.context_k, device, eval_indices=eval_indices
+    )
 
     # k-means with deterministic seed
     labels_pred = _kmeans_clustering(emb, k=k, seed=seed)

@@ -40,9 +40,7 @@ class SequentialMLP(nn.Module):
     def __init__(self, in_dim=384, hidden_dim=256, n_layers=3, dropout=0.1):
         super().__init__()
         self.input_proj = nn.Linear(in_dim, hidden_dim)
-        self.blocks = nn.ModuleList(
-            [_FFNBlock(hidden_dim, dropout) for _ in range(n_layers)]
-        )
+        self.blocks = nn.ModuleList([_FFNBlock(hidden_dim, dropout) for _ in range(n_layers)])
 
     def forward(self, data):
         # ignores edge_index: no message passing

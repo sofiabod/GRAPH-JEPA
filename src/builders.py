@@ -1,8 +1,8 @@
-from src.models.graph_encoder import GraphEncoder
-from src.models.target_encoder import TargetEncoder
-from src.models.predictor import TemporalGraphPredictor
-from src.models.ema import EMAUpdater
 from src.losses.prediction import TGJEPALoss
+from src.models.ema import EMAUpdater
+from src.models.graph_encoder import GraphEncoder
+from src.models.predictor import TemporalGraphPredictor
+from src.models.target_encoder import TargetEncoder
 
 
 def build_graph_encoder(cfg):

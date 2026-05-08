@@ -10,6 +10,7 @@ growth[i,t→t+1]) pairs should:
 a clean "graph wins, sequential ~baseline, raw features ~baseline" result
 is the thesis-grade "learned something transferable" demonstration.
 """
+
 from __future__ import annotations
 
 import numpy as np
@@ -17,8 +18,7 @@ import torch
 import torch.nn.functional as F
 
 
-def _all_snapshot_embeddings(online, graphs, device,
-                              from_t: int, to_t: int) -> np.ndarray:
+def _all_snapshot_embeddings(online, graphs, device, from_t: int, to_t: int) -> np.ndarray:
     """produce per-snapshot embeddings via the encoder. returns array of
     shape [T, N, D] where T = to_t - from_t + 1."""
     online.eval()
@@ -33,8 +33,7 @@ def _all_snapshot_embeddings(online, graphs, device,
     return np.stack(embs, axis=0)
 
 
-def _trade_volume_per_country(graphs, from_t: int, to_t: int,
-                               feature_idx: int = 0) -> np.ndarray:
+def _trade_volume_per_country(graphs, from_t: int, to_t: int, feature_idx: int = 0) -> np.ndarray:
     """extract per-country trade volume signal across snapshots.
 
     feature_idx 0 = normalized volume in our 6d node feature convention.
@@ -64,8 +63,7 @@ def _r2_score(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     return 1.0 - ss_res / ss_tot
 
 
-def _kfold_linear_probe(X: np.ndarray, Y: np.ndarray, k: int = 5,
-                         seed: int = 0) -> dict:
+def _kfold_linear_probe(X: np.ndarray, Y: np.ndarray, k: int = 5, seed: int = 0) -> dict:
     """k-fold cross-validated linear probe. returns mean R², MAE, per-fold lists."""
     try:
         from sklearn.linear_model import Ridge
@@ -94,12 +92,18 @@ def _kfold_linear_probe(X: np.ndarray, Y: np.ndarray, k: int = 5,
     }
 
 
-def run_probe(online, graphs, cfg, splits, *,
-              kind: str = "graph",
-              feature_idx: int = 0,
-              folds: int = 5,
-              seed: int = 0,
-              device=None) -> dict:
+def run_probe(
+    online,
+    graphs,
+    cfg,
+    splits,
+    *,
+    kind: str = "graph",
+    feature_idx: int = 0,
+    folds: int = 5,
+    seed: int = 0,
+    device=None,
+) -> dict:
     """run linear probe for one model.
 
     args:
@@ -112,7 +116,7 @@ def run_probe(online, graphs, cfg, splits, *,
     returns r2/mae over k-fold CV against next-period log-growth target.
     """
     if device is None:
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     train_range, val_range, test_range = splits
     # use ALL valid (context_k <= t < last_snapshot) pairs across train+val+test
@@ -146,11 +150,13 @@ def run_probe(online, graphs, cfg, splits, *,
     Y_flat = Y_flat[finite]
 
     metrics = _kfold_linear_probe(X_flat, Y_flat, k=folds, seed=seed)
-    metrics.update({
-        "kind": kind,
-        "n_samples": int(X_flat.shape[0]),
-        "embedding_dim": int(X_flat.shape[1]),
-        "snapshots_used": [int(from_t), int(to_t)],
-        "feature_idx_used_for_volume": int(feature_idx),
-    })
+    metrics.update(
+        {
+            "kind": kind,
+            "n_samples": int(X_flat.shape[0]),
+            "embedding_dim": int(X_flat.shape[1]),
+            "snapshots_used": [int(from_t), int(to_t)],
+            "feature_idx_used_for_volume": int(feature_idx),
+        }
+    )
     return metrics

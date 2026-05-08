@@ -1,13 +1,11 @@
 import torch
-import torch.nn as nn
 from torch_geometric.data import Data
 
-from src.models.graph_encoder import GraphEncoder
-from src.models.target_encoder import TargetEncoder
-from src.models.ema import EMAUpdater
-from src.models.predictor import TemporalGraphPredictor
 from src.losses.prediction import TGJEPALoss
-
+from src.models.ema import EMAUpdater
+from src.models.graph_encoder import GraphEncoder
+from src.models.predictor import TemporalGraphPredictor
+from src.models.target_encoder import TargetEncoder
 
 # use small hidden_dim=32 to keep tests fast
 HIDDEN_DIM = 32
@@ -25,13 +23,16 @@ def make_tiny_graph():
 
 def build_components():
     """assemble all components with small hidden dim"""
-    online = GraphEncoder(
-        in_dim=IN_DIM, hidden_dim=HIDDEN_DIM, n_layers=1, n_heads=2, dropout=0.0
-    )
+    online = GraphEncoder(in_dim=IN_DIM, hidden_dim=HIDDEN_DIM, n_layers=1, n_heads=2, dropout=0.0)
     target = TargetEncoder(online)
     predictor = TemporalGraphPredictor(
-        embed_dim=HIDDEN_DIM, n_heads=2, n_layers=1, mlp_ratio=2,
-        dropout=0.0, n_nodes=N_NODES, max_time_steps=20
+        embed_dim=HIDDEN_DIM,
+        n_heads=2,
+        n_layers=1,
+        mlp_ratio=2,
+        dropout=0.0,
+        n_nodes=N_NODES,
+        max_time_steps=20,
     )
     loss_fn = TGJEPALoss(lambda_reg=0.01)
     ema = EMAUpdater(momentum_start=0.996, momentum_end=1.0, total_steps=100)
@@ -80,9 +81,7 @@ def test_full_forward_no_error():
 
 def test_online_encoder_params_update():
     online, target, predictor, loss_fn, ema = build_components()
-    optimizer = torch.optim.Adam(
-        list(online.parameters()) + list(predictor.parameters()), lr=1e-3
-    )
+    optimizer = torch.optim.Adam(list(online.parameters()) + list(predictor.parameters()), lr=1e-3)
 
     # snapshot online params
     online_before = {n: p.data.clone() for n, p in online.named_parameters()}
@@ -94,17 +93,14 @@ def test_online_encoder_params_update():
 
     # at least one param should have changed
     any_changed = any(
-        not torch.allclose(p.data, online_before[n])
-        for n, p in online.named_parameters()
+        not torch.allclose(p.data, online_before[n]) for n, p in online.named_parameters()
     )
     assert any_changed, "at least one online encoder param should change after optimizer step"
 
 
 def test_predictor_params_update():
     online, target, predictor, loss_fn, ema = build_components()
-    optimizer = torch.optim.Adam(
-        list(online.parameters()) + list(predictor.parameters()), lr=1e-3
-    )
+    optimizer = torch.optim.Adam(list(online.parameters()) + list(predictor.parameters()), lr=1e-3)
 
     predictor_before = {n: p.data.clone() for n, p in predictor.named_parameters()}
 
@@ -114,17 +110,14 @@ def test_predictor_params_update():
     optimizer.step()
 
     any_changed = any(
-        not torch.allclose(p.data, predictor_before[n])
-        for n, p in predictor.named_parameters()
+        not torch.allclose(p.data, predictor_before[n]) for n, p in predictor.named_parameters()
     )
     assert any_changed, "at least one predictor param should change after optimizer step"
 
 
 def test_target_encoder_unchanged_by_optimizer():
     online, target, predictor, loss_fn, ema = build_components()
-    optimizer = torch.optim.Adam(
-        list(online.parameters()) + list(predictor.parameters()), lr=1e-3
-    )
+    optimizer = torch.optim.Adam(list(online.parameters()) + list(predictor.parameters()), lr=1e-3)
 
     # snapshot target params before training step
     target_before = {n: p.data.clone() for n, p in target.named_parameters()}
@@ -136,8 +129,9 @@ def test_target_encoder_unchanged_by_optimizer():
     # do NOT call ema.update here
 
     for n, p in target.named_parameters():
-        assert torch.allclose(p.data, target_before[n]), \
+        assert torch.allclose(p.data, target_before[n]), (
             f"target param {n} should not change after optimizer.step (no ema.update)"
+        )
 
 
 def test_target_updates_via_ema():
@@ -145,9 +139,7 @@ def test_target_updates_via_ema():
 
     # use low momentum so the update is visible
     ema_fast = EMAUpdater(momentum_start=0.5, momentum_end=0.5, total_steps=100)
-    optimizer = torch.optim.Adam(
-        list(online.parameters()) + list(predictor.parameters()), lr=0.1
-    )
+    optimizer = torch.optim.Adam(list(online.parameters()) + list(predictor.parameters()), lr=0.1)
 
     target_before = {n: p.data.clone() for n, p in target.named_parameters()}
 
@@ -160,26 +152,22 @@ def test_target_updates_via_ema():
     ema_fast.update(online, target, step=0)
 
     any_changed = any(
-        not torch.allclose(p.data, target_before[n])
-        for n, p in target.named_parameters()
+        not torch.allclose(p.data, target_before[n]) for n, p in target.named_parameters()
     )
     assert any_changed, "target encoder params should change after ema.update"
 
 
 def test_target_not_in_optimizer():
     online, target, predictor, loss_fn, ema = build_components()
-    optimizer = torch.optim.Adam(
-        list(online.parameters()) + list(predictor.parameters()), lr=1e-3
-    )
+    optimizer = torch.optim.Adam(list(online.parameters()) + list(predictor.parameters()), lr=1e-3)
 
     target_param_ids = {id(p) for p in target.parameters()}
-    optimizer_param_ids = {
-        id(p) for group in optimizer.param_groups for p in group['params']
-    }
+    optimizer_param_ids = {id(p) for group in optimizer.param_groups for p in group["params"]}
 
     overlap = target_param_ids & optimizer_param_ids
-    assert len(overlap) == 0, \
+    assert len(overlap) == 0, (
         "target encoder parameters must not appear in any optimizer param group"
+    )
 
 
 def test_loss_finite():

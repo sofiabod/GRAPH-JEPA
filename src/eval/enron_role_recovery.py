@@ -26,17 +26,17 @@ what makes this non-tautological:
     role information is in the second-order structure (who emails whom),
     which only message-passing can extract
 """
-from __future__ import annotations
 
-from typing import Optional
+from __future__ import annotations
 
 import numpy as np
 import torch
 import torch.nn.functional as F
 
 
-def _embed_all_people(online, graphs, context_k: int, device,
-                      eval_indices: Optional[list[int]] = None) -> np.ndarray:
+def _embed_all_people(
+    online, graphs, context_k: int, device, eval_indices: list[int] | None = None
+) -> np.ndarray:
     """produce one L2-normalized embedding per person, averaged across
     eval_indices snapshots. shape [N, D]."""
     online.eval()
@@ -70,8 +70,13 @@ def _mann_whitney_u_one_sided(within: np.ndarray, between: np.ndarray) -> dict:
     returns dict with U, p, normal-approx z. self-contained (no scipy)."""
     n_w, n_b = len(within), len(between)
     if n_w == 0 or n_b == 0:
-        return {"U": float("nan"), "p": float("nan"), "z": float("nan"),
-                "n_within": int(n_w), "n_between": int(n_b)}
+        return {
+            "U": float("nan"),
+            "p": float("nan"),
+            "z": float("nan"),
+            "n_within": int(n_w),
+            "n_between": int(n_b),
+        }
     combined = np.concatenate([within, between])
     # ranks (average for ties)
     order = np.argsort(combined, kind="stable")
@@ -91,25 +96,44 @@ def _mann_whitney_u_one_sided(within: np.ndarray, between: np.ndarray) -> dict:
     mean_U = n_w * n_b / 2.0
     var_U = n_w * n_b * (n_w + n_b + 1) / 12.0
     if var_U <= 0:
-        return {"U": float(U_w), "p": float("nan"), "z": float("nan"),
-                "n_within": int(n_w), "n_between": int(n_b)}
+        return {
+            "U": float(U_w),
+            "p": float("nan"),
+            "z": float("nan"),
+            "n_within": int(n_w),
+            "n_between": int(n_b),
+        }
     z = (U_w - mean_U) / np.sqrt(var_U)
     # one-sided p (within > between → larger U → larger z)
     # use normal approx; for exact p with small n, scipy would be better
     from math import erf, sqrt
+
     p = 0.5 * (1.0 - erf(z / sqrt(2)))
-    return {"U": float(U_w), "p": float(p), "z": float(z),
-            "n_within": int(n_w), "n_between": int(n_b)}
+    return {
+        "U": float(U_w),
+        "p": float(p),
+        "z": float(z),
+        "n_within": int(n_w),
+        "n_between": int(n_b),
+    }
 
 
-def _bootstrap_median_gap_ci(within: np.ndarray, between: np.ndarray,
-                              n_resamples: int = 5000, ci: float = 0.95,
-                              seed: int = 0) -> dict:
+def _bootstrap_median_gap_ci(
+    within: np.ndarray,
+    between: np.ndarray,
+    n_resamples: int = 5000,
+    ci: float = 0.95,
+    seed: int = 0,
+) -> dict:
     rng = np.random.default_rng(seed)
     n_w, n_b = len(within), len(between)
     if n_w == 0 or n_b == 0:
-        return {"median_gap": float("nan"), "ci_low": float("nan"),
-                "ci_high": float("nan"), "n_resamples": 0}
+        return {
+            "median_gap": float("nan"),
+            "ci_low": float("nan"),
+            "ci_high": float("nan"),
+            "n_resamples": 0,
+        }
     gaps = np.empty(n_resamples)
     for r in range(n_resamples):
         w = within[rng.integers(0, n_w, size=n_w)]
@@ -124,11 +148,17 @@ def _bootstrap_median_gap_ci(within: np.ndarray, between: np.ndarray,
     }
 
 
-def run_role_recovery(online, graphs, cfg, person_index: dict,
-                       email_to_role: dict,
-                       *, kind: str = "graph",
-                       seed: int = 0,
-                       device=None) -> dict:
+def run_role_recovery(
+    online,
+    graphs,
+    cfg,
+    person_index: dict,
+    email_to_role: dict,
+    *,
+    kind: str = "graph",
+    seed: int = 0,
+    device=None,
+) -> dict:
     """run role-recovery test for one model.
 
     args:
@@ -138,12 +168,13 @@ def run_role_recovery(online, graphs, cfg, person_index: dict,
       kind: "graph" / "sequential" / "raw_features"
     """
     if device is None:
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     n_nodes = graphs[0].x.shape[0]
     K = cfg.training.context_k
     # average embeddings across test snapshots only (most relevant for role-period 2001-2002)
     import json
+
     if hasattr(cfg.data, "test_weeks") and cfg.data.test_weeks is not None:
         test_lo, test_hi = cfg.data.test_weeks
     else:
@@ -193,8 +224,7 @@ def run_role_recovery(online, graphs, cfg, person_index: dict,
     between_arr = np.array(between)
 
     mwu = _mann_whitney_u_one_sided(within_arr, between_arr)
-    boot = _bootstrap_median_gap_ci(within_arr, between_arr,
-                                      n_resamples=5000, seed=seed)
+    boot = _bootstrap_median_gap_ci(within_arr, between_arr, n_resamples=5000, seed=seed)
 
     per_role_summary = {}
     for role, vals in per_role_within.items():

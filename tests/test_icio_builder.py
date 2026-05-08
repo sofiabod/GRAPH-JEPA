@@ -1,9 +1,8 @@
-import torch
 from torch_geometric.data import Data
 
 from src.data.icio_builder import (
-    build_icio_graphs_from_records,
     _parse_partner_country,
+    build_icio_graphs_from_records,
 )
 
 

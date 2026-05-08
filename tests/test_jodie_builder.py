@@ -1,16 +1,17 @@
-import torch
 from torch_geometric.data import Data
+
 from src.data.jodie_builder import build_jodie_graphs_from_csv
 
 
 def make_fake_jodie_csv(n_users=5, n_items=3, n_rows=60, n_feat=172):
     """generate fake jodie CSV content."""
     import random
+
     lines = ["user,item,timestamp,state_label," + ",".join(f"f{i}" for i in range(n_feat))]
     week_sec = 7 * 24 * 3600
     for i in range(n_rows):
-        user = f"u{random.randint(0, n_users-1)}"
-        item = f"i{random.randint(0, n_items-1)}"
+        user = f"u{random.randint(0, n_users - 1)}"
+        item = f"i{random.randint(0, n_items - 1)}"
         ts = (i // (n_rows // 10)) * week_sec + i * 100
         label = 1 if i % 20 == 0 else 0
         feats = ",".join(str(round(random.random(), 4)) for _ in range(n_feat))
@@ -63,5 +64,6 @@ def test_inactive_node_interaction_features_are_zero(tmp_path):
         active_mask = g.x[:, 176] == 1.0
         inactive = ~active_mask
         if inactive.any():
-            assert g.x[inactive, :172].abs().sum() == 0.0, \
+            assert g.x[inactive, :172].abs().sum() == 0.0, (
                 "inactive nodes should have zero interaction features"
+            )

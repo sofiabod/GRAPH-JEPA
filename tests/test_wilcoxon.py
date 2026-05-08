@@ -1,5 +1,6 @@
 import numpy as np
-from src.eval.wilcoxon import paired_wilcoxon, bonferroni_correct
+
+from src.eval.wilcoxon import bonferroni_correct, paired_wilcoxon
 
 
 def test_wilcoxon_identical_returns_one():

@@ -12,6 +12,7 @@ this is non-tautological because role isn't a function of email volume alone:
 lawyers email everyone (contract reviews), traders email each other and external
 counterparties, executives have varied patterns.
 """
+
 from __future__ import annotations
 
 # email → functional role (from public enron records)

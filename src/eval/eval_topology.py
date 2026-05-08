@@ -20,17 +20,17 @@ embed countries such that "neighbors in embedding space" are "trading partners
 in the real world." sequential is the natural counterfactual: it has the same
 JEPA objective and parameter count but never sees edge weights.
 """
-from __future__ import annotations
 
-from typing import Optional
+from __future__ import annotations
 
 import numpy as np
 import torch
 import torch.nn.functional as F
 
 
-def _country_embeddings(online, graphs, context_k: int, device,
-                        eval_indices: Optional[list[int]] = None) -> np.ndarray:
+def _country_embeddings(
+    online, graphs, context_k: int, device, eval_indices: list[int] | None = None
+) -> np.ndarray:
     """produce one L2-normalized embedding per country averaged across
     eval_indices snapshots. shape [N, D]."""
     online.eval()
@@ -55,8 +55,9 @@ def _country_embeddings(online, graphs, context_k: int, device,
     return accum.cpu().numpy()
 
 
-def _aggregate_trade_weights(graphs, eval_indices: list[int],
-                              n_nodes: int, symmetric: bool = True) -> np.ndarray:
+def _aggregate_trade_weights(
+    graphs, eval_indices: list[int], n_nodes: int, symmetric: bool = True
+) -> np.ndarray:
     """sum bilateral edge weights across test snapshots into an [N, N] matrix.
 
     if symmetric=True (default), w[i,j] = total i→j + j→i flow across snapshots —
@@ -105,9 +106,9 @@ def _spearman(a: np.ndarray, b: np.ndarray) -> float:
     return float(np.corrcoef(ra, rb)[0, 1])
 
 
-def _bootstrap_spearman_ci(a: np.ndarray, b: np.ndarray,
-                            n_resamples: int = 5000, ci: float = 0.95,
-                            seed: int = 0) -> dict:
+def _bootstrap_spearman_ci(
+    a: np.ndarray, b: np.ndarray, n_resamples: int = 5000, ci: float = 0.95, seed: int = 0
+) -> dict:
     rng = np.random.default_rng(seed)
     n = a.size
     rhos = np.empty(n_resamples)
@@ -124,9 +125,16 @@ def _bootstrap_spearman_ci(a: np.ndarray, b: np.ndarray,
     }
 
 
-def run_topology_test(online, graphs, cfg, *, kind: str = "graph",
-                      raw_features_idx: Optional[list[int]] = None,
-                      seed: int = 0, device=None) -> dict:
+def run_topology_test(
+    online,
+    graphs,
+    cfg,
+    *,
+    kind: str = "graph",
+    raw_features_idx: list[int] | None = None,
+    seed: int = 0,
+    device=None,
+) -> dict:
     """run topology test for one model.
 
     kind ∈ {"graph", "sequential", "raw_features"}. for raw_features, online may
@@ -134,12 +142,13 @@ def run_topology_test(online, graphs, cfg, *, kind: str = "graph",
     "embedding" (default: all dims).
     """
     if device is None:
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     n_nodes = graphs[0].x.shape[0]
     K = cfg.training.context_k
     # determine test snapshots (bilateral trade aggregation + embedding averaging)
     import json
+
     try:
         test_lo, test_hi = cfg.data.test_weeks
     except Exception:

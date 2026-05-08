@@ -1,9 +1,10 @@
 import json
-import torch
 from pathlib import Path
 from types import SimpleNamespace
 
-from src.data.factory import create_dataset, compute_split_ranges, save_meta
+import torch
+
+from src.data.factory import compute_split_ranges, create_dataset, save_meta
 
 
 def test_compute_split_ranges_proportions():
@@ -27,8 +28,13 @@ def test_compute_split_ranges_coverage():
 
 
 def test_save_meta_writes_json(tmp_path):
-    meta = {"train_range": [0, 9], "val_range": [10, 14], "test_range": [15, 19],
-            "n_snapshots": 20, "n_nodes": 5}
+    meta = {
+        "train_range": [0, 9],
+        "val_range": [10, 14],
+        "test_range": [15, 19],
+        "n_snapshots": 20,
+        "n_nodes": 5,
+    }
     out = str(tmp_path / "sub" / "meta.json")
     save_meta(meta, out)
     loaded = json.loads(Path(out).read_text())
@@ -51,9 +57,12 @@ def test_enron_route_loads_graphs(tmp_path):
     pt_path = str(tmp_path / "g.pt")
     torch.save(graphs, pt_path)
 
-    cfg = SimpleNamespace(dataset="enron", data=SimpleNamespace(
-        graphs_path=pt_path,
-        train_weeks=[0, 6],
-    ))
+    cfg = SimpleNamespace(
+        dataset="enron",
+        data=SimpleNamespace(
+            graphs_path=pt_path,
+            train_weeks=[0, 6],
+        ),
+    )
     result = create_dataset(cfg)
     assert len(result) == 1

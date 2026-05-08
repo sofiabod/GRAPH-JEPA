@@ -12,6 +12,7 @@ git_sha, ensuring the dataset hash matches, and rerunning the same script.
 inside modal containers there is no .git tree, so commit_sha is read from
 an env var GIT_SHA that the local entrypoint writes when launching.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -20,10 +21,9 @@ import platform
 import subprocess
 import sys
 from pathlib import Path
-from typing import Optional
 
 
-def _read_git_sha() -> Optional[str]:
+def _read_git_sha() -> str | None:
     """try git rev-parse first; fall back to GIT_SHA env (set by local entrypoint)."""
     env_sha = os.environ.get("GIT_SHA")
     if env_sha:
@@ -31,7 +31,9 @@ def _read_git_sha() -> Optional[str]:
     try:
         out = subprocess.run(
             ["git", "rev-parse", "HEAD"],
-            capture_output=True, text=True, check=False,
+            capture_output=True,
+            text=True,
+            check=False,
         )
         if out.returncode == 0:
             return out.stdout.strip()
@@ -40,13 +42,15 @@ def _read_git_sha() -> Optional[str]:
     return None
 
 
-def _read_git_dirty() -> Optional[bool]:
+def _read_git_dirty() -> bool | None:
     """returns True if working tree has uncommitted changes, False if clean,
     None if git unavailable."""
     try:
         out = subprocess.run(
             ["git", "status", "--porcelain"],
-            capture_output=True, text=True, check=False,
+            capture_output=True,
+            text=True,
+            check=False,
         )
         if out.returncode == 0:
             return bool(out.stdout.strip())
@@ -55,7 +59,7 @@ def _read_git_dirty() -> Optional[bool]:
     return None
 
 
-def file_sha256(path: str | Path) -> Optional[str]:
+def file_sha256(path: str | Path) -> str | None:
     """sha256 of a file (None if not readable)."""
     p = Path(path)
     if not p.is_file():
@@ -69,7 +73,7 @@ def file_sha256(path: str | Path) -> Optional[str]:
 
 def lib_versions() -> dict:
     """capture versions of the core libraries that affect numerical results."""
-    versions: dict[str, Optional[str]] = {
+    versions: dict[str, str | None] = {
         "python": platform.python_version(),
         "platform": platform.platform(),
     }
@@ -82,9 +86,12 @@ def lib_versions() -> dict:
     return versions
 
 
-def capture_metadata(*, dataset_paths: list[str | Path] | None = None,
-                     config_path: str | Path | None = None,
-                     extra: dict | None = None) -> dict:
+def capture_metadata(
+    *,
+    dataset_paths: list[str | Path] | None = None,
+    config_path: str | Path | None = None,
+    extra: dict | None = None,
+) -> dict:
     """capture all reproducibility metadata into a single dict.
 
     pass dataset_paths for the graphs.pt + meta.json pair, and config_path
@@ -102,9 +109,7 @@ def capture_metadata(*, dataset_paths: list[str | Path] | None = None,
         "argv": list(sys.argv),
     }
     if dataset_paths:
-        md["dataset_sha256"] = {
-            str(p): file_sha256(p) for p in dataset_paths
-        }
+        md["dataset_sha256"] = {str(p): file_sha256(p) for p in dataset_paths}
     if config_path is not None:
         md["config_path"] = str(config_path)
         md["config_sha256"] = file_sha256(config_path)
@@ -113,9 +118,10 @@ def capture_metadata(*, dataset_paths: list[str | Path] | None = None,
     return md
 
 
-def _torch_deterministic_state() -> Optional[bool]:
+def _torch_deterministic_state() -> bool | None:
     try:
         import torch
+
         return bool(torch.are_deterministic_algorithms_enabled())
     except Exception:
         return None
