@@ -19,5 +19,5 @@ class EMAUpdater:
         # ema update: p_target = m * p_target + (1 - m) * p_online
         m = self.get_momentum(step)
         with torch.no_grad():
-            for p_o, p_t in zip(online.parameters(), target.encoder.parameters()):
+            for p_o, p_t in zip(online.parameters(), target.encoder.parameters(), strict=False):
                 p_t.data.mul_(m).add_(p_o.data, alpha=1 - m)

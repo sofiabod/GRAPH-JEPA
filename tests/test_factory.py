@@ -45,7 +45,7 @@ def test_unknown_dataset_raises():
     cfg = SimpleNamespace(dataset="unknown_xyz", data=SimpleNamespace())
     try:
         create_dataset(cfg)
-        assert False, "should have raised"
+        raise AssertionError("should have raised")
     except ValueError as e:
         assert "unknown_xyz" in str(e)
 

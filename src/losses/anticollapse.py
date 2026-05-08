@@ -70,7 +70,7 @@ class CovarianceLoss(torch.nn.Module):
     def forward(self, x: torch.Tensor):
         x = batch_all_gather(x)
         batch_size = x.shape[0]
-        num_features = x.shape[-1]
+        x.shape[-1]
         x = x - x.mean(dim=0, keepdim=True)
         cov = (x.T @ x) / (batch_size - 1)  # [D, D]
         cov_loss = self.off_diagonal(cov).pow(2).mean()

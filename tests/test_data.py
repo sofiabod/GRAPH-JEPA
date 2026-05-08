@@ -56,7 +56,7 @@ def test_no_future_in_context():
         # context graphs must come from earlier time steps
         # the dataset should record context week indices, or we verify via structure
         # each context graph should be a snapshot strictly before the target
-        context_graphs = sample["context_graphs"]
+        sample["context_graphs"]
         # check the dataset provides context_week_indices if available
         if "context_week_indices" in sample:
             for ctx_idx in sample["context_week_indices"]:

@@ -73,7 +73,7 @@ def test_ema_diverges_from_online():
 
     # online params should differ from target params now
     any_diff = False
-    for (_, p_o), (_, p_t) in zip(online.named_parameters(), target.named_parameters()):
+    for (_, p_o), (_, p_t) in zip(online.named_parameters(), target.named_parameters(), strict=False):
         if not torch.allclose(p_o.data, p_t.data):
             any_diff = True
             break

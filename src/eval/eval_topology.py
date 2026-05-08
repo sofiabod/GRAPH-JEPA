@@ -34,7 +34,7 @@ def _country_embeddings(
     """produce one L2-normalized embedding per country averaged across
     eval_indices snapshots. shape [N, D]."""
     online.eval()
-    n_nodes = graphs[0].x.shape[0]
+    graphs[0].x.shape[0]
     if eval_indices is None:
         eval_indices = list(range(context_k, len(graphs)))
 

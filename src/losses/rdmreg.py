@@ -23,7 +23,10 @@ import torch.nn.functional as F
 from torch.distributions.laplace import Laplace
 
 
-def _sample_product_laplace(shape, device, dtype, loc=0.0, scale=1.0 / math.sqrt(2)):
+_INV_SQRT_2 = 1.0 / math.sqrt(2)
+
+
+def _sample_product_laplace(shape, device, dtype, loc=0.0, scale=_INV_SQRT_2):
     """sample from a product laplace distribution."""
     loc_t = torch.tensor(loc, device=device, dtype=dtype)
     scale_t = torch.tensor(scale, device=device, dtype=dtype)

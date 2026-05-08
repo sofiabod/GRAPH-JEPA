@@ -40,7 +40,7 @@ def _embed_all_people(
     """produce one L2-normalized embedding per person, averaged across
     eval_indices snapshots. shape [N, D]."""
     online.eval()
-    n_nodes = graphs[0].x.shape[0]
+    graphs[0].x.shape[0]
     if eval_indices is None:
         eval_indices = list(range(context_k, len(graphs)))
 

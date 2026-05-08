@@ -21,7 +21,7 @@ class GraphEncoder(nn.Module):
     def forward(self, data):
         # project input features then apply gat layers with residual connections
         h = self.input_proj(data.x)
-        for layer, norm in zip(self.layers, self.norms):
+        for layer, norm in zip(self.layers, self.norms, strict=False):
             h_new = norm(layer(h, data.edge_index))
             if h_new.shape == h.shape:
                 h = h + self.dropout(h_new)

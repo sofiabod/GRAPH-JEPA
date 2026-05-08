@@ -84,6 +84,7 @@ ignore = [
     "E501",  # line-too-long; we set line-length=100 above and let it slide for math
     "N806",  # uppercase variable in function (matches paper notation: B, D, M, etc.)
     "N803",  # uppercase argument (same reason)
+    "N812",  # `torch.nn.functional as F` is universal pytorch convention
 ]
 
 [tool.ruff.lint.per-file-ignores]

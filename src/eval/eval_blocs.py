@@ -128,7 +128,7 @@ def _ari_numpy(t, p) -> float:
     p = np.asarray(p)
     n = len(t)
     contingency: dict = {}
-    for a, b in zip(t, p):
+    for a, b in zip(t, p, strict=False):
         contingency[(a, b)] = contingency.get((a, b), 0) + 1
     a_marg: dict = {}
     b_marg: dict = {}
@@ -162,7 +162,7 @@ def _nmi_numpy(t, p) -> float:
     h_t = entropy(t)
     h_p = entropy(p)
     pairs: dict = {}
-    for a, b in zip(t, p):
+    for a, b in zip(t, p, strict=False):
         pairs[(a, b)] = pairs.get((a, b), 0) + 1
     mi = 0.0
     for (a, b), v in pairs.items():

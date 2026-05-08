@@ -68,8 +68,8 @@ def _kfold_linear_probe(X: np.ndarray, Y: np.ndarray, k: int = 5, seed: int = 0)
     try:
         from sklearn.linear_model import Ridge
         from sklearn.model_selection import KFold
-    except ImportError:
-        raise RuntimeError("sklearn required for linear probe")
+    except ImportError as e:
+        raise RuntimeError("sklearn required for linear probe") from e
 
     kf = KFold(n_splits=k, shuffle=True, random_state=seed)
     r2s, maes, n_test_total = [], [], 0
