@@ -1,0 +1,51 @@
+dataset: baci_gravity_2008test
+
+encoder:
+  in_dim: 6
+  hidden_dim: 256
+  n_layers: 3
+  n_heads: 4
+  dropout: 0.1
+
+predictor:
+  embed_dim: 256
+  n_heads: 4
+  n_layers: 2
+  mlp_ratio: 2
+  dropout: 0.1
+  n_nodes: 227
+  max_time_steps: 50
+
+training:
+  optimizer: adamw
+  lr: 3.0e-4
+  weight_decay: 0.01
+  lr_min: 1.0e-5
+  batch_size: 4
+  max_epochs: 200
+  early_stopping_patience: 30
+  mask_ratio: 0.20
+  context_k: 4
+  ema_momentum_start: 0.996
+  ema_momentum_end: 1.0
+  grad_clip_max_norm: 1.0
+  total_steps: 5000
+
+loss:
+  lambda_reg: 0.01
+  bcs_num_slices: 1024
+  bcs_lmbd: 0.1
+
+data:
+  graphs_path: data/baci_gravity_graphs.pt
+  meta_path: data/baci_gravity_meta.json
+  # RG-2 counterfactual hold-out test: 2008 GFC as held-out test year instead of 2020.
+  # BACI year_idx 0=1996, year_idx 12=2008, year_idx 24=2020.
+  # train 0-7 (1996-2003), val 8-11 (2004-2007), test 12-15 (2008-2011).
+  # 2008 (snap_idx 12) is the FIRST test snap — directly analogous to 2020 in the
+  # original config (snap_idx 24, also a held-out shock year).
+  train_weeks: [0, 7]
+  val_weeks: [8, 11]
+  test_weeks: [12, 15]
+
+seeds: [0, 1, 2, 3, 4]

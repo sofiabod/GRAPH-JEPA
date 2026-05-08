@@ -1,7 +1,7 @@
 dataset: eu_email
 
 encoder:
-  in_dim: 5
+  in_dim: 6
   hidden_dim: 256
   n_layers: 3
   n_heads: 4

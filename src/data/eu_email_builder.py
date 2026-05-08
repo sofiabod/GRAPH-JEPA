@@ -32,7 +32,10 @@ def build_eu_email_graphs_from_edges(txt_path: str, min_active_nodes: int = 10):
     """parse (src dst timestamp) edge list and return weekly snapshot graphs.
 
     returns (graphs: list[PyG Data], meta: dict)
-    node features: 5d structural (out_deg, in_deg, out_w, in_w, active_flag)
+    node features: 6d = [1d normalized incident email volume, 5d structural].
+    matches the cross-dataset 6d convention used by tgbn_trade, baci_gravity,
+    metrla, pemsbay, icio, dblp, chickenpox so this dataset can share configs
+    and architecture with the rest.
     """
     edges_by_week = defaultdict(list)
     all_nodes = set()
@@ -71,11 +74,20 @@ def build_eu_email_graphs_from_edges(txt_path: str, min_active_nodes: int = 10):
             [edge_count[(s, d)] for s, d in zip(src_list, dst_list)], dtype=torch.float
         )
 
-        x = compute_structural_features(edge_index, n_nodes=n_nodes, edge_weights=weights)
+        # 1d normalized incident email volume per node
+        node_vol = torch.zeros(n_nodes)
+        node_vol.scatter_add_(0, edge_index[0], weights)
+        node_vol.scatter_add_(0, edge_index[1], weights)
+        vol_max = node_vol.max().clamp(min=1e-8)
+        node_vol_norm = (node_vol / vol_max).unsqueeze(1)  # [N, 1]
+
+        structural = compute_structural_features(edge_index, n_nodes=n_nodes, edge_weights=weights)
+        x = torch.cat([node_vol_norm, structural], dim=1)  # [N, 6]
 
         graphs.append(Data(
             x=x,
             edge_index=edge_index,
+            edge_attr=weights.unsqueeze(1),
             node_ids=torch.arange(n_nodes),
         ))
 
@@ -85,7 +97,7 @@ def build_eu_email_graphs_from_edges(txt_path: str, min_active_nodes: int = 10):
         "dataset": "eu_email",
         "n_nodes": n_nodes,
         "n_snapshots": n,
-        "node_feature_dim": 5,
+        "node_feature_dim": 6,
         "train_range": list(train_range),
         "val_range": list(val_range),
         "test_range": list(test_range),

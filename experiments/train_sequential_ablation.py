@@ -16,9 +16,11 @@ image = (
         find_links=f"https://data.pyg.org/whl/torch-{TORCH_VERSION}+{CUDA}.html",
     )
     .pip_install("sentence-transformers", "omegaconf", "einops")
+    .env({"CUBLAS_WORKSPACE_CONFIG": ":4096:8"})
     .add_local_dir("src", remote_path="/app/src")
     .add_local_dir("configs", remote_path="/app/configs")
-    .add_local_dir("data", remote_path="/app/data")
+    .add_local_dir("data", remote_path="/app/data",
+                   ignore=["*_raw", "*_raw/**", "*.zip", "*.gz", "*.tab", "*.csv"])
 )
 
 vol = modal.Volume.from_name("tgjepa-results", create_if_missing=True)
@@ -31,7 +33,8 @@ vol = modal.Volume.from_name("tgjepa-results", create_if_missing=True)
     volumes={"/results": vol},
     max_containers=1,
 )
-def train_seed_ablation(seed: int, config_path: str = "configs/tgbn_trade.yaml"):
+def train_seed_ablation(seed: int, config_path: str = "configs/tgbn_trade.yaml",
+                         git_sha: str = ""):
     import os
     import sys
     sys.path.insert(0, "/app")
@@ -41,14 +44,18 @@ def train_seed_ablation(seed: int, config_path: str = "configs/tgbn_trade.yaml")
     from src.train import train
     from src.utils.seed import set_seed
 
+    if git_sha:
+        os.environ["GIT_SHA"] = git_sha
     cfg = OmegaConf.load(f"/app/{config_path}")
     set_seed(seed)
+    # namespace by dataset so per-dataset runs don't clobber each other
+    dataset = cfg.get("dataset", "tgjepa")
     # ablation=True swaps GraphEncoder for param-matched SequentialMLP (no message passing)
     log = train(
         cfg,
         seed=seed,
         ablation=True,
-        out_dir=f"/results/sequential-ablation/seed{seed}",
+        out_dir=f"/results/{dataset}/sequential-ablation/seed{seed}",
     )
     vol.commit()
     return log
@@ -82,20 +89,33 @@ def _read_dataset_name_local(config_path: str) -> str:
     return "tgjepa"
 
 
+def _local_git_sha() -> str:
+    import subprocess
+    try:
+        sha = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+        dirty = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True).stdout.strip()
+        return (sha + ("-dirty" if dirty else "")) if sha else ""
+    except Exception:
+        return ""
+
+
 @app.local_entrypoint()
-def main(config: str = "configs/tgbn_trade.yaml", seeds: str = "0,1,2,3,4"):
+def main(config: str = "configs/tgbn_trade.yaml", seeds: str = "0,1,2,3,4",
+         out_root: str = "results"):
     import json
     from pathlib import Path
     seed_list = [int(s) for s in seeds.split(",")]
     dataset = _read_dataset_name_local(config)
-    # collect all futures into a list first so modal's iterator cleanup is fully done
-    # before we run local save logic (streaming iteration races with cleanup, drops side effects)
-    print(f"running {len(seed_list)} seeds; saves will land after all complete")
-    logs = list(train_seed_ablation.map(seed_list, kwargs={"config_path": config}))
+    git_sha = _local_git_sha()
+    if git_sha:
+        print(f"[repro] git_sha={git_sha}")
+    print(f"running {len(seed_list)} seeds; saves to {out_root}/{dataset}/")
+    logs = list(train_seed_ablation.map(seed_list,
+                                          kwargs={"config_path": config, "git_sha": git_sha}))
     print("all seeds complete; saving locally")
     for seed, future in zip(seed_list, logs):
         print(_format_log(future, seed))
-        out_dir = Path("results") / dataset / f"seed{seed}"
+        out_dir = Path(out_root) / dataset / f"seed{seed}"
         out_dir.mkdir(parents=True, exist_ok=True)
         with open(out_dir / "train_log_seq.json", "w") as f:
             json.dump(future, f, indent=2)

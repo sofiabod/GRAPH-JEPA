@@ -149,6 +149,122 @@ def build_weekly_graphs(emails, top_n=50, min_active=10, embed_model=None, cache
     return graphs, meta
 
 
+def build_weekly_graphs_6d(emails, top_n=50, min_active=10):
+    """6d-feature variant of build_weekly_graphs (no bge text encoding).
+
+    matches the cross-dataset 6d convention used by tgbn_trade, baci_gravity,
+    metrla, pemsbay, icio, dblp, chickenpox, eu_email so enron can share configs
+    and architecture with the rest. node features are [1d normalized incident
+    email volume, 5d structural].
+
+    args:
+        emails: list of {sender, recipients, body, date_str} dicts (same shape
+            as the input to build_weekly_graphs)
+        top_n: keep top n people by total email volume
+        min_active: drop weeks with fewer active people than this
+
+    returns (graphs: list[PyG Data], meta: dict).
+    """
+    weekly_edges = defaultdict(lambda: defaultdict(int))
+
+    for e in emails:
+        try:
+            from email.utils import parsedate_to_datetime
+            dt = parsedate_to_datetime(e["date_str"])
+            # drop emails with corrupted Date headers (e.g. 1980-W01 outliers from
+            # malformed timestamps in the Enron corpus). the actual corpus is
+            # 1998-2002, so anything before 1998 is parser garbage.
+            if dt.year < 1998:
+                continue
+            week_key = dt.isocalendar()[:2]
+        except Exception:
+            continue
+        sender = e["sender"]
+        for r in e["recipients"]:
+            weekly_edges[week_key][(sender, r)] += 1
+
+    # top n people by total email volume
+    person_counts = defaultdict(int)
+    for week_data in weekly_edges.values():
+        for (s, r), cnt in week_data.items():
+            person_counts[s] += cnt
+            person_counts[r] += cnt
+    top_people = sorted(person_counts, key=lambda p: -person_counts[p])[:top_n]
+    person_to_idx = {p: i for i, p in enumerate(top_people)}
+    n_people = len(top_people)
+
+    from src.data.graph_utils import compute_structural_features
+    from src.data.factory import compute_split_ranges
+
+    graphs = []
+    meta_weeks = []
+    week_seq = 0
+
+    for week_key in sorted(weekly_edges.keys()):
+        edges = weekly_edges[week_key]
+
+        # restrict to top-n people
+        kept = [(s, r, cnt) for (s, r), cnt in edges.items()
+                if s in person_to_idx and r in person_to_idx]
+        if not kept:
+            continue
+        active = {p for s, r, _ in kept for p in (s, r)}
+        if len(active) < min_active:
+            continue
+
+        src_list = [person_to_idx[s] for s, r, _ in kept]
+        dst_list = [person_to_idx[r] for s, r, _ in kept]
+        weights_list = [float(cnt) for _, _, cnt in kept]
+
+        edge_index = torch.tensor([src_list, dst_list], dtype=torch.long)
+        weights = torch.tensor(weights_list, dtype=torch.float)
+
+        # 1d normalized incident email volume
+        node_vol = torch.zeros(n_people)
+        node_vol.scatter_add_(0, edge_index[0], weights)
+        node_vol.scatter_add_(0, edge_index[1], weights)
+        vol_max = node_vol.max().clamp(min=1e-8)
+        node_vol_norm = (node_vol / vol_max).unsqueeze(1)  # [N, 1]
+
+        structural = compute_structural_features(edge_index, n_nodes=n_people, edge_weights=weights)
+        x = torch.cat([node_vol_norm, structural], dim=1)  # [N, 6]
+
+        graphs.append(Data(
+            x=x,
+            edge_index=edge_index,
+            edge_attr=weights.unsqueeze(1),
+            node_ids=torch.arange(n_people),
+            week_idx=week_seq,
+        ))
+        meta_weeks.append({
+            "week_idx": week_seq,
+            "year": week_key[0],
+            "week": week_key[1],
+            "date_str": f"{week_key[0]}-W{week_key[1]:02d}",
+            "n_active": len(active),
+            "n_edges": len(src_list),
+            "email_volume": int(sum(edges.values())),
+        })
+        week_seq += 1
+
+    n = len(graphs)
+    train_range, val_range, test_range = compute_split_ranges(n)
+    meta = {
+        "dataset": "enron",
+        "person_index": {p: i for p, i in person_to_idx.items()},
+        "n_nodes": n_people,
+        "n_snapshots": n,
+        "top_n": top_n,
+        "min_active": min_active,
+        "node_feature_dim": 6,
+        "train_range": list(train_range),
+        "val_range": list(val_range),
+        "test_range": list(test_range),
+        "weeks": meta_weeks,
+    }
+    return graphs, meta
+
+
 def _compute_bge_embeddings(weekly_texts, top_people, embed_model=None, cache_path=None):
     # returns dict[(year, week)][person] -> list[float] length 384
     # loads from cache if available, otherwise embeds and caches

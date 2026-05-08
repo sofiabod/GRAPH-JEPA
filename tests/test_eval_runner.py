@@ -187,3 +187,78 @@ def test_train_raises_on_inconsistent_n_nodes_across_graphs():
     b = _make_graphs(n=10, n_nodes=8)
     with pytest.raises(ValueError, match='n_nodes'):
         train(cfg, seed=0, graphs=a + b, out_dir=None)
+
+
+def test_eval3_multistep_rollout_returns_horizons():
+    """eval 3 should return entries for h1, h2, h4 with paired wilcoxon vs copy-forward."""
+    n_nodes = 10
+    graphs = _make_graphs(n=30, n_nodes=n_nodes, n_edges=20)
+    cfg = _tiny_cfg(n_nodes=n_nodes)
+
+    online = build_graph_encoder(cfg.encoder)
+    predictor = build_predictor(cfg.predictor)
+    target = build_target_encoder(online)
+
+    runner = EvalRunner(
+        online, target, predictor, graphs, cfg,
+        train_range=(0, 19), val_range=(20, 23), test_range=(24, 29),
+        mask_seed=0,
+    )
+    result = runner._eval3_multistep_rollout(horizons=(1, 2, 4))
+    assert 'horizons_evaluated' in result, "must report which horizons ran"
+    assert 'h1' in result, "h1 must be present"
+    for h in result['horizons_evaluated']:
+        entry = result[f'h{h}']
+        assert 'mean_pred_cos' in entry
+        assert 'mean_copy_cos' in entry
+        assert 'wilcoxon_p_vs_copy' in entry
+        assert 'n_pairs' in entry
+        assert -1.0 - 1e-5 <= entry['mean_pred_cos'] <= 1.0 + 1e-5, \
+            f"cos must be in [-1,1], got pred_cos={entry['mean_pred_cos']} at h={h}"
+        assert -1.0 - 1e-5 <= entry['mean_copy_cos'] <= 1.0 + 1e-5
+        assert entry['n_pairs'] > 0
+
+
+def test_eval3_handles_empty_test_range():
+    """eval 3 must return a clean error dict if test set is empty."""
+    n_nodes = 10
+    graphs = _make_graphs(n=10, n_nodes=n_nodes, n_edges=20)
+    cfg = _tiny_cfg(n_nodes=n_nodes)
+
+    online = build_graph_encoder(cfg.encoder)
+    predictor = build_predictor(cfg.predictor)
+    target = build_target_encoder(online)
+
+    runner = EvalRunner(
+        online, target, predictor, graphs, cfg,
+        train_range=(0, 5), val_range=(6, 7), test_range=(100, 200),
+        mask_seed=0,
+    )
+    result = runner._eval3_multistep_rollout(horizons=(1, 2, 4))
+    assert 'error' in result
+
+
+def test_eval3_horizon_runs_out_of_data():
+    """if horizon h would index past the graph list, it should be skipped, not crash."""
+    n_nodes = 10
+    graphs = _make_graphs(n=15, n_nodes=n_nodes, n_edges=20)
+    cfg = _tiny_cfg(n_nodes=n_nodes)
+
+    online = build_graph_encoder(cfg.encoder)
+    predictor = build_predictor(cfg.predictor)
+    target = build_target_encoder(online)
+
+    # test range with small space for rollout: only 1 sample fits in test
+    runner = EvalRunner(
+        online, target, predictor, graphs, cfg,
+        train_range=(0, 9), val_range=(10, 11), test_range=(12, 13),
+        mask_seed=0,
+    )
+    # h=4 needs target_idx + 3 to exist; with only 2 test indices and graphs ending at 14,
+    # h=4 may have fewer pairs than h=1
+    result = runner._eval3_multistep_rollout(horizons=(1, 2, 4))
+    if 'error' not in result:
+        # h1 should always run if any test sample exists
+        if 'h1' in result:
+            assert result['h1']['n_pairs'] > 0
+        # h4 may run with fewer pairs or be absent — either is fine, not a crash

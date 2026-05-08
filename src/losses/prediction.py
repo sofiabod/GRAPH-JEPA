@@ -17,5 +17,13 @@ class TGJEPALoss(nn.Module):
         pred_loss = F.mse_loss(z_pred, z_target)
         # bcs is a regularizer over the online encoder distribution alone
         sigreg = self.bcs(z_online_all)
-        total = pred_loss + self.lambda_reg * sigreg["loss"]
+        # 2026-05-07 audit fix: split lambda_reg scaling between invariance and bcs explicitly
+        # rather than scaling the combined sigreg["loss"]. effective coefficients preserved:
+        #   invariance: lambda_reg
+        #   bcs:        lambda_reg * bcs.lmbd
+        # this is a refactor, not a behavior change — math is identical to the prior
+        # `lambda_reg * sigreg["loss"]` formulation but the structure is now transparent.
+        inv_coeff = self.lambda_reg
+        bcs_coeff = self.lambda_reg * self.bcs.lmbd
+        total = pred_loss + inv_coeff * sigreg["invariance_loss"] + bcs_coeff * sigreg["bcs_loss"]
         return total, pred_loss, sigreg

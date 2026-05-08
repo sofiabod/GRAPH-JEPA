@@ -25,12 +25,13 @@ def test_output_is_list_of_data(tmp_path):
     assert isinstance(graphs[0], Data)
 
 
-def test_node_feature_dim_is_5(tmp_path):
+def test_node_feature_dim_is_6(tmp_path):
     txt = tmp_path / "edges.txt"
     txt.write_text(make_fake_edge_lines(n_nodes=8))
     graphs, meta = build_eu_email_graphs_from_edges(str(txt), min_active_nodes=2)
     for g in graphs:
-        assert g.x.shape[1] == 5, f"expected in_dim=5, got {g.x.shape[1]}"
+        assert g.x.shape[1] == 6, f"expected in_dim=6, got {g.x.shape[1]}"
+    assert meta["node_feature_dim"] == 6
 
 
 def test_edge_index_valid(tmp_path):

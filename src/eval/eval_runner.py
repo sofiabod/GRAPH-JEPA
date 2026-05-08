@@ -178,10 +178,106 @@ class EvalRunner:
             'n_pairs': len(pred_arr),
         }
 
-    def _eval3_multistep_rollout(self) -> dict:
-        # placeholder: autoregressive rollout at horizons 1, 2, 4
-        # full implementation requires iterative forward pass
-        return {'status': 'not_implemented'}
+    def _eval3_multistep_rollout(self, horizons=(1, 2, 4)) -> dict:
+        """autoregressive multi-step rollout in latent space.
+
+        for each test sample with target index T, predict masked-node embeddings
+        at horizons T+(h-1) for h in {1,2,4} by feeding earlier predictions back
+        as context. compare to ground-truth target encoder output and to
+        copy-forward (last-known online embedding) at each horizon.
+
+        the masked node set is fixed across horizons (deterministic masking).
+        non-masked nodes at each predicted timestep use the target encoder's
+        ground-truth embedding (revealed); masked nodes use the model's
+        previous-step prediction. this is the standard v-jepa rollout protocol.
+        """
+        from src.data.dataset import TemporalGraphDataset
+        from src.train import _build_tokens_for_sample
+
+        k_ctx = self.cfg.training.context_k
+        max_h = max(horizons)
+
+        dataset = TemporalGraphDataset(
+            self.graphs,
+            context_k=k_ctx,
+            mask_ratio=self.cfg.training.mask_ratio,
+            split='test',
+            train_range=self.train_range,
+            val_range=self.val_range,
+            test_range=self.test_range,
+            seed=self.mask_seed,
+        )
+        if len(dataset) == 0:
+            return {'error': 'no test data'}
+
+        pred_cos_per_h = {h: [] for h in horizons}
+        copy_cos_per_h = {h: [] for h in horizons}
+
+        self.online.eval()
+        self.predictor.eval()
+
+        with torch.no_grad():
+            for sample_idx in range(len(dataset)):
+                sample = dataset[sample_idx]
+                target_idx = dataset.valid_target_indices[sample_idx]
+                masked_ids = sample['masked_node_ids'].to(self.device)
+                visible_ids = sample['visible_node_ids'].to(self.device)
+
+                # encode k context graphs once with online encoder
+                ctx_embs = [self.online(g.to(self.device)) for g in sample['context_graphs']]
+                z_last_ctx = ctx_embs[-1]  # used for copy-forward baseline at every horizon
+
+                current_ctx = list(ctx_embs)
+                for h in range(1, max_h + 1):
+                    t_h = target_idx + h - 1
+                    if t_h >= len(self.graphs):
+                        break
+
+                    target_graph = self.graphs[t_h].to(self.device)
+                    z_target_full = self.target(target_graph)  # [N, D] target encoder, normalized
+                    z_target_masked = z_target_full[masked_ids]
+
+                    tokens, time_indices, node_ids_seq, mask_positions = _build_tokens_for_sample(
+                        current_ctx, z_target_full, masked_ids, visible_ids, self.predictor
+                    )
+                    out = self.predictor(
+                        tokens.unsqueeze(0),
+                        time_indices.unsqueeze(0),
+                        node_ids_seq.unsqueeze(0),
+                    ).squeeze(0)
+                    z_pred = F.normalize(out[mask_positions], dim=-1)
+
+                    if h in horizons:
+                        # both z_pred and z_target_masked are unit vectors; cos = dot product
+                        cos = (z_pred * z_target_masked).sum(dim=-1).cpu().numpy()
+                        pred_cos_per_h[h].extend(cos.tolist())
+
+                        # copy-forward baseline at this horizon: z_last_ctx[masked] vs z_target at t_h
+                        z_last = z_last_ctx[masked_ids]
+                        cos_cf = (z_last * z_target_masked).sum(dim=-1).cpu().numpy()
+                        copy_cos_per_h[h].extend(cos_cf.tolist())
+
+                    # slide window for next iteration: composed embedding at t_h
+                    # non-masked nodes use ground-truth target encoder; masked nodes use prediction
+                    composed = z_target_full.clone()
+                    composed[masked_ids] = z_pred
+                    current_ctx = current_ctx[1:] + [composed]
+
+        result = {'horizons_evaluated': [h for h in horizons if len(pred_cos_per_h[h]) > 0]}
+        for h in horizons:
+            if len(pred_cos_per_h[h]) == 0:
+                continue
+            pa = np.array(pred_cos_per_h[h])
+            ca = np.array(copy_cos_per_h[h])
+            p, stat = paired_wilcoxon(pa, ca)
+            result[f'h{h}'] = {
+                'mean_pred_cos': float(pa.mean()),
+                'mean_copy_cos': float(ca.mean()),
+                'wilcoxon_p_vs_copy': p,
+                'wilcoxon_stat_vs_copy': stat,
+                'n_pairs': len(pa),
+            }
+        return result
 
     def _eval6_representation_quality(self) -> dict:
         # effective rank and mean pairwise cosine on test set embeddings

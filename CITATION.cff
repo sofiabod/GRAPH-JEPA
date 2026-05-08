@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this software or the accompanying paper, please cite it as below."
+title: "GRAPH-JEPA-2: Temporal Graph as Input Modality to a JEPA-based World Model"
+type: software
+authors:
+  - family-names: Bodnar
+    given-names: Sofia
+    affiliation: "University of Waterloo"
+date-released: 2026-05-07
+url: "https://github.com/sofiabodnar/GRAPH-JEPA-2"
+license: MIT
+version: "0.1.0"
+keywords:
+  - joint-embedding predictive architectures
+  - JEPA
+  - temporal graphs
+  - world models
+  - self-supervised learning
+  - representation learning
+  - graph neural networks
+  - temporal straightening
+preferred-citation:
+  type: article
+  title: "GRAPH-JEPA-2: Temporal Graph as Input Modality to a JEPA-based World Model"
+  authors:
+    - family-names: Bodnar
+      given-names: Sofia
+  year: 2026
+  url: "https://github.com/sofiabodnar/GRAPH-JEPA-2"
+  notes: "Undergraduate thesis, University of Waterloo. Submission target: NeurIPS 2026 / ICLR 2027."

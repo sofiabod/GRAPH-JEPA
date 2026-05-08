@@ -115,3 +115,146 @@ def build_jodie_graphs_from_csv(csv_path: str, min_active_nodes: int = 10):
         "node2id": node2id,
     }
     return graphs, meta
+
+
+def build_jodie_user_user_graphs(csv_path: str, top_k_users: int = 500,
+                                  bucket_seconds: int = 7 * 24 * 3600,
+                                  min_active_nodes: int = 30,
+                                  jaccard: bool = False):
+    """projection-based jodie builder: user-user co-interaction graph.
+
+    converts the bipartite user-item interaction graph into a unipartite user-user
+    graph compatible with the working 6d-feature, ~200-1000-node architecture.
+
+    for each time bucket (default weekly), two users share an edge if they both
+    interacted with at least one common item in that bucket. edge weight = number
+    of shared items (or jaccard if jaccard=True). filters to top_k_users by total
+    activity to keep N tractable for full-graph attention in the predictor.
+
+    matches the cross-dataset 6d convention: [1d normalized incident weight,
+    5d structural].
+
+    args:
+        csv_path: path to jodie csv
+        top_k_users: keep top-k most active users by total interaction count
+        bucket_seconds: time bucket in seconds (default 1 week)
+        min_active_nodes: drop buckets with fewer active users than this
+        jaccard: if True, edge weight = jaccard(item_set_i, item_set_j); else =
+            number of co-interacted items
+
+    returns (graphs: list[PyG Data], meta: dict).
+    """
+    user_seq, item_seq, ts_seq = [], [], []
+    with open(csv_path) as f:
+        f.readline()  # header
+        for line in f:
+            parts = line.strip().split(",")
+            if len(parts) < 3:
+                continue
+            user_seq.append(parts[0])
+            item_seq.append(parts[1])
+            ts_seq.append(float(parts[2]))
+
+    if not ts_seq:
+        return [], {"dataset": "jodie_user_user", "n_snapshots": 0}
+
+    # filter to top-k users by total activity
+    user_counts = defaultdict(int)
+    for u in user_seq:
+        user_counts[u] += 1
+    top_users = sorted(user_counts, key=lambda u: -user_counts[u])[:top_k_users]
+    user2id = {u: i for i, u in enumerate(top_users)}
+    n_nodes = len(user2id)
+
+    # bucket by time
+    t0 = min(ts_seq)
+    bucket_to_user_items = defaultdict(lambda: defaultdict(set))  # bucket -> user_id -> set of items
+    bucket_to_user_count = defaultdict(lambda: defaultdict(int))  # bucket -> user_id -> interaction count
+    for u, it, ts in zip(user_seq, item_seq, ts_seq):
+        if u not in user2id:
+            continue
+        bucket = int((ts - t0) / bucket_seconds)
+        uid = user2id[u]
+        bucket_to_user_items[bucket][uid].add(it)
+        bucket_to_user_count[bucket][uid] += 1
+
+    graphs = []
+    edge_count_per_snapshot = []
+    active_count_per_snapshot = []
+    for bucket in sorted(bucket_to_user_items.keys()):
+        user_items = bucket_to_user_items[bucket]
+        active_users = sorted(user_items.keys())
+        if len(active_users) < min_active_nodes:
+            continue
+
+        # build inverted index: item -> set of users that touched it this bucket
+        item_to_users = defaultdict(set)
+        for uid, items in user_items.items():
+            for it in items:
+                item_to_users[it].add(uid)
+
+        # accumulate co-interaction counts between user pairs
+        pair_count = defaultdict(float)
+        for it, users in item_to_users.items():
+            users_l = sorted(users)
+            for i in range(len(users_l)):
+                for j in range(i + 1, len(users_l)):
+                    a, b = users_l[i], users_l[j]
+                    pair_count[(a, b)] += 1.0
+
+        if not pair_count:
+            continue
+
+        if jaccard:
+            for (a, b), cnt in list(pair_count.items()):
+                ia = user_items[a]
+                ib = user_items[b]
+                union = len(ia | ib)
+                pair_count[(a, b)] = cnt / max(union, 1)
+
+        # build undirected (symmetrized) edge_index
+        src_list, dst_list, weight_list = [], [], []
+        for (a, b), w in pair_count.items():
+            src_list.extend([a, b])
+            dst_list.extend([b, a])
+            weight_list.extend([w, w])
+
+        edge_index = torch.tensor([src_list, dst_list], dtype=torch.long)
+        weights = torch.tensor(weight_list, dtype=torch.float)
+
+        # 1d normalized per-user activity count this bucket
+        node_activity = torch.zeros(n_nodes)
+        for uid, cnt in bucket_to_user_count[bucket].items():
+            node_activity[uid] = float(cnt)
+        act_max = node_activity.max().clamp(min=1e-8)
+        activity_norm = (node_activity / act_max).unsqueeze(1)  # [N, 1]
+
+        structural = compute_structural_features(edge_index, n_nodes=n_nodes, edge_weights=weights)
+        x = torch.cat([activity_norm, structural], dim=1)  # [N, 6]
+
+        graphs.append(Data(
+            x=x,
+            edge_index=edge_index,
+            edge_attr=weights.unsqueeze(1),
+            node_ids=torch.arange(n_nodes),
+        ))
+        edge_count_per_snapshot.append(edge_index.shape[1])
+        active_count_per_snapshot.append(len(active_users))
+
+    n = len(graphs)
+    train_range, val_range, test_range = compute_split_ranges(n)
+    meta = {
+        "dataset": "jodie_user_user",
+        "n_nodes": n_nodes,
+        "n_snapshots": n,
+        "node_feature_dim": 6,
+        "top_k_users": top_k_users,
+        "bucket_seconds": bucket_seconds,
+        "jaccard": jaccard,
+        "edge_counts": edge_count_per_snapshot,
+        "active_counts": active_count_per_snapshot,
+        "train_range": list(train_range),
+        "val_range": list(val_range),
+        "test_range": list(test_range),
+    }
+    return graphs, meta

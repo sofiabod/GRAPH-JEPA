@@ -1,7 +1,7 @@
 dataset: enron
 
 encoder:
-  in_dim: 389
+  in_dim: 6
   hidden_dim: 256
   n_layers: 3
   n_heads: 4
@@ -39,8 +39,12 @@ loss:
 data:
   graphs_path: data/enron_graphs.pt
   meta_path: data/enron_meta.json
-  train_weeks: [0, 119]
-  val_weeks: [120, 139]
-  test_weeks: [140, 179]
+  # 120 weekly snapshots (after dropping bogus 1980-W01 outlier).
+  # boundary nudged by 1 from default so the SEC-inquiry/Fastow-fired week
+  # (2001-W42 = snap 101) lands in held-out test along with the write-down
+  # (W45 = snap 104) and bankruptcy (W48 = snap 107).
+  train_weeks: [0, 82]
+  val_weeks: [83, 100]
+  test_weeks: [101, 119]
 
 seeds: [0, 1, 2, 3, 4]
