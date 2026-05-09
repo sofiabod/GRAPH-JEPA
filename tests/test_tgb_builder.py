@@ -8,6 +8,9 @@ from src.data.tgb_builder import (
 
 def test_tgb_pip_package_importable():
     # smoke test: confirm py-tgb pip install resolves the expected import path
+    import pytest
+
+    pytest.importorskip("tgb")
     from tgb.nodeproppred.dataset import NodePropPredDataset  # noqa: F401
 
 

@@ -3,14 +3,14 @@ from collections import defaultdict
 import torch
 from torch_geometric.data import Data
 
-from tgb.nodeproppred.dataset import NodePropPredDataset
-
 from src.data.graph_utils import compute_structural_features
 from src.data.factory import compute_split_ranges
 
 
 def download_tgbn_trade(data_dir: str):
     """download tgbn-trade via the pip-installed py-tgb package."""
+    from tgb.nodeproppred.dataset import NodePropPredDataset
+
     dataset = NodePropPredDataset(name="tgbn-trade", root=data_dir)
     return dataset
 
@@ -77,6 +77,8 @@ def build_tgbn_trade_graphs_from_raw(records, country_ids):
 
 def build_tgbn_trade_graphs(data_dir: str):
     """full pipeline: download tgbn-trade via TGB, convert to annual snapshots."""
+    from tgb.nodeproppred.dataset import NodePropPredDataset
+
     dataset = NodePropPredDataset(name="tgbn-trade", root=data_dir)
     data = dataset.full_data
 
@@ -175,6 +177,8 @@ def build_tgbn_genre_graphs(data_dir: str):
     from the first observed timestamp. matches the weekly aggregation pattern
     used in jodie_builder.py.
     """
+    from tgb.nodeproppred.dataset import NodePropPredDataset
+
     dataset = NodePropPredDataset(name="tgbn-genre", root=data_dir)
     data = dataset.full_data
 
@@ -381,6 +385,8 @@ def build_tgbn_genre_v2_graphs(data_dir: str):
       - filters out nodes active in < 25% of weeks
       - adds a node type indicator feature
     """
+    from tgb.nodeproppred.dataset import NodePropPredDataset
+
     dataset = NodePropPredDataset(name="tgbn-genre", root=data_dir)
     data = dataset.full_data
 
