@@ -1,4 +1,4 @@
-# SPEC: GRAPH-JEPA-2 — Temporal Graph as Input to a JEPA-based World Model
+# SPEC: GRAPH-JEPA — Temporal Graph as Input to a JEPA-based World Model
 
 **Pre-registered specification.** This document fixes the hypotheses, experimental contract, frozen hyperparameters, and falsification criteria *before* the experiments run. Any deviation from this spec must be documented in `SPEC_AUDIT.md` with rationale.
 
@@ -13,7 +13,7 @@
 
 ### 0.1 The paper in one paragraph
 
-We present GRAPH-JEPA-2, the first joint-embedding predictive architecture trained on temporal graph data as a world model. The architecture (GATv2 encoder + bidirectional Transformer predictor + EMA target encoder + BCS / LeJEPA-family anti-collapse regularizer) consumes a sequence of past graph snapshots and predicts the latent state of the future graph, autoregressively rolled out to horizon h. We test the hypothesis that JEPA's straightening property (proven by Wang et al. 2026 for image-JEPA) transfers to graph-structured observations, manifesting as an emergent low-rank attractor in the latent space. On TGBN-Trade across 5 seeds, the model achieves Δcos = 0.081 over a capacity-matched non-graph ablation (paired Wilcoxon p < 10⁻¹²) with effective rank 8.04 ± 0.20 — quantitatively matching Wang's d=8 finding for image-JEPA. We extend to METR-LA (the standard temporal-graph forecasting benchmark) for the world-model rollout claim, and characterise empirical scope across a 7-dataset matrix.
+We present GRAPH-JEPA, the first joint-embedding predictive architecture trained on temporal graph data as a world model. The architecture (GATv2 encoder + bidirectional Transformer predictor + EMA target encoder + BCS / LeJEPA-family anti-collapse regularizer) consumes a sequence of past graph snapshots and predicts the latent state of the future graph, autoregressively rolled out to horizon h. We test the hypothesis that JEPA's straightening property (proven by Wang et al. 2026 for image-JEPA) transfers to graph-structured observations, manifesting as an emergent low-rank attractor in the latent space. On TGBN-Trade across 5 seeds, the model achieves Δcos = 0.081 over a capacity-matched non-graph ablation (paired Wilcoxon p < 10⁻¹²) with effective rank 8.04 ± 0.20 — quantitatively matching Wang's d=8 finding for image-JEPA. We extend to METR-LA (the standard temporal-graph forecasting benchmark) for the world-model rollout claim, and characterise empirical scope across a 7-dataset matrix.
 
 ### 0.2 The four contributions
 
@@ -29,7 +29,7 @@ We present GRAPH-JEPA-2, the first joint-embedding predictive architecture train
 
 ## 1. Positioning vs prior work
 
-GRAPH-JEPA-2 sits at the intersection of three lineages:
+GRAPH-JEPA sits at the intersection of three lineages:
 
 | Lineage | Representative work | What we share | What's new |
 |---|---|---|---|

@@ -1,4 +1,4 @@
-# Reproduction Guide — GRAPH-JEPA-2
+# Reproduction Guide — GRAPH-JEPA
 
 This guide reproduces every number in the paper from source. All commands assume the repository root as the working directory and Python ≥ 3.11.
 

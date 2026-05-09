@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to GRAPH-JEPA-2 are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+All notable changes to GRAPH-JEPA are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
