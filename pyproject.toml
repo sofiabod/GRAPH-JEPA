@@ -28,6 +28,7 @@ dependencies = [
     "tqdm>=4.66",
     "omegaconf>=2.3",
     "pyyaml>=6.0",
+    "h5py>=3.10",
 ]
 
 [project.optional-dependencies]

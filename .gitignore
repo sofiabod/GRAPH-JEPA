@@ -13,3 +13,4 @@ __pycache__/
 .pytest_cache/
 results/_modal_volume/
 scripts/__pycache__/
+.venv/

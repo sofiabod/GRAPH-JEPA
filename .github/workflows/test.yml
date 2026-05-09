@@ -27,8 +27,7 @@ jobs:
           # CPU-only torch wheel keeps CI lean; tests don't need GPU
           pip install torch --index-url https://download.pytorch.org/whl/cpu
           pip install torch-geometric
-          # install dev + experiments extras so tests can resolve optional-dep imports
-          pip install -e ".[dev,experiments]"
+          pip install -e ".[dev]"
 
       - name: Lint with ruff
         run: |
