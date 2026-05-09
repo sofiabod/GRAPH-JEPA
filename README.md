@@ -117,6 +117,6 @@ See the [LICENSE](LICENSE) file for details.
             by Observation},
   author = {Bodnar, Sofia},
   year   = {2026},
-  note   = {Graph-JEPA-2 codebase, NeurIPS submission}
+  note   = {Graph-JEPA-2 codebase}
 }
 ```
