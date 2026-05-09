@@ -3,7 +3,7 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "graph-jepa-2"
+name = "graph-jepa"
 version = "0.1.0"
 description = "Temporal Graph as Input Modality to a JEPA-based World Model"
 authors = [{ name = "Sofia Bodnar", email = "sofia@sentra.app" }]
@@ -55,8 +55,8 @@ dev = [
 ]
 
 [project.urls]
-Repository = "https://github.com/sofiabodnar/GRAPH-JEPA-2"
-Documentation = "https://github.com/sofiabodnar/GRAPH-JEPA-2/blob/main/README.md"
+Repository = "https://github.com/sofiabodnar/GRAPH-JEPA"
+Documentation = "https://github.com/sofiabodnar/GRAPH-JEPA/blob/main/README.md"
 
 [tool.setuptools.packages.find]
 where = ["."]

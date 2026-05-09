@@ -14,3 +14,4 @@ __pycache__/
 results/_modal_volume/
 scripts/__pycache__/
 .venv/
+*.egg-info/
