@@ -1,122 +1,124 @@
 <h1 align="center">Graph-JEPA</h1>
 
-PyTorch codebase for **Graph-JEPA** (Temporal Graph Joint-Embedding Predictive Architecture), a method for self-supervised learning of node-level representations from temporal graphs.
+<hr>
 
-[\[LeCun JEPA\]](https://openreview.net/pdf?id=BZ5a1r-kVsf)
-[\[I-JEPA\]](https://arxiv.org/abs/2301.08243)
-[\[V-JEPA\]](https://arxiv.org/abs/2404.08471)
-[\[Graph-JEPA (Skenderi)\]](https://arxiv.org/abs/2410.06747)
-[\[LeJEPA\]](https://arxiv.org/abs/2511.08544)
+<p align="center">
+  <b>Learning the Dynamics of Relational Worlds by Observation</b>
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="License"></a>
+  <img src="https://img.shields.io/badge/Python-3.11+-blue?style=flat-square" alt="Python">
+  <img src="https://img.shields.io/badge/PyTorch-2.3+-orange?style=flat-square" alt="PyTorch">
+</p>
+
+<p align="center">
+  <a href="https://arxiv.org/abs/2506.09985">V-JEPA 2</a> ·
+  <a href="https://arxiv.org/abs/2404.08471">V-JEPA</a> ·
+  <a href="https://arxiv.org/abs/2301.08243">I-JEPA</a> ·
+  <a href="https://arxiv.org/abs/2410.06747">Graph-JEPA (Skenderi, static)</a> ·
+  <a href="https://arxiv.org/abs/2511.08544">LeJEPA</a>
+</p>
 
 ## Method
 
-Graph-JEPA extends the joint-embedding predictive architecture to temporal graphs. A trained GATv2 encoder produces node embeddings from each weekly graph snapshot. An EMA target encoder provides stable prediction targets. A spatiotemporal transformer predictor takes the full visible context: all nodes across all history steps plus all other nodes at the target timestep via the target encoder, and predicts the masked node's representation at t+1. This is the direct V-JEPA translation to graphs.
+Graph-JEPA is a method for self-supervised learning of relational
+temporal data. At a high level, Graph-JEPA predicts the representation
+of one entity at one timestep, a *node-at-time* (v, τ), from the
+representations of the rest of the temporal graph context.
 
-**Research question:** Does relational context (who communicates with whom) improve node-level state prediction beyond sequential observation of a single node's history alone?
+![scene = graph snapshot, video = graph evolving](figures/scene_graph.png)
 
-**Lineage:** I-JEPA (images) -> V-JEPA (video) -> Graph-JEPA static (Skenderi, 2025) -> **Temporal Graph-JEPA (this work)**
+Notably, this approach learns relational dynamics:
 
-k context snapshots are encoded by the online GATv2 encoder into per-node embeddings. The target graph at t+1 is encoded by the EMA target encoder (stop-grad). The predictor receives: all node embeddings across all k history steps, all non-masked nodes at t+1 via the target encoder, and a learnable mask token at position (v, t+1) carrying temporal and node-identity embeddings. It outputs a predicted embedding at the mask position, which is regressed against the target encoder's output via MSE on the unit sphere. BCS regularization enforces isotropy and prevents collapse.
+- without relying on hand-crafted graph augmentations or pre-specified
+  invariances, which tend to be biased for particular downstream tasks;
+- and without having the model reconstruct edge-level details (e.g.,
+  bilateral flow magnitudes in a single year), which are dominated by
+  reporting noise rather than signal.
 
-## Approach
-
-**Graph encoder (online, trained).** A 3-layer GATv2Conv network (input projection Linear(384, 256), 4 attention heads, dropout 0.1, LayerNorm after each layer). The encoder is trained jointly with the predictor under the JEPA objective. Frozen encoders learn retrieval features, not temporal dynamics. Approximately 1-2M parameters.
-
-**Target encoder (EMA, stop-grad).** Exact architectural copy of the graph encoder. Updated via EMA (momentum cosine-scheduled 0.996 -> 1.0). All outputs are stop-gradded. Provides stable regression targets.
-
-**Temporal predictor.** A 2-layer bidirectional transformer (4 heads, dim 256, MLP ratio 2). Takes the full spatiotemporal context: k history steps for all nodes via the online encoder, all nodes at t+1 via the target encoder (stop-grad), and a learnable mask token at position (v, t+1) carrying temporal and node-identity embeddings. For N=49 visible nodes and k=4: 250 total input tokens. Approximately 500K-1M parameters.
-
-Why bidirectional and not causal: every visible token at every timestep should inform the prediction of the masked node. The only withheld information is the masked node's embedding at t+1. The attention pattern is otherwise unrestricted.
-
-**Mask token identity.** The mask token carries the identity of the missing node and its target timestep: `mask = temporal_pos_emb[t+1] + node_id_emb[v]`. The predictor knows who and when it is predicting.
-
-**Loss.**
-```
-L = SmoothL1(z_pred, sg(z_target)) + lambda_reg * L_SigReg
-```
-lambda_reg is frozen in `docs/frozen-config-tgjepa.md` before any evaluation run.
-
-**Masking.** 15-30% of nodes are masked at timestep t+1. Both encoders always process the full graph without masking. Masking is applied at the predictor stage only: masked nodes at t+1 have their target encoder embedding replaced by the learnable mask token.
-
-## Benchmarks
-
-| Dataset | Domain | Nodes | Timesteps | Key Feature |
-|---|---|---|---|---|
-| Enron Email | Organizational communication | ~150 executives | ~180 weeks | Natural collapse event (Oct 2001) for anomaly detection |
-| EU Email (SNAP) | Academic institution | ~986 people | ~3 years | Same structure as Enron, different context |
-| JODIE — Reddit | User-subreddit interaction | Users + subreddits | Continuous | Large-scale, widely cited temporal graph benchmark |
-| JODIE — Wikipedia | User-page edit network | Users + pages | Continuous | Temporal node feature dynamics |
-| TGBN-Trade (TGB) | Country trade flows | Countries | Annual | Non-communication domain, tests generalization |
+![graph-jepa architecture](figures/graph_jepa.png)
 
 ## Evaluations
 
-5 random seeds. Paired Wilcoxon signed-rank test for all comparisons. Bonferroni correction across the full evaluation family. Mean +/- 95% CI for all metrics.
+Action-free pretraining yields a substrate evaluated on two probe
+families; planning is not addressed.
 
-| Eval | Metric | Baseline | Pass Criterion |
-|---|---|---|---|
-| Node state prediction | cos(z_pred, z_target) | copy-forward, graph-average | model > copy-forward, p < 0.05 after Bonferroni |
-| Graph context ablation | Graph-JEPA vs Sequential-JEPA (see below) | Sequential-JEPA, copy-forward | Graph-JEPA > Sequential-JEPA, p < 0.05 |
-| Multi-step rollout | cos at k=1,2,4 weeks ahead (autoregressive) | copy-forward at each horizon | stays above copy-forward at k >= 2 |
-| Downstream probes | linear probe accuracy on 4 tasks | frozen BGE-small encoder | beats frozen BGE on >= 2/4 tasks, p < 0.05 |
-| Anomaly detection | per-node prediction error over time (Enron) | n/a | qualitative: error spike before Oct 2001 collapse? |
-| Representation quality | effective rank, mean pairwise cosine, UMAP | n/a | rank > 30, mean cos < 0.5 |
+Across 8 datasets in 7 domains, two empirical signatures of learned
+dynamics emerge and dissociate cleanly. Compression to ~8 effective
+dimensions appears across three distinct domains; a graph-aware encoder
+beats a capacity-matched non-graph ablation on next-state prediction
+across three relation types. The two findings appear and disappear
+independently across the matrix.
 
-Downstream probe tasks: (1) communication volume next week (regression), (2) primary topic next week (K=20 clusters), (3) new contact binary classification, (4) hub vs periphery role classification.
+**8-dataset matrix.**
 
-**Primary metric: Eval 2 (graph context ablation). This is the thesis experiment.**
+| dataset | domain | eff_rank | d≈8? | win rate | per-seed p |
+|---|---|---:|:---:|---:|---|
+| **BACI Gravity** | bilateral commodity trade | 7.03 | ✓ | 95.8% | <10⁻³⁰ all seeds |
+| **TGBN-Trade** | country-pair trade | 7.97 | ✓ | 77.3% | <10⁻²⁶ all seeds |
+| **ICIO** | sectoral input-output | 2.54 | ✗ | 98.5% | <10⁻⁷ all seeds |
+| **JODIE Reddit u-u** | social co-interaction | 11.44 | ✗ | 71.7% | 10⁻⁶⁵ to 2×10⁻³ |
+| JODIE Wiki u-u | wiki editing co-interaction | 3.44 | ✗ | 52.6% | 7×10⁻⁵⁹ to 0.95 |
+| DBLP | academic coauthorship | 8.31 | ✓ | 38% mean | bimodal |
+| Enron | corporate emails | 8.83 | ✓ | 44% | losses w/ tight CI |
+| METR-LA | highway traffic | 18.28 (seq=7.07) | ✗ | 8% | p=1 all seeds |
 
-## Ablation Design
+**Per-dataset prediction advantage** (Δcos = graph − non-graph; 5 seeds,
+paired Wilcoxon, Bonferroni-corrected over the 8-dataset matrix).
 
-| Model | Encoder | Predictor Input | Purpose |
-|---|---|---|---|
-| Graph-JEPA (full) | GATv2, trained | masked node history + all other nodes at all timesteps | main model |
-| Sequential-JEPA | 3-layer MLP, matched params | masked node history only (k=4 tokens) | graph context ablation |
-| Copy-forward | none | last known node embedding | trivial baseline |
-| Graph-average | none | mean neighbor embedding at t | graph-aware non-learned baseline |
+| dataset | Δcos (mean) | 95% CI | win rate | corrected p | Cliff's δ |
+|---|---:|---|---:|---|---:|
+| **BACI Gravity** | **+0.198** | [+0.177, +0.224] | 95.8% | 1.1×10⁻³⁰ | 1.00 |
+| **TGBN-Trade** | **+0.084** | [+0.069, +0.103] | 77.3% | 3.8×10⁻²⁶ | 1.00 |
+| **ICIO** | **+0.038** | [+0.029, +0.046] | 98.5% | 6.0×10⁻⁸ | 1.00 |
+| **JODIE Reddit u-u** | **+0.105** | [+0.076, +0.130] | 71.7% | 8.3×10⁻⁶⁵ | 1.00 |
+| JODIE Wiki u-u | +0.058 | [+0.041, +0.074] | 52.6% | 5.6×10⁻⁵⁸ | 1.00 |
+| DBLP | −0.016 | [−0.137, +0.120] | 38.3% | 3.2×10⁻¹²⁸ | −0.20 |
+| Enron | −0.046 | [−0.084, −0.006] | 38.1% | 0.92 | −0.60 |
+| METR-LA | −0.004 | [−0.005, −0.003] | 7.8% | 1.0 | −1.00 |
 
-The MLP encoder in the sequential ablation is matched in parameter count to GATv2. This controls for model capacity and isolates relational context as the independent variable.
+## Pretrained models
 
-## Getting Started
+| dataset | domain | seeds | results |
+|---|---|---:|---|
+| BACI Gravity | bilateral commodity trade | 5 | [`paper_results/baci_gravity/`](paper_results/baci_gravity) |
+| TGBN-Trade | country-pair trade | 5 | [`paper_results/tgbn_trade/`](paper_results/tgbn_trade) |
+| ICIO | sectoral input-output | 5 | [`paper_results/icio/`](paper_results/icio) |
+| JODIE Reddit u-u | social co-interaction | 5 | [`paper_results/jodie_reddit_uu/`](paper_results/jodie_reddit_uu) |
+| JODIE Wiki u-u | wiki editing co-interaction | 5 | [`paper_results/jodie_wikipedia_uu/`](paper_results/jodie_wikipedia_uu) |
+| DBLP | academic coauthorship | 5 | [`paper_results/dblp/`](paper_results/dblp) |
+| Enron | corporate emails | 5 | [`paper_results/enron/`](paper_results/enron) |
+| METR-LA | highway traffic | 5 | [`paper_results/metrla/`](paper_results/metrla) |
 
-```bash
-conda create -n graph-jepa python=3.10 pip
-conda activate graph-jepa
-pip install -r requirements.txt
-```
-
-**Download and preprocess Enron data:**
-```bash
-python experiments/download_enron.py
-```
-
-**Training (local):**
-```bash
-python src/main.py --fname configs/tgjepa_base.yaml --devices cuda:0
-```
-
-**Training (Modal, GPU):**
-```bash
-modal run experiments/train_tgjepa.py
-```
-
-**Run all evaluations:**
-```bash
-python experiments/eval_all.py --checkpoint results/tgjepa/seed0/best_model.pt
-```
+Per-dataset, per-seed stamped outputs (`git_sha` + dataset SHA256 +
+deterministic flag) live under `paper_results/`. For the full
+reproduction protocol, see [REPRODUCE.md](REPRODUCE.md).
 
 ## Requirements
 
-```
-torch >= 2.0
-torch-geometric >= 2.4
-sentence-transformers >= 2.2
-py-tgb
-numpy
-scikit-learn
-scipy
-matplotlib
-umap-learn
-pytest
-modal
+- Python ≥ 3.11
+- PyTorch ≥ 2.3
+- torch-geometric ≥ 2.4
+
+Full dependency list in `pyproject.toml`. Install via:
+
+```bash
+pip install -e '.[experiments,dev]'
 ```
 
+## License
+
+See the [LICENSE](LICENSE) file for details.
+
+## Citation
+
+```bibtex
+@misc{bodnar2026graphjepa,
+  title  = {Graph-JEPA: Learning the Dynamics of Relational Worlds
+            by Observation},
+  author = {Bodnar, Sofia},
+  year   = {2026},
+  note   = {Graph-JEPA-2 codebase, NeurIPS submission}
+}
+```
