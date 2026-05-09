@@ -34,12 +34,20 @@ dependencies = [
 [project.optional-dependencies]
 experiments = [
     "py-tgb>=0.9",
-    "torch-geometric-temporal>=0.55",
     "sentence-transformers>=2.2",
     "scikit-learn>=1.4",
     "matplotlib>=3.8",
     "seaborn>=0.13",
     "networkx>=3.2",
+]
+# torch-geometric-temporal is intentionally excluded from [experiments].
+# it pulls torch-sparse, which fails to build under PEP 517 isolation
+# (torch-sparse's setup.py imports torch before torch is available in the
+# build env). only chickenpox_builder.py uses it, and chickenpox is not in
+# the paper-locked 8-dataset matrix. install separately if needed:
+#   pip install --no-build-isolation 'torch-geometric-temporal>=0.55'
+chickenpox = [
+    "torch-geometric-temporal>=0.55",
 ]
 modal = [
     "modal>=0.64",

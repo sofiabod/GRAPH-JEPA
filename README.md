@@ -1,7 +1,5 @@
 <h1 align="center">Graph-JEPA</h1>
 
-<hr>
-
 <p align="center">
   <b>Learning the Dynamics of Relational Worlds by Observation</b>
 </p>
